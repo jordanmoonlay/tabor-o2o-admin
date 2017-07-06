@@ -1,0 +1,114 @@
+<div class="row" ng-controller="dealerCtrl as main" >
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <center><strong><h3 class="box-title">DEALERS DATA TABEL</h3></strong></center>
+            </div>
+            <!-- /.box-header -->
+            <form class="form-inline">
+              <div class="form-group">
+                <label >Search</label>
+                <input type="text" ng-model="search" class="form-control" placeholder="Search">
+              </div>
+            </form>
+          <div class="box-body">
+              <table class="table table-bordered table-hover">
+                <thead>
+                <th>Code</th>
+                <th>Name</th>
+                <th>BranchID</th>
+                <th>BranchCode</th>
+                <th>BranchName</th>
+                <th>Description</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                </thead>
+                <tbody>
+                    <tr dir-paginate="dealer in main.dealers | filter:search |itemsPerPage:10"  ng-click="main.setEditedDealer(dealer)" ng-class="{'active':main.isCurrentDealer(dealer.Code)}">
+                    <td>{{dealer.Code}} </td>
+                    <td>{{dealer.Name}} </td>
+                    <td>{{dealer.BranchId}} </td>
+                    <td>{{dealer.BranchCode}} </td>
+                    <td>{{dealer.BranchName}} </td>
+                    <td>{{dealer.Description}} </td>
+                    <td>{{dealer.Address}} </td>
+                    <td>{{dealer.PhoneNumber}} <button type="button" class="close" ng-click="main.deleteDealer(dealer.Code)">&times;</button></td>
+                    </tr>
+                </tbody>
+                
+              </table>
+               <dir-pagination-controls
+                max-size="5"
+                direction-links="true"
+                boundary-links="true" >
+              </dir-pagination-controls>
+        
+            <!-- /.box-body -->
+          </div>
+          <div ng-if="main.isEditing">
+            <h4> <b>Editing {{main.editedDealer.Name}}</b></h4>
+                <form  role="form" ng-submit="main.updateDealer(main.editedDealer)" novalidate>
+              <div class="box-body">
+                
+                <div class="form-group">
+                  <label for="exampleEditCode">Code</label>
+                  <input type="text" class="form-control" ng-model="main.editedDealer.Code" placeholder="Code" disabled>
+                </div>  
+                <div class="form-group">
+                  <label for="exampleEditName">Name</label>
+                  <input type="text" class="form-control" ng-model="main.editedDealer.Name" placeholder="Name">
+                </div>
+                 <!--<div class="form-group">   
+                    <label for="exampleSelectId">Branch</label> 
+                    <select class="form-control select2" style="width: 100%;" ng-model="selectedTestBranch" ng-options="item as item.id +' - '+ item.code +' - '+ item.name for item in main.branches" ng-change="main.selectBranch(selectedTestBranch)">
+                      <option value="">Select ID</option>
+                    </select>
+                </div>-->
+                 <div class="form-group" id="scrollable-dropdown-menu">
+                  <label for="exampleInputBranch">Branch</label></br>
+                  <input type="text" ng-model="selectedTestBranch" typeahead="item as item.id +' - '+ item.code +' - '+ item.name for item in main.branches | filter:$viewValue" typeahead-on-select="main.selectBranch(selectedTestBranch)" placeholder="Branch">
+                </div>
+                <div class="form-group">
+                  <label for="exampleEditBranchId">BranchId</label>
+                  <input type="text" class="form-control" ng-model="main.editedDealer.BranchId" placeholder="BranchIdName" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleEditBranchCode">BranchCode</label>
+                  <input type="text" class="form-control" ng-model="main.editedDealer.BranchCode" placeholder="BranchCode" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleEditBranchName">BranchName</label>
+                  <input type="text" class="form-control" ng-model="main.editedDealer.BranchName" placeholder="BranchName" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleEditDescription">Description</label>
+                  <input type="text" class="form-control" ng-model="main.editedDealer.Description" placeholder="Description">
+                </div>
+                <div class="form-group">
+                  <label for="exampleEditAddress">Address</label>
+                  <input type="text" class="form-control" ng-model="main.editedDealer.Address" placeholder="Address" >
+                </div>
+                <div class="form-group">
+                  <label for="exampleEditPhoneNumber">Phone Number</label>
+                  <input type="text" class="form-control" ng-model="main.editedDealer.PhoneNumber" placeholder="PhoneNumber" >
+                </div>
+
+              </div>
+              <!-- /.box-body -->
+
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-primary" ng-click="main.cancelEditing()">Cancel</button>
+              </div>
+            </form>
+            </div>
+          <!-- /.box -->
+
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+  </div>
