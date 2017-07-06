@@ -13,7 +13,7 @@
 (function(window, angular, undefined) {
   'use strict';
 
-  var urlBase = "http://11.11.1.42:10010/api";
+  var urlBase = "http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api";
 //  var authHeader = 'authorization';
 
   //function getHost(url) {
