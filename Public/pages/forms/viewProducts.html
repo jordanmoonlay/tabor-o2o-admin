@@ -1,0 +1,96 @@
+<div class="row" ng-controller="productCtrl as main">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Products Data Table</h3>
+            </div>
+            <!-- /.box-header -->
+            <form class="form-inline">
+              <div class="form-group">
+                <label >Search</label>
+                <input type="text" ng-model="search" class="form-control" placeholder="Search">
+              </div>
+            </form>
+          <div class="box-body">
+              <table class="table table-bordered table-hover">
+                <thead>
+                <th>Brand Code</th>
+                <th>Code</th>
+                <th>SKU</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Specification</th>
+                </thead>
+                <tbody>
+                    <tr dir-paginate="product in main.products | filter:search |itemsPerPage:3"  ng-click="main.setEditedProduct(product)" ng-class="{'active':main.isCurrentProduct(product.Code)}">
+                    <td> {{product.BrandCode}} </td>
+                    <td> {{product.Code}} </td>
+                    <td> {{product.SKU}} </td>
+                    <td>{{product.Name}} </td>
+                    <td>{{product.Description}} </td>
+                    <td>{{product.Price}} </td>
+                    <td>{{product.Specification}} <button type="button" class="close" ng-click="main.deleteProduct(product.Code)">&times;</button></td>
+                    </tr>
+                </tbody>
+                
+              </table>
+              <dir-pagination-controls
+                max-size="5"
+                direction-links="true"
+                boundary-links="true" >
+              </dir-pagination-controls>
+            <!-- /.box-body -->
+          </div>
+          <div ng-if="main.isEditing">
+            <h4> <b>Editing {{main.editedProduct.Name}}</b></h4>
+                <form  role="form" ng-submit="main.updateProduct(main.editedProduct)" novalidate>
+              <div class="box-body">
+                <div class="form-group">
+                  <label for="exampleEditBrandCode">Brand Code</label>
+                  <input type="text" class="form-control" ng-model="main.editedProduct.BrandCode" placeholder="Brand Code" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleEditCode">Code</label>
+                  <input type="text" class="form-control" ng-model="main.editedProduct.Code" placeholder="Code" disabled>
+                </div>  
+                <div class="form-group">
+                  <label for="exampleEditCode">SKU</label>
+                  <input type="text" class="form-control" ng-model="main.editedProduct.SKU" placeholder="SKU" >
+                </div>
+                <div class="form-group">
+                  <label for="exampleEditName">Name</label>
+                  <input type="text" class="form-control" ng-model="main.editedProduct.Name" placeholder="Name">
+                </div>
+                <div class="form-group">
+                  <label for="exampleEditDescription">Description</label>
+                  <input type="text" class="form-control" ng-model="main.editedProduct.Description" placeholder="Description">
+                </div>
+                <div class="form-group">
+                  <label for="exampleEditPrice">Price</label>
+                  <input type="text" class="form-control" ng-model="main.editedProduct.Price" placeholder="Price" >
+                </div>
+                <div class="form-group">
+                  <label for="exampleEditSpecification">Specification</label>
+                  <input type="text" class="form-control" ng-model="main.editedProduct.Specification" placeholder="Specification" >
+                </div>
+
+              </div>
+              <!-- /.box-body -->
+
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-primary" ng-click="main.cancelEditing()">Cancel</button>
+              </div>
+            </form>
+            </div>
+          <!-- /.box -->
+
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+  </div>

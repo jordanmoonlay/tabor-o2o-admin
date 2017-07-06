@@ -1,0 +1,97 @@
+
+<div class="row" ng-controller="orderCtrl as main">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <center><strong><h3 class="box-title">ORDERS DATA TABEL</h3></strong></center>
+            </div>
+            <!-- /.box-header -->
+            <form class="form-inline">
+              <div class="form-group">
+                <label >Search</label>
+                <input type="text" ng-model="search" class="form-control" placeholder="Search">
+              </div>
+            </form>
+          <div class="box-body">
+              <table class="table table-bordered table-hover">
+                <thead>
+                <th>Code</th>
+                <th>Kiosk</th>
+                <th>Dealer</th>
+                <th>DP</th>
+                <th>Disc</th>
+                <th>Disc Nominal</th>
+                <th>Total Price</th>
+                <th>Request Date</th>
+                <th>Delivery Date</th>
+                <th>Total Qty</th>
+                <th>Destination</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Payment Type</th>
+                </thead>
+                <tbody>
+                    <tr dir-paginate="order in main.orders | filter:search |itemsPerPage:10 "  ng-click="main.setEditedBrand(order)" ng-class="{'active':main.isCurrentOrder(order.Code)}" >
+                    <td> {{order.Code}} </td>
+                    <td>{{order.KioskCode}} </td>
+                    <td>{{order.DealerCode}} </td>
+                    <td>{{order.DP}} </td>
+                    <td>{{order.Discount}} </td>
+                    <td>{{order.DiscountNominal}} </td>
+                    <td>{{order.TotalPrice}} </td>
+                    <td>{{order.RequestDate}} </td>
+                    <td>{{order.DeliveryDate}} </td>
+                    <td>{{order.TotalQty}} </td>
+                    <td>{{order.Destination}} </td>
+                    <td>{{order.Phone}} </td>
+                    <td>{{order.Status}} </td>
+                    <td>{{order.PaymentType}} <button type="button" class="close" ng-click="main.deleteOrder(order.Code)">&times;</button></td>
+                    </tr>
+                </tbody>
+                
+              </table>
+              <dir-pagination-controls
+                max-size="5"
+                direction-links="true"
+                boundary-links="true" >
+              </dir-pagination-controls>
+            <!-- /.box-body -->
+          </div>
+          <div ng-if="main.isEditing">
+            <h4> <b>Editing {{main.editedBrand.Nama}}</b></h4>
+                <form role="form" ng-submit="main.updateBrand(main.editedBrand)" novalidate>
+              <div class="box-body">
+                <div class="form-group">
+                  <label for="exampleEditBrand">Code</label>
+                  <input type="text" class="form-control" ng-model="main.editedBrand.Code" placeholder="Code" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleEditName">Name</label>
+                  <input type="text" class="form-control" ng-model="main.editedBrand.Nama" placeholder="Name">
+                </div>
+                <div class="form-group">
+                  <label for="exampleEditDescription">Description</label>
+                  <input type="text" class="form-control" ng-model="main.editedBrand.Description" placeholder="Description">
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputFile">Logo</label>
+                  <input type="text" ng-model="main.editedBrand.Logo">
+
+                </div>
+              </div>
+              <!-- /.box-body -->
+
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-primary" ng-click="main.cancelEditing()">Cancel</button>
+              </div>
+            </form>
+            </div>
+          <!-- /.box -->
+
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+  </div>
+  
