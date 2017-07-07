@@ -1,8 +1,14 @@
 var express = require('express'),
     app = express();
 
+
 app.use(express.static('D:/home/site/wwwroot/src/tabor-o2o-admin/Public/'));
 
+
+
+
+app.use(express.static(__dirname + '/Public'));
+app.use('/static', express.static(__dirname + '/Public'));
 
 app.set('port', process.env.PORT || 1338);
 
