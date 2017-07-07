@@ -6,5 +6,6 @@
   "author": "Richard Key <rich@busyrich.com>",
   "dependencies": {
     "express": "^4.8.5"
-  }
+  },
+  "start": "node site.js"
 }
