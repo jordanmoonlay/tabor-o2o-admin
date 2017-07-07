@@ -1,0 +1,74 @@
+<div class="row" ng-controller="MainCtrl as main">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <center><strong><h3 class="box-title">BRANDS DATA TABEL</h3></strong></center>
+            </div>
+            <!-- /.box-header -->
+            <form class="form-inline">
+              <div class="form-group">
+                <label >Search</label>
+                <input type="text" ng-model="search" class="form-control" placeholder="Search">
+              </div>
+            </form>
+          <div class="box-body">
+              <table class="table table-bordered table-hover">
+                <thead>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Description</th>
+                </thead>
+                <tbody>
+                    <tr dir-paginate="brand in main.brands | filter:search |itemsPerPage:3"  ng-click="main.setEditedBrand(brand)" ng-class="{'active':main.isCurrentBrand(brand.Code)}">
+                    <td> {{brand.Code}} </td>
+                    <td>{{brand.Nama}} </td>
+                    <td>{{brand.Description}} <button type="button" class="close" ng-click="main.deleteBrand(brand.Code)">&times;</button></td>
+                    </tr>
+                </tbody>
+                
+              </table>
+              <dir-pagination-controls
+                max-size="5"
+                direction-links="true"
+                boundary-links="true" >
+              </dir-pagination-controls>
+            <!-- /.box-body -->
+          </div>
+          <div ng-if="main.isEditing">
+            <h4> <b>Editing {{main.editedBrand.Nama}}</b></h4>
+                <form role="form" ng-submit="main.updateBrand(main.editedBrand)" novalidate>
+              <div class="box-body">
+                <div class="form-group">
+                  <label for="exampleEditBrand">Code</label>
+                  <input type="text" class="form-control" ng-model="main.editedBrand.Code" placeholder="Code" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleEditName">Name</label>
+                  <input type="text" class="form-control" ng-model="main.editedBrand.Nama" placeholder="Name">
+                </div>
+                <div class="form-group">
+                  <label for="exampleEditDescription">Description</label>
+                  <input type="text" class="form-control" ng-model="main.editedBrand.Description" placeholder="Description">
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputFile">Logo</label>
+                  <input type="text" ng-model="main.editedBrand.Logo">
+
+                </div>
+              </div>
+              <!-- /.box-body -->
+
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-primary" ng-click="main.cancelEditing()">Cancel</button>
+              </div>
+            </form>
+            </div>
+          <!-- /.box -->
+
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+  </div>
+  

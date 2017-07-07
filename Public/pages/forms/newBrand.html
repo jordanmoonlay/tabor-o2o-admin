@@ -1,0 +1,51 @@
+
+            <!-- /.box-header -->
+            <!-- form start -->
+            <center><strong><h3 class="box-title">NEW BRAND</h3></strong></center>
+            <div ng-controller= "MainCtrl as main">
+            <div ng-if="!main.isEditing">
+            <form role="form" name="brandForm" ng-submit="main.createBrand(main.newBrand)" novalidate  >
+              <div class="box-body">
+                <div class="form-group">
+                  <label for="exampleInputBrand">Code</label>
+                  <input type="text" class="form-control" name="code" ng-model="main.newBrand.Code" placeholder="Code" required>
+                  <div ng-if="main.errors.details.messages.Code[0]">
+                  <div style="color:red"> {{main.errors.details.messages.Code[0]}}</div>
+                  </div>  
+                  <span style="color:green" ng-if ="brandForm.code.$valid"> Valid </span>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputName">Name</label>
+                  <input type="text" name="nama" class="form-control" ng-model="main.newBrand.Nama" placeholder="Name" required>
+                  <div ng-if="main.errors.details.messages.Nama[0]">
+                  <div style="color:red"> {{main.errors.details.messages.Nama[0]}}</div>
+                  </div>
+                  <span style="color:green" ng-if ="brandForm.nama.$valid"> Valid </span>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputDescription">Description</label>
+                  <input type="text" name="desc" class="form-control" ng-model="main.newBrand.Description" placeholder="Description" required>
+                  <div ng-if="main.errors.details.messages.Description[0]">
+                  <div style="color:red"> {{main.errors.details.messages.Description[0]}}</div>
+                  </div>
+                  <span style="color:green" ng-if ="brandForm.desc.$valid"> Valid </span>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputFile">Logo</label>
+                  <input type="text" ng-model="main.newBrand.Logo" required>
+            
+                </div>
+              </div>
+              <!-- /.box-body -->
+
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary" >Submit</button>
+              
+              </div>
+            </form>
+            
+              
+              
+            </div>
+            
+   
