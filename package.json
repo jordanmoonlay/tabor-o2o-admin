@@ -8,5 +8,7 @@
     "azure": "^2.0.0-preview",
     "express": "^4.8.5"
   },
-  "start": "node site.js"
+  "scripts": {
+    "start": "node ."
+  }
 }
