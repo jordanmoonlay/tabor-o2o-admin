@@ -166,7 +166,7 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
         function getBrands(){
             $http({
                 method : 'GET',
-                url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/brands/',
+                url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/brands',
                 data:{}
             }).then(function (result){
                 main.brands = result.data;

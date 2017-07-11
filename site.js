@@ -1,17 +1,14 @@
 var express = require('express'),
     app = express();
 
+app.use(express.static(__dirname + '/Public'));
 
 app.use(express.static('D:/home/site/wwwroot/src/tabor-o2o-admin/Public/'));
 
 
 
+var port= process.env.PORT || 1338;
 
-// app.use(express.static(__dirname + '/Public'));
-app.use('/static', express.static(__dirname + '/Public'));
-
-app.set('port', process.env.PORT || 1338);
-
-var server = app.listen(1338, function() {
+var server = app.listen(port, function() {
   console.log('Listening on port %d', server.address().port);
 });
