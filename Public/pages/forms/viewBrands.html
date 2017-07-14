@@ -5,6 +5,7 @@
               <center><strong><h3 class="box-title">BRANDS DATA TABEL</h3></strong></center>
             </div>
             <!-- /.box-header -->
+            <div ng-if = "main.isShow">
             <form class="form-inline">
               <div class="form-group">
                 <label >Search</label>
@@ -19,10 +20,13 @@
                 <th>Description</th>
                 </thead>
                 <tbody>
-                    <tr dir-paginate="brand in main.brands | filter:search |itemsPerPage:3"  ng-click="main.setEditedBrand(brand)" ng-class="{'active':main.isCurrentBrand(brand.Code)}">
+                    <tr dir-paginate="brand in main.brands | filter:search |itemsPerPage:10"  ng-class="{'active':main.isCurrentBrand(brand.Code)}">
                     <td> {{brand.Code}} </td>
                     <td>{{brand.Nama}} </td>
-                    <td>{{brand.Description}} <button type="button" class="close" ng-click="main.deleteBrand(brand.Code)">&times;</button></td>
+                    <td>{{brand.Description}} 
+                      <button type="button" class="close" ng-click="main.deleteBrand(brand.Code)"><p class = "fa fa-trash"></p></button> 
+                      <button type="button" class="close"  ng-click="main.setEditedBrand(brand)"><p class = "fa fa-edit"></p></button> 
+                      </td>
                     </tr>
                 </tbody>
                 
@@ -33,6 +37,7 @@
                 boundary-links="true" >
               </dir-pagination-controls>
             <!-- /.box-body -->
+          </div>
           </div>
           <div ng-if="main.isEditing">
             <h4> <b>Editing {{main.editedBrand.Nama}}</b></h4>
@@ -52,9 +57,10 @@
                 </div>
                 <div class="form-group">
                   <label for="exampleInputFile">Logo</label>
-                  <input type="text" ng-model="main.editedBrand.Logo">
-
-                </div>
+                  <input type="file" fileread="main.editedBrand.Logo" required>
+                  <img src="{{main.editedBrand.Logo}}" class="img-responsive" alt="Image preview..." />
+                  <input type="hidden" ng-model="main.editedBrand.Logo" value="{{main.editedBrand.Logo}}" placeholder="drag image here" required/>
+              </div>
               </div>
               <!-- /.box-body -->
 

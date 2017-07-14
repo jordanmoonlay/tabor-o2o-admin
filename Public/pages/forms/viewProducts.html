@@ -1,3 +1,6 @@
+
+
+
 <div class="row" ng-controller="productCtrl as main">
         <div class="col-xs-12">
           <div class="box">
@@ -5,6 +8,7 @@
               <h3 class="box-title">Products Data Table</h3>
             </div>
             <!-- /.box-header -->
+            <div ng-if = "main.isShow">
             <form class="form-inline">
               <div class="form-group">
                 <label >Search</label>
@@ -18,19 +22,18 @@
                 <th>Code</th>
                 <th>SKU</th>
                 <th>Name</th>
-                <th>Description</th>
                 <th>Price</th>
-                <th>Specification</th>
                 </thead>
                 <tbody>
-                    <tr dir-paginate="product in main.products | filter:search |itemsPerPage:3"  ng-click="main.setEditedProduct(product)" ng-class="{'active':main.isCurrentProduct(product.Code)}">
+                    <tr dir-paginate="product in main.products | filter:search |itemsPerPage:10"  ng-class="{'active':main.isCurrentProduct(product.Code)}">
                     <td> {{product.BrandCode}} </td>
                     <td> {{product.Code}} </td>
                     <td> {{product.SKU}} </td>
                     <td>{{product.Name}} </td>
-                    <td>{{product.Description}} </td>
-                    <td>{{product.Price}} </td>
-                    <td>{{product.Specification}} <button type="button" class="close" ng-click="main.deleteProduct(product.Code)">&times;</button></td>
+                    <td>{{product.Price}} 
+                    <button type="button" class="close" ng-click="main.deleteProduct(product.Code)"><p class = "fa fa-trash"></p></button>
+                    <button type="button" class="close" ng-click="main.setEditedProduct(product)"><p class = "fa fa-edit"></p></button>
+                    <button type="button" class="close" ng-click="main.viewProduct(product)"><p class = "fa fa-file"></p></button></td>
                     </tr>
                 </tbody>
                 
@@ -41,6 +44,7 @@
                 boundary-links="true" >
               </dir-pagination-controls>
             <!-- /.box-body -->
+          </div>
           </div>
           <div ng-if="main.isEditing">
             <h4> <b>Editing {{main.editedProduct.Name}}</b></h4>
@@ -74,7 +78,12 @@
                   <label for="exampleEditSpecification">Specification</label>
                   <input type="text" class="form-control" ng-model="main.editedProduct.Specification" placeholder="Specification" >
                 </div>
-
+                <div class="form-group">
+                  <label for="exampleInputFile">Logo</label>
+                  <input type="file" fileread="main.editedProduct.Image" required>
+                  <img src="{{main.editedProduct.Image}}" class="img-responsive" alt="Image preview..." />
+                  <input type="hidden" id="txtImage" ng-model="main.editedProduct.Image" value="{{main.editedProduct.Image}}" placeholder="drag image here" required/>
+              </div>
               </div>
               <!-- /.box-body -->
 
@@ -83,6 +92,55 @@
                 <button type="button" class="btn btn-primary" ng-click="main.cancelEditing()">Cancel</button>
               </div>
             </form>
+            </div>
+
+          <div ng-if="main.isView">
+            <h4> <b>View Detail {{main.viewProduct.Name}}</b></h4>
+                
+              <div class="box-body">
+                <div class="form-group">
+                  <label for="exampleViewImage">Logo</label>
+                  <img src="{{main.viewProduct.Image}}" class="img-responsive" alt="Image preview..." />
+                </div>
+                <div class="form-group">
+                  <label for="exampleViewBrandCode">Brand Code</label>
+                  <input type="text" class="form-control" ng-model="main.viewProduct.BrandCode" placeholder="Brand Code" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleViewCode">Code</label>
+                  <input type="text" class="form-control" ng-model="main.viewProduct.Code" placeholder="Code" disabled>
+                </div>  
+                <div class="form-group">
+                  <label for="exampleViewCode">SKU</label>
+                  <input type="text" class="form-control" ng-model="main.viewProduct.SKU" placeholder="SKU" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleViewName">Name</label>
+                  <input type="text" class="form-control" ng-model="main.viewProduct.Name" placeholder="Name" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleViewDescription">Description</label>
+                  <input type="text" class="form-control" ng-model="main.viewProduct.Description" placeholder="Description" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleViewPrice">Price</label>
+                  <input type="text" class="form-control" ng-model="main.viewProduct.Price" placeholder="Price" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleViewSpecification">Specification</label>
+                  <input type="text" class="form-control" ng-model="main.viewProduct.Specification" placeholder="Specification" disabled>
+                </div>
+                
+              </div>
+              <!-- /.box-body -->
+
+              <div class="box-footer">
+                <div class="form-group">
+                  <button type="button"  class="btn btn-primary" ng-click="main.cancelEditing()">Back</button>
+                </div>
+                
+              </div>
+            
             </div>
           <!-- /.box -->
 

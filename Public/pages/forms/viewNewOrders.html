@@ -1,9 +1,9 @@
 
-<div class="row" ng-controller="orderCtrl as main">
+<div class="row" ng-controller="newOrderCtrl as main">
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <center><strong><h3 class="box-title">ORDERS DATA TABEL</h3></strong></center>
+              <center><strong><h3 class="box-title">NEW ORDERS DATA TABEL</h3></strong></center>
             </div>
             <!-- /.box-header -->
             <form class="form-inline">
@@ -32,7 +32,7 @@
                 </thead>
                 <tbody>
                     <tr dir-paginate="order in main.orders | filter:search |itemsPerPage:10 "  ng-click="main.setEditedBrand(order)" ng-class="{'active':main.isCurrentOrder(order.Code)}" >
-                    <td> {{order.Code}} </td>
+                    <td>  <button type="button" class="check" ng-click="main.deleteOrder(order.Code)">&times;</button> {{order.Code}} </td>
                     <td>{{order.KioskCode}} </td>
                     <td>{{order.DealerCode}} </td>
                     <td>{{order.DP}} </td>
@@ -46,6 +46,8 @@
                     <td>{{order.Phone}} </td>
                     <td>{{order.Status}} </td>
                     <td>{{order.PaymentType}} <button type="button" class="close" ng-click="main.deleteOrder(order.Code)">&times;</button></td>
+                     
+                      
                     </tr>
                 </tbody>
                 
