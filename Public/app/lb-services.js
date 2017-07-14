@@ -1,4 +1,4 @@
-// CommonJS package manager support
+﻿// CommonJS package manager support
 //if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   //module.exports === exports) {
   // Export the *name* of this Angular module
@@ -13,7 +13,8 @@
 (function(window, angular, undefined) {
   'use strict';
 
-  var urlBase = "http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api";
+  //var urlBase = "http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api";
+var urlBase = "http://11.11.1.42:10010/api";
 //  var authHeader = 'authorization';
 
   //function getHost(url) {

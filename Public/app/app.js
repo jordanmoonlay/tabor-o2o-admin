@@ -1,6 +1,6 @@
 angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directives.dirPagination','lbServices'])
 
-  
+    
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider,
     $urlRouterProvider) {
     $stateProvider
@@ -34,7 +34,7 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
       })
       .state('newOrder', {
         url: '/newOrder',
-        templateUrl: 'pages/forms/newOrder.html'
+        templateUrl: 'pages/forms/viewNewOrders.html'
       })
       .state('home', {
         url: '/index',
@@ -45,7 +45,11 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
     .controller('MainCtrl', function (Brand) {
         var main = this;
          var defDate = new Date();
-    
+
+         function eraseText(brand){
+            document.getElementById("txtLogo").value = "";
+        }
+
   
         function getBrands() {
             Brand.find(
@@ -89,7 +93,9 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
         function setEditedBrand(brand) {
             main.editedBrand = angular.copy(brand);
             main.isEditing = true;
+            main.isShow = false;
         }
+        
 
         function isCurrentBrand(brandId) {
             return main.editedBrand !== null && main.editedBrand.Code === brandId;
@@ -98,6 +104,7 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
         function cancelEditing() {
             main.editedBrand = null;
             main.isEditing = false;
+            main.isShow = true;
         }
          function selectBrand(brand){
             console.log(brand);
@@ -109,6 +116,7 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
         main.brands = [];
         main.editedBrand = null;
         main.isEditing = false;
+        main.isShow =true;
         main.getBrands = getBrands;
         main.createBrand = createBrand;
         main.updateBrand = updateBrand;
@@ -116,6 +124,7 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
         main.setEditedBrand = setEditedBrand;
         main.isCurrentBrand = isCurrentBrand;
         main.cancelEditing = cancelEditing;
+        main.eraseText = eraseText;
         
         
 
@@ -127,7 +136,6 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
          var defDate = new Date();
          var submain = this;
 
-     
 
         function getProducts() {
             Product.find(
@@ -175,42 +183,56 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
            
 
         function initCreateForm() {
-            main.newProduct = { Code: '',BrandCode: '',Name: '', Description: '',Price:'',Specification: '',Active: 1, Deleted:0, CreatedBy: 'AUTO', CreatedDate: defDate, CreateAgent: 'AUTO', UpdatedBy: 'AUTO', UpdatedDate: defDate, UpdateAgent: 'AUTO' };
+            main.newProduct = { Code: '',BrandCode: '',Name: '', Description: '',Price:'',Specification: '',Image: '',Active: 1, Deleted:0, CreatedBy: 'AUTO', CreatedDate: defDate, CreateAgent: 'AUTO', UpdatedBy: 'AUTO', UpdatedDate: defDate, UpdateAgent: 'AUTO' };
         }
 
         function setEditedProduct(product) {
             main.editedProduct = angular.copy(product);
             main.isEditing = true;
+            main.isShow =false;
+            main.isView =false;
         }
 
+        function viewProduct(product){
+            main.viewProduct = angular.copy(product);
+            main.isView = true;
+            main.isShow = false;
+        }
+
+
         function isCurrentProduct(productId) {
-            return main.editedProduct !== null && main.editedProduct.Code === productId;
+            return main.editedProduct !== null || main.viewProduct!== null && main.editedProduct.Code === productId;
         }
 
         function cancelEditing() {
             main.editedProduct = null;
+            main.viewProduct = null;
             main.isEditing = false;
+            main.isShow =true;
+            main.isView =false;
         }
+
         function selectBrand(brand){
             console.log(brand);
-            main.newProduct.BrandCode = brand.Code;
-            
+            main.newProduct.BrandCode = brand.Code;      
         }
         
-   
 
         main.products = [];
         main.editedProduct = null;
+        main.viewProduct = null;
         main.isEditing = false;
+        main.isView = false;
+        main.isShow =true;
         main.getProducts = getProducts;
         main.createProduct = createProduct;
         main.updateProduct = updateProduct;
         main.deleteProduct = deleteProduct;
         main.setEditedProduct = setEditedProduct;
+        main.viewProduct = viewProduct;
         main.isCurrentProduct = isCurrentProduct;
         main.cancelEditing = cancelEditing;
         main.selectBrand = selectBrand;
-        
 
         initCreateForm();
         getProducts();
@@ -298,6 +320,7 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
         main.dealers = [];
         main.editedDealer = null;
         main.isEditing = false;
+        
         main.getDealers = getDealers;
         main.createDealer = createDealer;
         main.updateDealer = updateDealer;
@@ -416,7 +439,6 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
          var defDate = new Date();
          var submain = this;
 
-     
 
         function getOrders() {
             Order.find(
@@ -455,7 +477,7 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
         function getBrands(){
             $http({
                 method : 'GET',
-                url : 'http://localhost:1337/api/brands',
+                url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
                 data:{}
             }).then(function (result){
                 main.brands = result.data;
@@ -499,6 +521,103 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
         main.isCurrentOrder = isCurrentOrder;
         main.cancelEditing = cancelEditing;
         main.selectBrand = selectBrand;
+
+        initCreateForm();
+        getOrders();
+        getBrands();
+
+    })
+    .controller('newOrderCtrl', function (Order,$http) {
+        var main = this;
+         var defDate = new Date();
+         var submain = this;
+
+
+        function getOrders() {
+            $http({
+                method : 'GET',
+                url : 'http://11.11.1.42:10010/api/Order?filter={"where":{"Status":"Unassigned"}}',
+                data:{}
+            }).then(function (result){
+                main.orders = result.data;
+            });
+        }
+
+        function createOrder(order) {
+            Order.create(order,
+                function (result) {
+                    initCreateForm();
+                    getOrders();
+                }, function(errors){
+                    main.errors = errors.data.error;
+                }
+                );
+        }
+
+        function updateOrder(order) {
+            Order.upsert(order,
+                function (result) {
+                    cancelEditing();
+                    getOrders();
+                });
+        }
+
+        function deleteOrder(orderId) {
+            Order.deleteById({Code: orderId},
+                function (result) {
+                    cancelEditing();
+                    getOrders();
+                });
+        }
+
+        function getBrands(){
+            $http({
+                method : 'GET',
+                url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
+                data:{}
+            }).then(function (result){
+                main.brands = result.data;
+            });
+        }
+           
+
+        function initCreateForm() {
+            main.newOrder = { Code: '',BrandCode: '',Name: '', Description: '',Price:'',Specification: '',Active: 1, Deleted:0, CreatedBy: 'AUTO', CreatedDate: defDate, CreateAgent: 'AUTO', UpdatedBy: 'AUTO', UpdatedDate: defDate, UpdateAgent: 'AUTO' };
+        }
+
+        function setEditedOrder(order) {
+            main.editedOrder = angular.copy(order);
+            main.isEditing = true;
+        }
+
+        function isCurrentOrder(orderId) {
+            return main.editedOrder !== null && main.editedOrder.Code === orderId;
+        }
+
+        function cancelEditing() {
+            main.editedOrder = null;
+            main.isEditing = false;
+        }
+        function selectBrand(brand){
+            console.log(brand);
+            main.newOrder.BrandCode = brand.Code;
+            
+        }
+        
+   
+
+        main.orders = [];
+        main.editedOrder = null;
+        main.isEditing = false;
+        main.getOrders = getOrders;
+        main.createOrder = createOrder;
+        main.updateOrder = updateOrder;
+        main.deleteOrder = deleteOrder;
+        main.setEditedOrder = setEditedOrder;
+        main.isCurrentOrder = isCurrentOrder;
+        main.cancelEditing = cancelEditing;
+        main.selectBrand = selectBrand;
+
         
 
         initCreateForm();
@@ -506,6 +625,28 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
         getBrands();
 
     })
-   ;
 
     
+
+    //your directive
+.directive("fileread", [
+  function() {
+    return {
+      scope: {
+        fileread: "="
+      },
+      link: function(scope, element, attributes) {
+        element.bind("change", function(changeEvent) {
+          var reader = new FileReader();
+          reader.onload = function(loadEvent) {
+            scope.$apply(function() {
+              scope.fileread = loadEvent.target.result;
+            });
+          }
+          reader.readAsDataURL(changeEvent.target.files[0]);
+        });
+      }
+    }
+  }
+]);
+   ;
