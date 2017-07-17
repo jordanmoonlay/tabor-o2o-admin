@@ -1,80 +1,88 @@
 <div class="row" ng-controller="MainCtrl as main">
-        <div class="col-xs-12">
-          <div class="box">
-            <div class="box-header">
-              <center><strong><h3 class="box-title">BRANDS DATA TABEL</h3></strong></center>
+  <div class="col-sm-12">
+    <div class="box box-primary">
+      <div class="box-header with-border">
+        <h3 class="box-title">Brand List</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body" ng-if="main.isShow">
+        <form class="form-inline">
+          <div class="row">
+            <div class="col-md-6">
+              <a class="btn btn-sm btn-primary" ui-sref="newBrand"><i class="fa fa-plus"></i> Create</a>
             </div>
-            <!-- /.box-header -->
-            <div ng-if = "main.isShow">
-            <form class="form-inline">
-              <div class="form-group">
-                <label >Search</label>
-                <input type="text" ng-model="search" class="form-control" placeholder="Search">
-              </div>
-            </form>
-          <div class="box-body">
-              <table class="table table-bordered table-hover">
-                <thead>
+            <div class="col-md-6 text-right form-group">
+              <label>
+                    Search :
+                    <input type="text" ng-model="search" class="form-control input-sm">
+                  </label>
+
+            </div>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-bordered table-hover">
+              <thead>
                 <th>Code</th>
                 <th>Name</th>
                 <th>Description</th>
-                </thead>
-                <tbody>
-                    <tr dir-paginate="brand in main.brands | filter:search |itemsPerPage:10"  ng-class="{'active':main.isCurrentBrand(brand.Code)}">
-                    <td> {{brand.Code}} </td>
-                    <td>{{brand.Nama}} </td>
-                    <td>{{brand.Description}} 
-                      <button type="button" class="close" ng-click="main.deleteBrand(brand.Code)"><p class = "fa fa-trash"></p></button> 
-                      <button type="button" class="close"  ng-click="main.setEditedBrand(brand)"><p class = "fa fa-edit"></p></button> 
-                      </td>
-                    </tr>
-                </tbody>
-                
-              </table>
-              <dir-pagination-controls
-                max-size="5"
-                direction-links="true"
-                boundary-links="true" >
-              </dir-pagination-controls>
-            <!-- /.box-body -->
-          </div>
-          </div>
-          <div ng-if="main.isEditing">
-            <h4> <b>Editing {{main.editedBrand.Nama}}</b></h4>
-                <form role="form" ng-submit="main.updateBrand(main.editedBrand)" novalidate>
-              <div class="box-body">
-                <div class="form-group">
-                  <label for="exampleEditBrand">Code</label>
-                  <input type="text" class="form-control" ng-model="main.editedBrand.Code" placeholder="Code" disabled>
-                </div>
-                <div class="form-group">
-                  <label for="exampleEditName">Name</label>
-                  <input type="text" class="form-control" ng-model="main.editedBrand.Nama" placeholder="Name">
-                </div>
-                <div class="form-group">
-                  <label for="exampleEditDescription">Description</label>
-                  <input type="text" class="form-control" ng-model="main.editedBrand.Description" placeholder="Description">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputFile">Logo</label>
-                  <input type="file" fileread="main.editedBrand.Logo" required>
-                  <img src="{{main.editedBrand.Logo}}" class="img-responsive" alt="Image preview..." />
-                  <input type="hidden" ng-model="main.editedBrand.Logo" value="{{main.editedBrand.Logo}}" placeholder="drag image here" required/>
-              </div>
-              </div>
-              <!-- /.box-body -->
+                <th style="width:150px;"></th>
+</thead>
+<tbody>
+  <tr dir-paginate="brand in main.brands | filter:search |itemsPerPage:10" ng-class="{'active':main.isCurrentBrand(brand.Code)}">
+    <td> {{brand.Code}} </td>
+    <td>{{brand.Nama}} </td>
+    <td>{{brand.Description}}</td>
+    <td>
+      <a type="button" class="btn btn-xs btn-warning" ng-click="main.setEditedBrand(brand)"><i class = "fa fa-pencil"></i></a>      &nbsp;
+      <a type="button" class="btn btn-xs btn-danger" ng-click="main.deleteBrand(brand.Code)"><i class = "fa fa-trash"></i></a>      &nbsp;
+    </td>
+  </tr>
+</tbody>
 
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="button" class="btn btn-primary" ng-click="main.cancelEditing()">Cancel</button>
-              </div>
-            </form>
-            </div>
-          <!-- /.box -->
-
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
+</table>
+<dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+</dir-pagination-controls>
+<!-- /.box-body -->
+</div>
+</div>
+</div>
+<div ng-if="main.isEditing">
+  <h4> <b>Editing {{main.editedBrand.Nama}}</b></h4>
+  <form role="form" ng-submit="main.updateBrand(main.editedBrand)" novalidate>
+    <div class="box-body">
+      <div class="form-group">
+        <label for="exampleEditBrand">Code</label>
+        <input type="text" class="form-control" ng-model="main.editedBrand.Code" placeholder="Code" disabled>
       </div>
-  </div>
-  
+      <div class="form-group">
+        <label for="exampleEditName">Name</label>
+        <input type="text" class="form-control" ng-model="main.editedBrand.Nama" placeholder="Name">
+      </div>
+      <div class="form-group">
+        <label for="exampleEditDescription">Description</label>
+        <input type="text" class="form-control" ng-model="main.editedBrand.Description" placeholder="Description">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputFile">Logo</label>
+        <input type="file" fileread="main.editedBrand.Logo" required>
+        <img src="{{main.editedBrand.Logo}}" class="img-responsive" alt="Image preview..." />
+        <input type="hidden" ng-model="main.editedBrand.Logo" value="{{main.editedBrand.Logo}}" placeholder="drag image here" required/>
+      </div>
+    </div>
+    <!-- /.box-body -->
+
+    <div class="box-footer">
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="button" class="btn btn-primary" ng-click="main.cancelEditing()">Cancel</button>
+    </div>
+  </form>
+</div>
+<!-- /.box -->
+
+<!-- /.box -->
+</div>
+<!-- /.col -->
+</div>
+</div>
