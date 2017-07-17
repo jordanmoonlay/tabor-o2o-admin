@@ -1,154 +1,162 @@
-
-
-
 <div class="row" ng-controller="productCtrl as main">
-        <div class="col-xs-12">
-          <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">Products Data Table</h3>
+  <div class="col-sm-12">
+    <div class="box box-primary">
+      <div class="box-header with-border">
+        <h3 class="box-title">Product List</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body" ng-if="main.isShow">
+        <form class="form-inline">
+          <div class="row">
+            <div class="col-md-6">
+              <a class="btn btn-sm btn-primary" ui-sref="newProduct"><i class="fa fa-plus"></i> Create</a>
             </div>
-            <!-- /.box-header -->
-            <div ng-if = "main.isShow">
-            <form class="form-inline">
-              <div class="form-group">
-                <label >Search</label>
-                <input type="text" ng-model="search" class="form-control" placeholder="Search">
-              </div>
-            </form>
-          <div class="box-body">
-              <table class="table table-bordered table-hover">
-                <thead>
+            <div class="col-md-6 text-right form-group">
+              <label>
+                    Search :
+                    <input type="text" ng-model="search" class="form-control input-sm">
+                  </label>
+
+            </div>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-bordered table-hover">
+              <thead>
                 <th>Brand Code</th>
                 <th>Code</th>
                 <th>SKU</th>
                 <th>Name</th>
                 <th>Price</th>
-                </thead>
-                <tbody>
-                    <tr dir-paginate="product in main.products | filter:search |itemsPerPage:10"  ng-class="{'active':main.isCurrentProduct(product.Code)}">
-                    <td> {{product.BrandCode}} </td>
-                    <td> {{product.Code}} </td>
-                    <td> {{product.SKU}} </td>
-                    <td>{{product.Name}} </td>
-                    <td>{{product.Price}} 
-                    <button type="button" class="close" ng-click="main.deleteProduct(product.Code)"><p class = "fa fa-trash"></p></button>
-                    <button type="button" class="close" ng-click="main.setEditedProduct(product)"><p class = "fa fa-edit"></p></button>
-                    <button type="button" class="close" ng-click="main.viewProduct(product)"><p class = "fa fa-file"></p></button></td>
-                    </tr>
-                </tbody>
-                
-              </table>
-              <dir-pagination-controls
-                max-size="5"
-                direction-links="true"
-                boundary-links="true" >
-              </dir-pagination-controls>
-            <!-- /.box-body -->
-          </div>
-          </div>
-          <div ng-if="main.isEditing">
-            <h4> <b>Editing {{main.editedProduct.Name}}</b></h4>
-                <form  role="form" ng-submit="main.updateProduct(main.editedProduct)" novalidate>
-              <div class="box-body">
-                <div class="form-group">
-                  <label for="exampleEditBrandCode">Brand Code</label>
-                  <input type="text" class="form-control" ng-model="main.editedProduct.BrandCode" placeholder="Brand Code" disabled>
-                </div>
-                <div class="form-group">
-                  <label for="exampleEditCode">Code</label>
-                  <input type="text" class="form-control" ng-model="main.editedProduct.Code" placeholder="Code" disabled>
-                </div>  
-                <div class="form-group">
-                  <label for="exampleEditCode">SKU</label>
-                  <input type="text" class="form-control" ng-model="main.editedProduct.SKU" placeholder="SKU" >
-                </div>
-                <div class="form-group">
-                  <label for="exampleEditName">Name</label>
-                  <input type="text" class="form-control" ng-model="main.editedProduct.Name" placeholder="Name">
-                </div>
-                <div class="form-group">
-                  <label for="exampleEditDescription">Description</label>
-                  <input type="text" class="form-control" ng-model="main.editedProduct.Description" placeholder="Description">
-                </div>
-                <div class="form-group">
-                  <label for="exampleEditPrice">Price</label>
-                  <input type="text" class="form-control" ng-model="main.editedProduct.Price" placeholder="Price" >
-                </div>
-                <div class="form-group">
-                  <label for="exampleEditSpecification">Specification</label>
-                  <input type="text" class="form-control" ng-model="main.editedProduct.Specification" placeholder="Specification" >
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputFile">Logo</label>
-                  <input type="file" fileread="main.editedProduct.Image" required>
-                  <img src="{{main.editedProduct.Image}}" class="img-responsive" alt="Image preview..." />
-                  <input type="hidden" id="txtImage" ng-model="main.editedProduct.Image" value="{{main.editedProduct.Image}}" placeholder="drag image here" required/>
-              </div>
-              </div>
-              <!-- /.box-body -->
+                <th style="width:150px;"></th>
+</thead>
+<tbody>
+  <tr dir-paginate="product in main.products | filter:search |itemsPerPage:10" ng-class="{'active':main.isCurrentProduct(product.Code)}">
+    <td> {{product.BrandCode}} </td>
+    <td> {{product.Code}} </td>
+    <td> {{product.SKU}} </td>
+    <td>{{product.Name}} </td>
+    <td>{{product.Price}} </td>
+    <td>
+      <a type="button" class="btn btn-xs btn-default" ng-click="main.viewProduct(product)"><i class = "fa fa-file"></i></a>      &nbsp;
+      <a type="button" class="btn btn-xs btn-warning" ng-click="main.setEditedProduct(product)"><i class = "fa fa-pencil"></i></a>      &nbsp;
+      <a type="button" class="btn btn-xs btn-danger" ng-click="main.deleteProduct(product.Code)"><i class = "fa fa-trash"></i></a>      &nbsp;
+    </td>
+  </tr>
+</tbody>
 
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="button" class="btn btn-primary" ng-click="main.cancelEditing()">Cancel</button>
-              </div>
-            </form>
-            </div>
-
-          <div ng-if="main.isView">
-            <h4> <b>View Detail {{main.viewProduct.Name}}</b></h4>
-                
-              <div class="box-body">
-                <div class="form-group">
-                  <label for="exampleViewImage">Logo</label>
-                  <img src="{{main.viewProduct.Image}}" class="img-responsive" alt="Image preview..." />
-                </div>
-                <div class="form-group">
-                  <label for="exampleViewBrandCode">Brand Code</label>
-                  <input type="text" class="form-control" ng-model="main.viewProduct.BrandCode" placeholder="Brand Code" disabled>
-                </div>
-                <div class="form-group">
-                  <label for="exampleViewCode">Code</label>
-                  <input type="text" class="form-control" ng-model="main.viewProduct.Code" placeholder="Code" disabled>
-                </div>  
-                <div class="form-group">
-                  <label for="exampleViewCode">SKU</label>
-                  <input type="text" class="form-control" ng-model="main.viewProduct.SKU" placeholder="SKU" disabled>
-                </div>
-                <div class="form-group">
-                  <label for="exampleViewName">Name</label>
-                  <input type="text" class="form-control" ng-model="main.viewProduct.Name" placeholder="Name" disabled>
-                </div>
-                <div class="form-group">
-                  <label for="exampleViewDescription">Description</label>
-                  <input type="text" class="form-control" ng-model="main.viewProduct.Description" placeholder="Description" disabled>
-                </div>
-                <div class="form-group">
-                  <label for="exampleViewPrice">Price</label>
-                  <input type="text" class="form-control" ng-model="main.viewProduct.Price" placeholder="Price" disabled>
-                </div>
-                <div class="form-group">
-                  <label for="exampleViewSpecification">Specification</label>
-                  <input type="text" class="form-control" ng-model="main.viewProduct.Specification" placeholder="Specification" disabled>
-                </div>
-                
-              </div>
-              <!-- /.box-body -->
-
-              <div class="box-footer">
-                <div class="form-group">
-                  <button type="button"  class="btn btn-primary" ng-click="main.cancelEditing()">Back</button>
-                </div>
-                
-              </div>
-            
-            </div>
-          <!-- /.box -->
-
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
+</table>
+<dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+</dir-pagination-controls>
+<!-- /.box-body -->
+</div>
+</div>
+</div>
+<div ng-if="main.isEditing">
+  <h4> <b>Editing {{main.editedProduct.Name}}</b></h4>
+  <form role="form" ng-submit="main.updateProduct(main.editedProduct)" novalidate>
+    <div class="box-body">
+      <div class="form-group">
+        <label for="exampleEditBrandCode">Brand Code</label>
+        <input type="text" class="form-control" ng-model="main.editedProduct.BrandCode" placeholder="Brand Code" disabled>
       </div>
-      <!-- /.row -->
-    </section>
-    <!-- /.content -->
+      <div class="form-group">
+        <label for="exampleEditCode">Code</label>
+        <input type="text" class="form-control" ng-model="main.editedProduct.Code" placeholder="Code" disabled>
+      </div>
+      <div class="form-group">
+        <label for="exampleEditCode">SKU</label>
+        <input type="text" class="form-control" ng-model="main.editedProduct.SKU" placeholder="SKU">
+      </div>
+      <div class="form-group">
+        <label for="exampleEditName">Name</label>
+        <input type="text" class="form-control" ng-model="main.editedProduct.Name" placeholder="Name">
+      </div>
+      <div class="form-group">
+        <label for="exampleEditDescription">Description</label>
+        <input type="text" class="form-control" ng-model="main.editedProduct.Description" placeholder="Description">
+      </div>
+      <div class="form-group">
+        <label for="exampleEditPrice">Price</label>
+        <input type="text" class="form-control" ng-model="main.editedProduct.Price" placeholder="Price">
+      </div>
+      <div class="form-group">
+        <label for="exampleEditSpecification">Specification</label>
+        <input type="text" class="form-control" ng-model="main.editedProduct.Specification" placeholder="Specification">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputFile">Logo</label>
+        <input type="file" fileread="main.editedProduct.Image" required>
+        <img src="{{main.editedProduct.Image}}" class="img-responsive" alt="Image preview..." />
+        <input type="hidden" id="txtImage" ng-model="main.editedProduct.Image" value="{{main.editedProduct.Image}}" placeholder="drag image here"
+          required/>
+      </div>
+    </div>
+    <!-- /.box-body -->
+
+    <div class="box-footer">
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="button" class="btn btn-primary" ng-click="main.cancelEditing()">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<div ng-if="main.isView">
+  <h4> <b>View Detail {{main.viewProduct.Name}}</b></h4>
+
+  <div class="box-body">
+    <div class="form-group">
+      <label for="exampleViewImage">Logo</label>
+      <img src="{{main.viewProduct.Image}}" class="img-responsive" alt="Image preview..." />
+    </div>
+    <div class="form-group">
+      <label for="exampleViewBrandCode">Brand Code</label>
+      <input type="text" class="form-control" ng-model="main.viewProduct.BrandCode" placeholder="Brand Code" disabled>
+    </div>
+    <div class="form-group">
+      <label for="exampleViewCode">Code</label>
+      <input type="text" class="form-control" ng-model="main.viewProduct.Code" placeholder="Code" disabled>
+    </div>
+    <div class="form-group">
+      <label for="exampleViewCode">SKU</label>
+      <input type="text" class="form-control" ng-model="main.viewProduct.SKU" placeholder="SKU" disabled>
+    </div>
+    <div class="form-group">
+      <label for="exampleViewName">Name</label>
+      <input type="text" class="form-control" ng-model="main.viewProduct.Name" placeholder="Name" disabled>
+    </div>
+    <div class="form-group">
+      <label for="exampleViewDescription">Description</label>
+      <input type="text" class="form-control" ng-model="main.viewProduct.Description" placeholder="Description" disabled>
+    </div>
+    <div class="form-group">
+      <label for="exampleViewPrice">Price</label>
+      <input type="text" class="form-control" ng-model="main.viewProduct.Price" placeholder="Price" disabled>
+    </div>
+    <div class="form-group">
+      <label for="exampleViewSpecification">Specification</label>
+      <input type="text" class="form-control" ng-model="main.viewProduct.Specification" placeholder="Specification" disabled>
+    </div>
+
   </div>
+  <!-- /.box-body -->
+
+  <div class="box-footer">
+    <div class="form-group">
+      <button type="button" class="btn btn-primary" ng-click="main.cancelEditing()">Back</button>
+    </div>
+
+  </div>
+
+</div>
+<!-- /.box -->
+
+<!-- /.box -->
+</div>
+<!-- /.col -->
+</div>
+<!-- /.row -->
+</section>
+<!-- /.content -->
+</div>

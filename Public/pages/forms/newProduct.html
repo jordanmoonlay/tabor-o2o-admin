@@ -1,11 +1,12 @@
-<div class="box-header with-border">
-  <h3 class="box-title">New Product</h3>
-</div>
+
 <div ng-controller="productCtrl as main">
   <!-- /.box-header -->
   <!-- form start -->
-  <div ng-if="!main.isEditing">
+  <div class="box box-primary" ng-if="!main.isEditing">
     <form role="form" name="productFormValidate" ng-submit="main.createProduct(main.newProduct)" novalidate>
+      <div class="box-header with-border">
+        <h3 class="box-title">Create Product</h3>
+      </div>
       <div class="box-body">
         <!--<div class="form-group" id="scrollable-dropdown-menu">
                   <label for="exampleInputBrands">Brands</label></br>
