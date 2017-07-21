@@ -1,0 +1,79 @@
+<!-- /.box-header -->
+<!-- form start -->
+<div ng-controller="kioskCtrl as main">
+
+  <div  class="box box-primary"  ng-if="!main.isEditing">
+    <form role="form" name="kioskFormValidate" ng-submit="main.createKiosk(main.newKiosk)" novalidate>
+      <div class="box-header with-border">
+        <h3 class="box-title">New Kiosk</h3>
+      </div>
+      <div class="box-body">
+      <div class="form-group" id="scrollable-dropdown-menu">
+            <label for="exampleInputOutlet">Outlet</label></br>
+            <input class="form-control" type="text" name="outletid" autocomplete="off" ng-model="selectedTestOutlet" typeahead="item as item.code +'-'+ item.name for item in main.getOutlets($viewValue) "
+              typeahead-on-select="main.selectOutlet(selectedTestOutlet)" placeholder="Outlet" required>
+            <span style="color:green" ng-if="kioskFormValidate.outletid.$valid"> Valid </span>
+            <div ng-if="main.errors.details.messages.outletid[0]">
+            <div style="color:red">  {{ main.errors.details.messages.outletid[0] }}</div>
+            </div>
+          </div>
+          
+          <!-- <div class="form-group" >   
+                    <label for="exampleSelectId">Outlet</label> 
+                    <select class="form-control select2" style="width: 100%;"  ng-model="selectedTestOutlet" ng-options="item as item.name +' - '+ item.id +' - '+ item.code for item in main.outlets" ng-change="main.selectOutlet(selectedTestOutlet)">
+                      <option value="">Select ID</option>
+                    </select>
+                </div>-->
+        <div class="form-group">
+            <label>Kiosk Code</label>
+            <input type="text" class="form-control" ng-model="main.newKiosk.Code" disabled=true>
+        </div>
+        <div class="form-group">
+            <label>Kiosk Name</label>
+            <input type="text" class="form-control" ng-model="main.newKiosk.Name" disabled=true>
+        </div>
+        <div class="form-group">
+            <label>Kiosk Address</label>
+            <input type="text" class="form-control" ng-model="main.newKiosk.Address" disabled=true>
+        </div>
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input type="text" class="form-control" ng-model="main.newKiosk.PhoneNumber" ng-init="main.newKiosk.PhoneNumber=0" required >
+            <div ng-if="main.errors.details.messages.PhoneNumber[0]">
+              <div style="color:red"> {{main.errors.details.messages.PhoneNumber[0]}}</div>
+              <span style="color:green" ng-if ="kioskFormValidate.PhoneNumber.$valid"> Valid </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Outlet Id</label>
+            <input type="text" class="form-control" ng-model="main.newKiosk.OutletId" disabled=true>
+        </div>
+        <div class="form-group">
+            <label>Outlet Code</label>
+            <input type="text" class="form-control" ng-model="main.newKiosk.OutletCode" disabled=true>
+        </div>
+        <div class="form-group">
+            <label>Outlet Name</label>
+            <input type="text" class="form-control" ng-model="main.newKiosk.OutletName" disabled=true>
+        </div>
+
+        <div class="form-group">
+            <label>Branch Id</label>
+            <input type="text" class="form-control" ng-model="main.newKiosk.BranchId" disabled=true>
+        </div>
+        <div class="form-group">
+            <label>Branch Code</label>
+            <input type="text" class="form-control" ng-model="main.newKiosk.BranchCode" disabled=true>
+        </div>
+        <div class="form-group">
+            <label>Branch Name</label>
+            <input type="text" class="form-control" ng-model="main.newKiosk.BranchName" disabled=true>
+        </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+    </div>
+  </div>
