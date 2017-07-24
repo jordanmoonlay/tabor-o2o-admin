@@ -33,6 +33,7 @@
   <link rel="stylesheet" href="../../assets/css/normalize.css">
     <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">-->
     <link rel="stylesheet" href="../../assets/css/app.css">
+    
        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
@@ -47,6 +48,7 @@
     <script src="http://angular-ui.github.com/bootstrap/ui-bootstrap-tpls-0.6.0.js"></script>
     <script src="../../app/dirPagination.js"></script>
     
+
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -138,9 +140,22 @@
             <li><a ui-sref="newDealer"><i class="fa fa-circle-o"></i> New Dealer</a></li>
           </ul>
         </li>
+
+        <li class="treeview">
+          <a href="pages/forms/viewKiosks.html">
+            <i class="fa fa-edit"></i> <span>KIOSK</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a ui-sref="viewKiosks"><i class="fa fa-circle-o"></i> View Kiosks</a></li>
+            <li><a ui-sref="newKiosk"><i class="fa fa-circle-o"></i> New Kiosks</a></li>
+          </ul>
+        </li>
         
 
-        <!--<li class="treeview">
+        <li class="treeview">
           <a href="pages/forms/viewOrders.html">
             <i class="fa fa-edit"></i> <span>ORDER</span>
             <span class="pull-right-container">
@@ -152,7 +167,7 @@
             <li><a ui-sref="newOrder"><i class="fa fa-circle-o"></i> View New Order</a></li>
           </ul>
         </li>
--->
+
       </ul>
     </section>
     <!-- /.sidebar -->
@@ -239,6 +254,7 @@
 <script src="dist/js/demo.js"></script>
 <script src="../../app/app.js"></script>
 <script src="../../app/lb-services.js"></script>
-
+<!--<script src="../../app/auth.service.js"></script>-->
+  </script>
 </body>
 </html>

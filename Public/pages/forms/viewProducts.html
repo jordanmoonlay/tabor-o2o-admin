@@ -39,7 +39,7 @@
     <td>{{product.Name}} </td>
     <td>{{product.Price}} </td>
     <td>
-      <a type="button" class="btn btn-xs btn-default" ng-click="main.viewProduct(product)"><i class = "fa fa-file"></i></a>      &nbsp;
+      <a type="button" class="btn btn-xs btn-default" ng-click="main.setViewProduct(product)"><i class = "fa fa-file"></i></a>      &nbsp;
       <a type="button" class="btn btn-xs btn-warning" ng-click="main.setEditedProduct(product)"><i class = "fa fa-pencil"></i></a>      &nbsp;
       <a type="button" class="btn btn-xs btn-danger" ng-click="main.deleteProduct(product.Code)"><i class = "fa fa-trash"></i></a>      &nbsp;
     </td>
@@ -82,9 +82,31 @@
         <input type="text" class="form-control" ng-model="main.editedProduct.Price" placeholder="Price">
       </div>
       <div class="form-group">
-        <label for="exampleEditSpecification">Specification</label>
-        <input type="text" class="form-control" ng-model="main.editedProduct.Specification" placeholder="Specification">
+        <label for="exampleEditDP">DP</label>
+        <input type="text" class="form-control" ng-model="main.editedProduct.DP" placeholder="DP">
       </div>
+      <div class="form-group">
+        <label for="exampleEditSpecification">Specification</label>
+        <input type="text" class="form-control" ng-model="main.editedProduct.Specification" placeholder="Specification" disabled>
+      </div>
+       <div class="form-group">
+          <label for="exampleInputSpecification">RAM</label>
+          <input type="text" name="Spec" autocomplete="off" class="form-control" ng-model="SpecRam" 
+          ng-change="main.getSpec(SpecRam, SpecColor)" placeholder="RAM" required>
+          <div ng-if="main.errors.details.messages.SpecRam[0]">
+              <div style="color:red"> {{main.errors.details.messages.SpecRam[0]}}</div>
+            </div>
+            <span style="color:green" ng-if ="productFormValidate.Spec.$valid"> Valid </span>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputSpecification">COLOR</label>
+          <input type="text" name="Spec" autocomplete="off" class="form-control" ng-model="SpecColor"
+          ng-change="main.getSpec(SpecRam, SpecColor)" placeholder="COLOR" required>
+          <div ng-if="main.errors.details.messages.SpecColor[0]">
+              <div style="color:red"> {{main.errors.details.messages.SpecColor[0]}}</div>
+            </div>
+            <span style="color:green" ng-if ="productFormValidate.Spec.$valid"> Valid </span>
+        </div>
       <div class="form-group">
         <label for="exampleInputFile">Logo</label>
         <input type="file" fileread="main.editedProduct.Image" required>
@@ -135,16 +157,21 @@
       <input type="text" class="form-control" ng-model="main.viewProduct.Price" placeholder="Price" disabled>
     </div>
     <div class="form-group">
+      <label for="exampleViewDP">DP</label>
+      <input type="text" class="form-control" ng-model="main.viewProduct.DP" placeholder="DP" disabled>
+    </div>
+    <div class="form-group">
       <label for="exampleViewSpecification">Specification</label>
       <input type="text" class="form-control" ng-model="main.viewProduct.Specification" placeholder="Specification" disabled>
     </div>
+   
 
   </div>
   <!-- /.box-body -->
 
   <div class="box-footer">
     <div class="form-group">
-      <button type="button" class="btn btn-primary" ng-click="main.cancelEditing()">Back</button>
+      <button type="button" class="btn btn-primary" ng-click="main.cancelView()">Back</button>
     </div>
 
   </div>
