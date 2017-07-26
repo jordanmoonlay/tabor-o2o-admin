@@ -15,7 +15,7 @@
                 </div>-->
         <div class="form-group" id="scrollable-dropdown-menu">
           <label for="exampleInputBranch">BrandCode</label></br>
-          <input type="text" class="form-control" name="brandId" autocomplete="off" ng-model="selectedTestBrand" typeahead="item as item.Code +' ('+ item.Name +')' for item in main.brands | filter:$viewValue"
+          <input type="text" class="form-control" name="brandId" autocomplete="off" ng-model="selectedTestBrand" uib-typeahead="item as item.Code +' ('+ item.Name +')' for item in main.brands | filter:$viewValue"
             typeahead-on-select="main.selectBrand(selectedTestBrand)" placeholder="Brand" required>
             <div ng-if="main.errors.details.messages.BrandCode[0]">
               <div style="color:red"> {{main.errors.details.messages.BrandCode[0]}}</div>
