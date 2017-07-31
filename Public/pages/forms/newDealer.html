@@ -26,7 +26,7 @@
           </div>
           <div class="form-group" id="scrollable-dropdown-menu">
             <label for="exampleInputBranch">Branch</label></br>
-            <input class="form-control" type="text" name="branchid" ng-model="selectedTestBranch" typeahead="item as item.id +' - '+ item.code +' - '+ item.name for item in main.branches | filter:$viewValue"
+            <input class="form-control" type="text" name="branchid" ng-model="selectedTestBranch" uib-typeahead="item as item.id +' - '+ item.code +' - '+ item.name for item in main.branches | filter:$viewValue"
               typeahead-on-select="main.selectBranch(selectedTestBranch)" placeholder="Branch" required>
             <span style="color:green" ng-if="dealerFormValidate.branchid.$valid"> Valid </span>
             <div ng-if="main.errors.details.messages.branchid[0]">

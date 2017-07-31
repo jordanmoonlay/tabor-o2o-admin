@@ -10,7 +10,7 @@
       <div class="box-body">
       <div class="form-group" id="scrollable-dropdown-menu">
             <label for="exampleInputOutlet">Outlet</label></br>
-            <input class="form-control" type="text" name="outletid" autocomplete="off" ng-model="selectedTestOutlet" typeahead="item as item.code +'-'+ item.name for item in main.getOutlets($viewValue) "
+            <input class="form-control" type="text" name="outletid" autocomplete="off" ng-model="selectedTestOutlet" uib-typeahead="item as item.code +'-'+ item.name for item in main.getOutlets($viewValue) "
               typeahead-on-select="main.selectOutlet(selectedTestOutlet)" placeholder="Outlet" required>
             <span style="color:green" ng-if="kioskFormValidate.outletid.$valid"> Valid </span>
             <div ng-if="main.errors.details.messages.outletid[0]">
