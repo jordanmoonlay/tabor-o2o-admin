@@ -558,8 +558,8 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
         function setViewOrder(order){
             $http({
                 method : 'GET',
-//              url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url : 'http://localhost:10010/api/orderDetails?filter={"where":{"OrderCode":"'+order.Code+'"}}',
+              url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
+//                url : 'http://localhost:10010/api/orderDetails?filter={"where":{"OrderCode":"'+order.Code+'"}}',
                 data:{}
             }).then(function (result){
                 main.ordersDetails = result.data;
@@ -660,7 +660,8 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
         function getOrders() {
             $http({
                 method : 'GET',
-                url : 'http://localhost:10010/api/Order?filter={"where":{"Status":"CREATED"}}',
+                url : 'http://tabor-o2o-webapi-internal-dev/api/Order?filter={"where":{"Status":"CREATED"}}',
+                // url : 'http://localhost:10010/api/Order?filter={"where":{"Status":"CREATED"}}',
                 data:{}
             }).then(function (result){
                 main.orders = result.data;
@@ -670,8 +671,8 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
         function getDealers(){
             $http({
                 method : 'GET',
-//              url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url : 'http://localhost:10010/api/dealers',
+             url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
+                // url : 'http://localhost:10010/api/dealers',
                 data:{}
             }).then(function (result){
                 main.dealers = result.data;
@@ -743,8 +744,8 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
         function setViewOrder(order){
             $http({
                 method : 'GET',
-//              url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url : 'http://localhost:10010/api/orderDetails?filter={"where":{"OrderCode":"'+order.Code+'"}}',
+             url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
+                // url : 'http://localhost:10010/api/orderDetails?filter={"where":{"OrderCode":"'+order.Code+'"}}',
                 data:{}
             }).then(function (result){
                 main.ordersDetails = result.data;
