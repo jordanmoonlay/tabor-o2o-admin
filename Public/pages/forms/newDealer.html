@@ -11,7 +11,7 @@
         <div class="form-group">
           <label for="exampleInputCode">Code</label>
           <input type="text" class="form-control" name="code" ng-model="main.newDealer.Code" placeholder="Code" required>
-          <span style="color:green" ng-if="dealerFormValidate.code.$valid"> Valid </span>
+    
 
           <div ng-if="main.errors.details.messages.Code[0]">
           <div style="color:red">  {{ main.errors.details.messages.Code[0] }}</div>
@@ -19,7 +19,7 @@
           <div class="form-group">
             <label for="exampleInputName">Name</label>
             <input type="text" name="Name" class="form-control" ng-model="main.newDealer.Name" placeholder="Name" required>
-            <span style="color:green" ng-if="dealerFormValidate.Name.$valid"> Valid </span>
+          
             <div ng-if="main.errors.details.messages.Name[0]">
             <div style="color:red">  {{ main.errors.details.messages.Name[0] }}</div>
             </div>
@@ -28,7 +28,7 @@
             <label for="exampleInputBranch">Branch</label></br>
             <input class="form-control" type="text" name="branchid" ng-model="selectedTestBranch" uib-typeahead="item as item.id +' - '+ item.code +' - '+ item.name for item in main.branches | filter:$viewValue"
               typeahead-on-select="main.selectBranch(selectedTestBranch)" placeholder="Branch" required>
-            <span style="color:green" ng-if="dealerFormValidate.branchid.$valid"> Valid </span>
+            
             <div ng-if="main.errors.details.messages.branchid[0]">
             <div style="color:red">  {{ main.errors.details.messages.branchid[0] }}</div>
             </div>
@@ -54,7 +54,7 @@
           <div class="form-group">
             <label for="exampleInputDescription">Description</label>
             <input type="text" name="desc" class="form-control" ng-model="main.newDealer.Description" placeholder="Description" required>
-            <span style="color:green" ng-if="dealerFormValidate.desc.$valid"> Valid </span>
+            
             <div ng-if="main.errors.details.messages.Description[0]">
             <div style="color:red">  {{ main.errors.details.messages.Description[0] }}</div>
             </div>
@@ -62,7 +62,7 @@
           <div class="form-group">
             <label for="exampleInputAddress">Address</label>
             <input type="text" name="Address" class="form-control" ng-model="main.newDealer.Address" placeholder="Address" required>
-            <span style="color:green" ng-if="dealerFormValidate.Address.$valid"> Valid </span>
+            
             <div ng-if="main.errors.details.messages.Address[0]">
             <div style="color:red">  {{ main.errors.details.messages.Address[0] }}</div>
             </div>
@@ -71,7 +71,7 @@
             <label for="exampleInputPhoneNumber">Phone Number</label>
             <input type="text" name="PhoneNumber" class="form-control" ng-model="main.newDealer.PhoneNumber" placeholder="PhoneNumber"
               required>
-            <span style="color:green" ng-if="dealerFormValidate.PhoneNumber.$valid"> Valid </span>
+            
             <div ng-if="main.errors.details.messages.PhoneNumber[0]">
              <div style="color:red"> {{ main.errors.details.messages.PhoneNumber[0] }}</div>
             </div>
