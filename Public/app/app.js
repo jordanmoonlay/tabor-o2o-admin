@@ -223,11 +223,11 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
         function getBrands() {
             $http({
-                method: 'GET',
-                //               url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/brands',
-                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/brands',
-                data: {}
-            }).then(function (result) {
+                method : 'GET',
+                url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/brands',
+ //                 url : 'http://localhost:10010/api/brands',
+                data:{}
+            }).then(function (result){
                 main.brands = result.data;
             });
         }
@@ -558,11 +558,11 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
         function setViewOrder(order) {
             $http({
-                method: 'GET',
-                //              url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/orderDetails?filter={"where":{"OrderCode":"' + order.Code + '"}}',
-                data: {}
-            }).then(function (result) {
+                method : 'GET',
+              url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
+//                url : 'http://localhost:10010/api/orderDetails?filter={"where":{"OrderCode":"'+order.Code+'"}}',
+                data:{}
+            }).then(function (result){
                 main.ordersDetails = result.data;
                 main.isShow = false;
                 main.isView = true;
@@ -667,12 +667,35 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             //         console.log(res);
             //     });
             $http({
-                method: 'GET',
-                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order?filter={"where":{"Status":"CREATED"}}',
-                data: {}
-            }).then(function successCallback(result) {
+                method : 'GET',
+                url : 'http://tabor-o2o-webapi-internal-dev/api/Order?filter={"where":{"Status":"CREATED"}}',
+                // url : 'http://localhost:10010/api/Order?filter={"where":{"Status":"CREATED"}}',
+                data:{}
+            }).then(function (result){
                 main.orders = result.data;
             });
+        }
+
+        function getDealers(){
+            $http({
+                method : 'GET',
+             url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
+                // url : 'http://localhost:10010/api/dealers',
+                data:{}
+            }).then(function (result){
+                main.dealers = result.data;
+            });   
+        }
+
+        function createOrder(order) {
+            Order.create(order,
+                function (result) {
+                    initCreateForm();
+                    getOrders();
+                }, function(errors){
+                    main.errors = errors.data.error;
+                }
+                );
         }
 
         function updateOrder(order) {
