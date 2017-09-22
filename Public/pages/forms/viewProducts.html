@@ -107,6 +107,23 @@
             </div>
             <span style="color:green" ng-if ="productFormValidate.Spec.$valid"> Valid </span>
         </div>
+
+      <div class="form-group">
+      <label for="exampleViewWeight">Weight</label>
+      <input type="text" class="form-control" ng-model="main.editedProduct.Weight" placeholder="Weight" disabled>
+    </div>
+    <div class="form-group">
+      <label for="exampleViewWidth">Width</label>
+      <input type="text" class="form-control" ng-model="main.editedProduct.Width" placeholder="Width" disabled>
+    </div>
+    <div class="form-group">
+      <label for="exampleViewHeight">Height</label>
+      <input type="text" class="form-control" ng-model="main.editedProduct.Height" placeholder="Height" disabled>
+    </div>
+    <div class="form-group">
+      <label for="exampleViewLength">Length</label>
+      <input type="text" class="form-control" ng-model="main.editedProduct.Length" placeholder="Length" disabled>
+    </div>
       <div class="form-group">
         <label for="exampleInputFile">Logo</label>
         <input type="file" fileread="main.editedProduct.Image" required>
@@ -114,6 +131,7 @@
         <input type="hidden" id="txtImage" ng-model="main.editedProduct.Image" value="{{main.editedProduct.Image}}" placeholder="drag image here"
           required/>
       </div>
+    
     </div>
     <!-- /.box-body -->
 
@@ -163,6 +181,22 @@
     <div class="form-group">
       <label for="exampleViewSpecification">Specification</label>
       <input type="text" class="form-control" ng-model="main.viewProduct.Specification" placeholder="Specification" disabled>
+    </div>
+    <div class="form-group">
+      <label for="exampleViewWeight">Weight</label>
+      <input type="text" class="form-control" ng-model="main.viewProduct.Weight" placeholder="Weight" disabled>
+    </div>
+    <div class="form-group">
+      <label for="exampleViewWidth">Width</label>
+      <input type="text" class="form-control" ng-model="main.viewProduct.Width" placeholder="Width" disabled>
+    </div>
+    <div class="form-group">
+      <label for="exampleViewHeight">Height</label>
+      <input type="text" class="form-control" ng-model="main.viewProduct.Height" placeholder="Height" disabled>
+    </div>
+    <div class="form-group">
+      <label for="exampleViewLength">Length</label>
+      <input type="text" class="form-control" ng-model="main.viewProduct.Length" placeholder="Length" disabled>
     </div>
    
 
