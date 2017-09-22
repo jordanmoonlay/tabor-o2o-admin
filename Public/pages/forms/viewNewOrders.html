@@ -21,7 +21,7 @@
           </div>
             </form>
           <div class="row">
-          <div class="col-md-12">
+          <div class="col-sm-12">
               <table class="table table-bordered table-hover">
                 <thead>
                 <th>Code</th>
@@ -52,7 +52,7 @@
                     <td>
                    <a type="button" class="btn btn-xs btn-default" ng-click="main.setViewOrder(order)"><i class = "fa fa-file"></i></a>  &nbsp;
                   <a type="button" class="btn btn-xs btn-danger" ng-click="main.deleteOrder(order.Code)"><i class = "fa fa-trash"></i></a>  &nbsp;
-                  <a type="button" class="btn btn-xl btn-default" ng-click="main.setEditedOrder(order)"><i class = "fa fa-tasks" ></i></a>  &nbsp;
+                  <a type="button" class="btn btn-xl btn-default" ng-click="main.openModalAssign(order)" ><i class = "fa fa-tasks" ></i></a>  &nbsp;
                     </td>  
                     </tr>
                 </tbody>
@@ -68,64 +68,7 @@
           </div>
         </div>
 
-    <div ng-if="main.isEditing">
-      <h4> <b>Editing {{main.editedOrder.Code}}</b></h4>
-      <form role="form" ng-submit="main.updateOrder(main.editedOrder)" novalidate>
-        <div class="box-body">
-          <div class="form-group" id="scrollable-dropdown-menu">
-          <label for="DealerCode">Dealer Code</label></br>
-          <input type="text" class="form-control" name="dealerCode" autocomplete="off" ng-model="selectedDealer" typeahead="item as item.Code +' ('+ item.Name +') ' for item in main.dealers | filter:$viewValue"
-            typeahead-on-select="main.selectDealer(selectedDealer)" placeholder="Dealer Code" required>
-            <div ng-if="main.errors.details.messages.dealerCode[0]">
-              <div style="color:red"> {{main.errors.details.messages.dealerCode[0]}}</div>
-            </div>
-            <span style="color:green" ng-if ="productFormValidate.dealerCode.$valid"> Valid </span>
-          </div>
-          <div class="form-group">
-            <input type="hidden" class="form-control" ng-model="main.editedOrder.DealerCode">
-          </div>
-          <div class="form-group">
-            <label for="editedOrderCode">Code</label>
-            <input type="text" class="form-control" ng-model="main.editedOrder.Code" disabled>
-          </div>
-          <div class="form-group">
-            <label for="Code">Kiosk Code</label>
-            <input type="text" class="form-control" ng-model="main.editedOrder.KioskCode"  disabled>
-          </div>
-
-          <div class="form-group">
-            <label for="DP">DP</label>
-            <input type="text" class="form-control" ng-model="main.editedOrder.DP" disabled>
-          </div>
-          <div class="form-group">
-            <label for="Discount">Discount</label>
-            <input type="text" class="form-control" ng-model="main.editedOrder.Discount" disabled >
-          </div>
-          <div class="form-group">
-            <label for="DiscountNominal">DiscountNominal</label>
-            <input type="text" class="form-control" ng-model="main.editedOrder.DiscountNominal" disabled>
-          </div>
-          <div class="form-group">
-            <label for="exampleEditDP">DP</label>
-            <input type="text" class="form-control" ng-model="main.editedOrder.TotalPrice" disabled>
-          </div>
-          <div class="form-group">
-            <label for="TotalQty">Total Qty</label>
-            <input type="text" class="form-control" ng-model="main.editedOrder.TotalQty" disabled>
-          </div>
-          <div class="form-group">
-            <label for="Destination">Destination</label>
-            <input type="text" class="form-control" ng-model="main.editedOrder.Destination"  disabled>
-          </div>
-        </div>
-        <!-- /.box-body -->
-
-        <div class="box-footer">
-          <button type="submit" class="btn btn-primary">Assign</button>
-          <button type="button" class="btn btn-primary" ng-click="main.cancelEditing()">Cancel</button>
-        </div>
-      </form>
-    </div>
+   
 
       <div class="box-body" ng-if="main.isView">
               <form class="form-inline">
