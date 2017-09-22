@@ -15,7 +15,7 @@
           <div ng-if="main.errors.details.messages.Code[0]">
             <div style="color:red"> {{main.errors.details.messages.Code[0]}}</div>
           </div>
-          <span style="color:green" ng-if ="brandForm.code.$valid"> Valid </span>
+        
         </div>
         <div class="form-group">
           <label for="exampleInputName">Name</label>
@@ -23,7 +23,6 @@
           <div ng-if="main.errors.details.messages.Name[0]">
               <div style="color:red"> {{main.errors.details.messages.Name[0]}}</div>
           </div>
-          <span style="color:green" ng-if ="brandForm.nama.$valid"> Valid </span>
         </div>
         <div class="form-group">
           <label for="exampleInputDescription">Description</label>
@@ -31,7 +30,6 @@
           <div ng-if="main.errors.details.messages.Description[0]">
             <div style="color:red"> {{main.errors.details.messages.Description[0]}}</div>
         </div>
-        <span style="color:green" ng-if ="brandForm.desc.$valid"> Valid </span>
         <div class="form-group">
           <label for="exampleInputFile">Logo</label>
           <input type="file" fileread="main.newBrand.Logo" required>

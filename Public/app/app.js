@@ -225,7 +225,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             $http({
                 method: 'GET',
                 //               url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/brands',
-                url: 'http://11.11.1.42:10010/api/brands',
+                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/brands',
                 data: {}
             }).then(function (result) {
                 main.brands = result.data;
@@ -234,7 +234,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
 
         function initCreateForm() {
-            main.newProduct = { Code: '', BrandCode: '', Name: '', Description: '', Price: '', DP: '', Specification: '', Image: '', Active: 1, Deleted: 0, CreatedBy: 'AUTO', CreatedDate: defDate, CreateAgent: 'AUTO', UpdatedBy: 'AUTO', UpdatedDate: defDate, UpdateAgent: 'AUTO' };
+            main.newProduct = { Code: '', BrandCode: '', Name: '', Description: '', Price: '', DP: '', Specification: '',Weight:'',Width:'',Height:'',Length:'', Image: '', Active: 1, Deleted: 0, CreatedBy: 'AUTO', CreatedDate: defDate, CreateAgent: 'AUTO', UpdatedBy: 'AUTO', UpdatedDate: defDate, UpdateAgent: 'AUTO' };
         }
 
         function setEditedProduct(product) {
@@ -560,7 +560,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             $http({
                 method: 'GET',
                 //              url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url: 'http://11.11.1.42:10010/api/orderDetails?filter={"where":{"OrderCode":"' + order.Code + '"}}',
+                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/orderDetails?filter={"where":{"OrderCode":"' + order.Code + '"}}',
                 data: {}
             }).then(function (result) {
                 main.ordersDetails = result.data;
@@ -660,7 +660,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         var submain = this;
 
         function getOrders() {
-            // $http.get('http://11.11.1.42:10010/api/Order?filter={"where":{"Status":"CREATED"}}',
+            // $http.get('http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order?filter={"where":{"Status":"CREATED"}}',
             //     function (result) {
             //         main.orders = result.data;
             //     }, function (res) {
@@ -668,7 +668,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             //     });
             $http({
                 method: 'GET',
-                url: 'http://11.11.1.42:10010/api/Order?filter={"where":{"Status":"CREATED"}}',
+                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order?filter={"where":{"Status":"CREATED"}}',
                 data: {}
             }).then(function successCallback(result) {
                 main.orders = result.data;
@@ -729,7 +729,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             $http({
                 method: 'GET',
                 //              url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url: 'http://11.11.1.42:10010/api/orderDetails?filter={"where":{"OrderCode":"' + order.Code + '"}}',
+                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/orderDetails?filter={"where":{"OrderCode":"' + order.Code + '"}}',
                 data: {}
             }).then(function (result) {
                 main.ordersDetails = result.data;
@@ -800,7 +800,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             $http({
                 method: 'GET',
                 //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url: 'http://11.11.1.42:10010/api/kiosks?filter={"where":{"Code":"'+ data.KioskCode +'"}}',
+                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/kiosks?filter={"where":{"Code":"'+ data.KioskCode +'"}}',
                 data:{}
             }).then(function successCallback(result) {
                 main.kiosks = result.data[0].BranchCode;
@@ -815,7 +815,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             $http({
                 method: 'GET',
                 //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url: 'http://11.11.1.42:10010/api/dealers?filter={"where":{"BranchCode":"'+main.kiosks+'"}}',
+                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/dealers?filter={"where":{"BranchCode":"'+main.kiosks+'"}}',
                 data:{}
             }).then(function (result) {
                 main.dealers = result.data;
@@ -829,7 +829,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             $http({
                 method: 'GET',
                 //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url: 'http://11.11.1.42:10010/api/orderDetails?filter={"where":{"OrderCode":"' + data.Code + '"}}',
+                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/orderDetails?filter={"where":{"OrderCode":"' + data.Code + '"}}',
                 data:{}
             }).then(function (result) {
                 main.orderDetails = result.data;
@@ -844,7 +844,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             $http({
                 method: 'GET',
                 //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url: 'http://11.11.1.42:10010/api/ProductDealers?filter={"where":{"and":[{"ProductCode":{"inq":['+joinConvOrderDetails+']}},{"DealerCode":{"inq":['+joinConvDealers+']}}]}}',
+                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/ProductDealers?filter={"where":{"and":[{"ProductCode":{"inq":['+joinConvOrderDetails+']}},{"DealerCode":{"inq":['+joinConvDealers+']}}]}}',
                 data:{}
             }).then(function (result) {
                 main.productDealers = result.data;
