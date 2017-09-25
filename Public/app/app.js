@@ -12,39 +12,56 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             })
             .state('newBrand', {
                 url: '/newBrand',
-                templateUrl: 'pages/forms/newBrand.html'
+                templateUrl: 'pages/forms/brand/newBrand.html'
             })
             .state('viewProducts', {
                 url: '/viewProducts',
-                templateUrl: 'pages/forms/viewProducts.html'
+                templateUrl: 'pages/forms/product/viewProducts.html'
             })
             .state('newProduct', {
                 url: '/newProduct',
-                templateUrl: 'pages/forms/newProduct.html'
+                templateUrl: 'pages/forms/product/newProduct.html'
             })
             .state('viewKiosks', {
                 url: '/viewKiosks',
-                templateUrl: 'pages/forms/viewKiosks.html'
+                templateUrl: 'pages/forms/kiosk/viewKiosks.html'
+            })
+            .state('viewKioskMap', {
+                url: '/viewKiosks/map/{:kioskId}',                
+                templateUrl: 'pages/forms/kiosk/viewKioskMap.html',
+                controller:'kioskMapCtrl',
+                controllerAs:'main',
+                // resolve:{
+                //     listProduct:['$http', function($http){
+                //         return $http({
+                //             method: 'GET',
+                //             url:"http://localhost:1337/api" + "/Products",
+                //             data: {}
+                //         }).then(function (result) {
+                //             return result;
+                //         })
+                //     }
+                //     ]} 
             })
             .state('newKiosk', {
                 url: '/newKiosk',
-                templateUrl: 'pages/forms/newKiosk.html'
+                templateUrl: 'pages/forms/kiosk/newKiosk.html'
             })
             .state('viewDealers', {
                 url: '/viewDealers',
-                templateUrl: 'pages/forms/viewDealers.html'
+                templateUrl: 'pages/forms/dealer/viewDealers.html'
             })
             .state('viewOrders', {
                 url: '/viewOrders',
-                templateUrl: 'pages/forms/viewOrders.html'
+                templateUrl: 'pages/forms/order/viewOrders.html'
             })
             .state('newDealer', {
                 url: '/newDealer',
-                templateUrl: 'pages/forms/newDealer.html'
+                templateUrl: 'pages/forms/dealer/newDealer.html'
             })
             .state('newOrder', {
                 url: '/newOrder',
-                templateUrl: 'pages/forms/viewNewOrders.html'
+                templateUrl: 'pages/forms/order/viewNewOrders.html'
             })
             .state('home', {
                 url: '/index',
@@ -1057,6 +1074,89 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         getKiosks();
         getOutlets();
 
+    })
+    .controller('kioskMapCtrl', function (Kiosk,Product, $http,$uibModal,$rootScope,$log,$scope,$stateParams) {
+        var main = this;
+        var defDate = new Date();
+        var submain = this;
+
+        function getProduct() {
+            Product.find(
+                function (result) {
+                    main.products = result;
+                });
+        }
+
+        function getKiosksDetail(code){
+            console.log(code)
+            Kiosk.findById({Code:code},function(result){
+                    main.kiosk = result;
+            } );
+        }
+
+        
+
+        function init(){
+            getProduct();
+            getKiosksDetail($stateParams.kioskId)
+        }
+
+        main.openModal = function (size,obj,codeProduct) {
+        
+        var modalInstance = $uibModal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'pages/forms/kiosk/modalKioskMap.html',
+            controller: 'modalMapDealerCtrl',
+            controllerAs: 'main',
+            size: size,
+            resolve: {
+                items: function () {
+                    var data = {}
+                    data.obj = obj
+                    data.code = codeProduct
+                    return data
+                },               
+            }
+        });
+
+        modalInstance.result.then(function (Kiosk) {
+        //Kiosk.save(tripCostLetter);
+        $rootScope.modalDialog("Data berhasil di simpan","viewKioskMap");
+        }, function () {
+        $log.info('Modal dismissed at: ' + new Date());
+        });
+        };
+
+        main.products = [];
+        main.kiosk = null
+        init();
+        
+
+        
+
+    })
+    .controller('modalMapDealerCtrl', function ($uibModalInstance, items,Dealer,$rootScope) {
+
+    var vm = this;
+    console.log(items)
+    vm.branchId = items.obj.BranchId
+    vm.dealers = []
+    function getDealer() {
+            Dealer.find({"where":{"BranchId":vm.branchId}},
+                function (result) {
+                    vm.dealers = result;
+                });
+        }
+
+    vm.items = items
+
+    vm.ok = function () {
+        $uibModalInstance.close();
+    };
+
+    vm.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
     })
 
     //     .controller('LoginController', ['$scope', '$state', 'authService', '$location', function ($scope, $state, authService, $location) {

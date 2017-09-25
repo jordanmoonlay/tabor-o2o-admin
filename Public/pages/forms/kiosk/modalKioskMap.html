@@ -1,0 +1,27 @@
+<div class="modal-header">
+    <h5 class="modal-title">Mapping Delaer</h5>
+</div>
+<div class="modal-body">
+    <table class="table table-bordered table-hover">
+        <thead>
+        <th>No</th>
+        <th>Dealer Name</th>       
+        </thead>
+        <tbody>
+        <tr dir-paginate="dealer in main.dealers | filter:search |itemsPerPage:10" ng-class="{'active':main.isCurrentDealer(dealer.Code)}">
+            <td> {{$index+1}} </td>
+            <td> {{dealer.Name}} </td>            
+        </tr>
+        </tbody>
+    </table>
+    <table>
+        <tr>
+            <td>Code product : {{main.items.code}}</td>
+        </tr>
+    </table> 
+    
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="main.ok()">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="main.cancel()">Cancel</button>
+</div>

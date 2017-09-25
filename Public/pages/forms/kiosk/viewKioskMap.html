@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="box box-primary">
+      <div class="box-header with-border">
+        <h3 class="box-title">Product List</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">      
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <th>No</th>
+                <th>Product</th>
+                <th>Dealer</th>                
+              </thead>
+<tbody>
+  <tr dir-paginate="product in main.products | filter:search |itemsPerPage:10" ng-class="{'active':main.isCurrentProduct(product.Code)}">
+    <td> {{$index+1}} </td>
+    <td> {{product.Name}} </td>
+    <td> dealer &nbsp; <a type="button" class="btn btn-xs btn-warning" ng-click="main.openModal('lg',main.kiosk,product.Code)"><i class = "fa fa-pencil"></i></a>      &nbsp; </td> 
+  </tr>
+</tbody>
+
+</table>
+<dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+</dir-pagination-controls>
+<!-- /.box-body -->
+</div>
+</div>
+</div>
+
+
+
+<!-- /.box -->
+
+<!-- /.box -->
+</div>
+<!-- /.col -->
+</div>
+<!-- /.row -->
+</section>
+<!-- /.content -->
+</div>
