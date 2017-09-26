@@ -15155,6 +15155,260 @@
         return R;
       }]);
 
+      module.factory(
+    "VProductDealer",
+    [
+      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
+      function(LoopBackResource, LoopBackAuth, $injector, $q) {
+        var R = LoopBackResource(
+        urlBase + "/VProductDealers/:Id",
+          { 'id': '@id' },
+          {
+
+
+
+            /**
+             * @ngdoc method
+             * @name lbServices.VProductDealer#findById
+             * @methodOf lbServices.VProductDealer
+             *
+             * @description
+             *
+             * Find a model instance by {{id}} from the data source.
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *  - `id` – `{*}` - Model id
+             *
+             *  - `filter` – `{object=}` - Filter defining fields and include - must be a JSON-encoded string ({"something":"value"})
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * <em>
+             * (The remote method definition does not provide any description.
+             * This usually means the response is a `VProductDealer` object.)
+             * </em>
+             */
+            "findById": {
+              url: urlBase + "/VProductDealers/:Id",
+              method: "GET",
+            },
+
+            
+            /**
+             * @ngdoc method
+             * @name lbServices.VProductDealer#find
+             * @methodOf lbServices.VProductDealer
+             *
+             * @description
+             *
+             * Find all instances of the model matched by filter from the data source.
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *  - `filter` – `{object=}` - Filter defining fields, where, include, order, offset, and limit - must be a JSON-encoded string ({"something":"value"})
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Array.<Object>,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Array.<Object>} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * <em>
+             * (The remote method definition does not provide any description.
+             * This usually means the response is a `VProductDealer` object.)
+             * </em>
+             */
+            "find": {
+              isArray: true,
+              url: urlBase + "/VProductDealers",
+              method: "GET",
+            },
+
+            /**
+             * @ngdoc method
+             * @name lbServices.VProductDealer#findOne
+             * @methodOf lbServices.VProductDealer
+             *
+             * @description
+             *
+             * Find first instance of the model matched by filter from the data source.
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *  - `filter` – `{object=}` - Filter defining fields, where, include, order, offset, and limit - must be a JSON-encoded string ({"something":"value"})
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * <em>
+             * (The remote method definition does not provide any description.
+             * This usually means the response is a `VProductDealer` object.)
+             * </em>
+             */
+            "findOne": {
+              url: urlBase + "/VProductDealers/findOne",
+              method: "GET",
+            },
+
+           
+
+            /**
+             * @ngdoc method
+             * @name lbServices.VProductDealer#count
+             * @methodOf lbServices.VProductDealer
+             *
+             * @description
+             *
+             * Count instances of the model matched by where from the data source.
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *  - `where` – `{object=}` - Criteria to match model instances
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * Data properties:
+             *
+             *  - `count` – `{number=}` -
+             */
+            "count": {
+              url: urlBase + "/VProductDealers/count",
+              method: "GET",
+            },
+
+           
+          }
+        );
+
+
+
+        /**
+        * @ngdoc property
+        * @name lbServices.VProductDealer#modelName
+        * @propertyOf lbServices.VProductDealer
+        * @description
+        * The name of the model represented by this $resource,
+        * i.e. `VProductDealer`.
+        */
+        R.modelName = "VProductDealer";
+
+
+            /**
+             * @ngdoc method
+             * @name lbServices.VProductDealer#Dealer
+             * @methodOf lbServices.VProductDealer
+             *
+             * @description
+             *
+             * Fetches belongsTo relation Dealer.
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *  - `id` – `{*}` - VProductDealer id
+             *
+             *  - `options` – `{object=}` -
+             *
+             *  - `refresh` – `{boolean=}` -
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * <em>
+             * (The remote method definition does not provide any description.
+             * This usually means the response is a `Dealer` object.)
+             * </em>
+             */
+        R.VProductDealer = function() {
+          var TargetResource = $injector.get("VProductDealer");
+          var action = TargetResource["::get::VProductDealer::Dealer"];
+          return action.apply(R, arguments);
+        };
+
+            /**
+             * @ngdoc method
+             * @name lbServices.VProductDealer#Product
+             * @methodOf lbServices.VProductDealer
+             *
+             * @description
+             *
+             * Fetches belongsTo relation Product.
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *  - `id` – `{*}` - VProductDealer id
+             *
+             *  - `options` – `{object=}` -
+             *
+             *  - `refresh` – `{boolean=}` -
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * <em>
+             * (The remote method definition does not provide any description.
+             * This usually means the response is a `Product` object.)
+             * </em>
+             */
+       
+
+
+        return R;
+      }]);
+
 
 
 module

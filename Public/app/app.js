@@ -27,10 +27,14 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 templateUrl: 'pages/forms/kiosk/viewKiosks.html'
             })
             .state('viewKioskMap', {
-                url: '/viewKiosks/map/{:kioskId}',                
+                url: '/viewKiosks/map/:kioskId',                
                 templateUrl: 'pages/forms/kiosk/viewKioskMap.html',
                 controller:'kioskMapCtrl',
                 controllerAs:'main',
+                // params:{
+                //     obj:null
+                // }
+
                 // resolve:{
                 //     listProduct:['$http', function($http){
                 //         return $http({
@@ -945,7 +949,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         
 
     }])
-    .controller('kioskCtrl', function (Kiosk, $http) {
+    .controller('kioskCtrl', function (Kiosk, $http,$state) {
         var main = this;
         var defDate = new Date();
         var submain = this;
@@ -1052,6 +1056,11 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
         }
 
+        function goTo(kiosk){
+            
+            $state.go('viewKioskMap',{kioskId:kiosk.Code});
+        }
+
 
 
         main.kiosks = [];
@@ -1067,6 +1076,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         main.isCurrentKiosk = isCurrentKiosk;
         main.cancelEditing = cancelEditing;
         main.selectOutlet = selectOutlet;
+        main.goTo = goTo;
 
 
 
@@ -1098,6 +1108,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
         function init(){
             getProduct();
+            //main.kiosk = $stateParams.obj;
             getKiosksDetail($stateParams.kioskId)
         }
 
@@ -1130,25 +1141,42 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         main.products = [];
         main.kiosk = null
         init();
-        
-
-        
 
     })
-    .controller('modalMapDealerCtrl', function ($uibModalInstance, items,Dealer,$rootScope) {
+    .controller('modalMapDealerCtrl', function ($uibModalInstance, items,VProductDealer,Product,$rootScope) {
 
     var vm = this;
-    console.log(items)
+    //console.log(items)
+    vm.items = items
     vm.branchId = items.obj.BranchId
+   
     vm.dealers = []
-    function getDealer() {
-            Dealer.find({"where":{"BranchId":vm.branchId}},
+    vm.products = []
+    
+    function getProductDealer() {
+            // VProductDealer.find({"where":{"and":[{"BranchId":vm.branchId},{"ProductCode":vm.items.code}]}},
+            VProductDealer.find({
+                filter:{
+                    where:{
+                        and:[
+                            {
+                                BranchId:vm.branchId
+                            },
+                            {
+                                ProductCode:vm.items.code
+                            }
+                        ]
+                    }
+                }
+
+            },
                 function (result) {
                     vm.dealers = result;
+                    console.log(result)
                 });
         }
-
-    vm.items = items
+   
+    getProductDealer();    
 
     vm.ok = function () {
         $uibModalInstance.close();
