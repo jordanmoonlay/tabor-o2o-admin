@@ -1,58 +1,59 @@
-angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.directives.dirPagination', 'lbServices'])
+angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directives.dirPagination','lbServices'])
 
-    .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider,
-        $urlRouterProvider) {
-        $stateProvider
-            .state('login', {
-                url: '/login',
-                templateUrl: 'pages/forms/login.html'
-            }).state('viewBrands', {
-                url: '/viewBrands',
-                templateUrl: 'pages/forms/viewBrands.html'
-            })
-            .state('newBrand', {
-                url: '/newBrand',
-                templateUrl: 'pages/forms/newBrand.html'
-            })
-            .state('viewProducts', {
-                url: '/viewProducts',
-                templateUrl: 'pages/forms/viewProducts.html'
-            })
-            .state('newProduct', {
-                url: '/newProduct',
-                templateUrl: 'pages/forms/newProduct.html'
-            })
-            .state('viewKiosks', {
-                url: '/viewKiosks',
-                templateUrl: 'pages/forms/viewKiosks.html'
-            })
-            .state('newKiosk', {
-                url: '/newKiosk',
-                templateUrl: 'pages/forms/newKiosk.html'
-            })
-            .state('viewDealers', {
-                url: '/viewDealers',
-                templateUrl: 'pages/forms/viewDealers.html'
-            })
-            .state('viewOrders', {
-                url: '/viewOrders',
-                templateUrl: 'pages/forms/viewOrders.html'
-            })
-            .state('newDealer', {
-                url: '/newDealer',
-                templateUrl: 'pages/forms/newDealer.html'
-            })
-            .state('newOrder', {
-                url: '/newOrder',
-                templateUrl: 'pages/forms/viewNewOrders.html'
-            })
-            .state('home', {
-                url: '/index',
-                templateUrl: 'pages/forms/home.html'
-            })
-            
-        $urlRouterProvider.otherwise('index');
-    }])
+    
+    .config(['$stateProvider', '$urlRouterProvider', function($stateProvider,
+    $urlRouterProvider) {
+    $stateProvider
+      .state('viewBrands', {
+        url: '/viewBrands',
+        templateUrl: 'pages/forms/viewBrands.html'
+      })
+      .state('newBrand', {
+        url: '/newBrand',
+        templateUrl: 'pages/forms/newBrand.html'
+      })
+      .state('viewProducts', {
+        url: '/viewProducts',
+        templateUrl: 'pages/forms/viewProducts.html'
+      })
+      .state('newProduct', {
+        url: '/newProduct',
+        templateUrl: 'pages/forms/newProduct.html'
+      })
+      .state('viewDealers', {
+        url: '/viewDealers',
+        templateUrl: 'pages/forms/viewDealers.html'
+      })
+      .state('viewOrders', {
+        url: '/viewOrders',
+        templateUrl: 'pages/forms/viewOrders.html'
+      })
+      .state('newDealer', {
+        url: '/newDealer',
+        templateUrl: 'pages/forms/newDealer.html'
+      })
+      .state('newOrder', {
+        url: '/newOrder',
+        templateUrl: 'pages/forms/viewNewOrders.html'
+      })
+      .state('home', {
+        url: '/index',
+        templateUrl: 'pages/forms/home.html'
+      })
+      .state('users',{
+          url:'/users',
+          templateUrl: 'pages/forms/user/list.html',
+          controller: 'UserController',
+          controllerAs: 'vm'
+      })
+      .state('users-register',{
+          url:'/users/register',
+          templateUrl: 'pages/forms/user/register.html',
+          controller: 'UserController',
+          controllerAs: 'vm'
+      })
+    $urlRouterProvider.otherwise('index');
+  }])
     .controller('MainCtrl', function (Brand) {
         var main = this;
         var defDate = new Date();

@@ -140,6 +140,19 @@
             <li><a ui-sref="newKiosk"><i class="fa fa-circle-o"></i> New Kiosks</a></li>
           </ul>
         </li>
+
+        <li class="treeview">
+          <a href="pages/forms/users/list.html">
+            <i class="fa fa-edit"></i> <span>USER</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a ui-sref="users"><i class="fa fa-circle-o"></i> View USER</a></li>
+            <li><a ui-sref="users-register"><i class="fa fa-circle-o"></i> Register</a></li>
+          </ul>
+        </li>
         
 
         <li class="treeview">
@@ -259,6 +272,9 @@
 <!-- AdminLTE for demo purposes -->
 <script src="dist/js/demo.js"></script>
 <script src="../../app/app.js"></script>
+<script src="../../app/app.constants.js"></script>
+<script src="pages/forms/user/user.controller.js"></script>
+<script src="pages/forms/user/user-register.controller.js"></script>
 <script src="../../app/lb-services.js"></script>
 <!--<script src="../../app/auth.service.js"></script>-->
   </script>
