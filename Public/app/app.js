@@ -18,6 +18,22 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 url: '/viewProducts',
                 templateUrl: 'pages/forms/product/viewProducts.html'
             })
+            .state('viewProductCategoryMap', {
+                url: '/ProductCategory/map/:productId',                
+                templateUrl: 'pages/forms/product/newProductCategoryMap.html',
+                controller:'productCategoryMapCtrl',
+                controllerAs:'main',            
+            })
+            .state('viewProductCategory', {
+                url: '/ProductCategory',
+                templateUrl: 'pages/forms/product/viewProductCategory.html'
+            })
+            .state('editProductCategory', {
+                url: '/ProductCategory/edit/:pcId',
+                templateUrl: 'pages/forms/product/editProductCategory.html',
+                controller:'productCategoryEditCtrl',
+                controllerAs:'main'
+            })
             .state('newProduct', {
                 url: '/newProduct',
                 templateUrl: 'pages/forms/product/newProduct.html'
@@ -187,7 +203,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         initCreateForm();
         getBrands();
     })
-    .controller('productCtrl', function (Product, $http) {
+    .controller('productCtrl', function (Product, $http,$state) {
         var main = this;
         var defDate = new Date();
         var submain = this;
@@ -303,6 +319,12 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             main.newProduct.Specification = getSpecJSON;
         }
 
+        function goTo(code)
+        {
+            console.log(code)
+            $state.go('viewProductCategoryMap',{productId:code})
+        }
+
 
         var specifications = [3];
         specifications[0] = { key: "RAM", value: "" };
@@ -345,6 +367,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         main.getSpec = getSpec;
         main.AddSpecification = AddSpecification;
         main.RemoveSpecification = RemoveSpecification;
+        main.goTo = goTo
 
         initCreateForm();
         getProducts();
@@ -586,7 +609,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             $http({
                 method : 'GET',
               url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-//                url : 'http://localhost:10010/api/orderDetails?filter={"where":{"OrderCode":"'+order.Code+'"}}',
+                //url : 'http://localhost:10010/api/orderDetails?filter={"where":{"OrderCode":"'+order.Code+'"}}',
                 data:{}
             }).then(function (result){
                 main.ordersDetails = result.data;
@@ -955,6 +978,115 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
     }])
 
+    .controller('productCategoryMapCtrl', function (ProductCategory,Product_productCategory,Product, $http,$stateParams,$q) {
+        var main = this;
+        var defDate = new Date();
+        main.productCategories = []
+        main.productProductCategories = []
+        main.product = {}
+        
+        //main.newMapProductCategory.ProductCode = $stateParams.productId
+        
+        
+        function getProductCategoriesByBranchCode(code) {
+            console.log(code)
+            ProductCategory.find({
+                filter:{
+                    where:{
+                        BrandCode:code
+                    }
+                }
+            },
+            function success(result) {
+                main.productCategories = result;
+                console.log(main.productCategories)
+                
+            },
+            function error(err){
+                main.errors = errors.data.error;
+            });
+        }
+
+        function getProductCategoriesByProductCode(code){
+            Product_productCategory.find({
+                filter:{
+                    where:{
+                        ProductCode:code
+                    },
+                    include:{
+                        relation:'ProductCategory',
+                        scope:{
+                            fields:['Name']
+                        }
+                    }
+                }
+            },
+            function success(result) {
+                main.productProductCategories = result;
+                console.log(main.productProductCategories)
+                
+            },
+            function error(err){
+                main.errors = errors.data.error;
+            });
+        }
+
+        function createMapProductCategory(){
+            Product_productCategory.upsert(main.newMapProductCategory
+                ,function success(result){
+                    getProductCategoriesByProductCode(main.product.Code)
+                    //main.productProductCategories.push(result)
+                    alert("Insert success")
+                },function error(err){
+                    main.errors = errors.data.error;
+                });
+        }
+
+        function selectProductCategory(category){
+            main.newMapProductCategory.ProductCategoryCode =  category.Code
+        }
+
+        function getProductDetail(code){
+         
+            Product.findById({Code:code},function(result){
+                    main.product = result;
+                    console.log(main.product)
+                    getProductCategoriesByBranchCode(main.product.BrandCode)
+                    getProductCategoriesByProductCode(main.product.Code)
+            } );
+        }
+
+        function removePPC(ppdId) {
+            if (confirm("Are You Sure to Delete?")) {
+                console.log(ppdId)
+                Product_productCategory.deleteById({ Id: ppdId },
+                    function (result) {
+                        main.productProductCategories = main.productProductCategories.filter(function(ppd){
+                            return ppd.id != ppdId
+                        })
+                        alert("Deleted");
+                    });
+            } else {
+                alert("Cancelled");
+            }
+        }
+
+        function initForm()
+        {
+            main.newMapProductCategory = {ProductCode:$stateParams.productId,ProductCategoryCode:'', Active:1,Deleted:0,CreatedBy:'AUTO', CreatedDate:defDate, CreateAgent:'AUTO', UpdatedBy:'AUTO', UpdatedDate:defDate, UpdateAgent:'AUTO'}
+        }
+
+        main.selectProductCategory = selectProductCategory
+        main.createMapProductCategory = createMapProductCategory
+        main.removePPC = removePPC
+
+        getProductDetail($stateParams.productId);
+        initForm()
+
+
+
+    })
+
     .controller('productCategoryCtrl', function (ProductCategory,Brand, $http,$state) {
         var main = this;
         var defDate = new Date();
@@ -964,7 +1096,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             ProductCategory.find(
                 function (result) {
                     main.productCategories = result;
-
+                    console.log(main.productCategories)
                 });
         }
 
@@ -990,6 +1122,19 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             } else {
                 alert("Cancelled");
             }
+        }
+
+        function removeProductCategory(code) {
+            if (confirm("Are You Sure to Delete?")) {
+                console.log(code)
+                ProductCategory.deleteById({ Code: code },
+                    function (result) {
+                        getProductCategories()
+                        alert("Deleted");
+                    });
+            } else {
+                alert("Cancelled");
+            }
 
         }
 
@@ -1005,13 +1150,17 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         main.newProductCategory = {}
         main.createProductCategory = createProductCategory
         main.selectBrand = selectBrand
-        
+        main.removeProductCategory = removeProductCategory
+        //main.getProductCategories = getProductCategories
 
         getBrands()
+        getProductCategories()
         initCreateForm();
-       
+      
 
     })
+
+
     .controller('kioskCtrl', function (Kiosk, $http,$state) {
         var main = this;
         var defDate = new Date();

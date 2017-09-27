@@ -1,15 +1,15 @@
-<div class="row" ng-controller="productCtrl as main">
+<div class="row" ng-controller="productCategoryCtrl as main">
   <div class="col-sm-12">
     <div class="box box-primary">
       <div class="box-header with-border">
-        <h3 class="box-title">Product List</h3>
+        <h3 class="box-title">Product Category List</h3>
       </div>
       <!-- /.box-header -->
-      <div class="box-body" ng-if="main.isShow">
+      <div class="box-body">
         <form class="form-inline">
           <div class="row">
             <div class="col-md-6">
-              <a class="btn btn-sm btn-primary" ui-sref="newProduct"><i class="fa fa-plus"></i> Create</a>
+              <a class="btn btn-sm btn-primary" ui-sref="newProductCategory"><i class="fa fa-plus"></i> Create</a>
             </div>
             <div class="col-md-6 text-right form-group">
               <label>
@@ -24,25 +24,20 @@
           <div class="col-md-12">
             <table class="table table-bordered table-hover">
               <thead>
-                <th>Brand Code</th>
                 <th>Code</th>
-                <th>SKU</th>
                 <th>Name</th>
-                <th>Price</th>
+                <th>Brand Code</th>                
                 <th style="width:150px;"></th>
 </thead>
 <tbody>
-  <tr dir-paginate="product in main.products | filter:search |itemsPerPage:10" ng-class="{'active':main.isCurrentProduct(product.Code)}">
-    <td> {{product.BrandCode}} </td>
-    <td> {{product.Code}} </td>
-    <td> {{product.SKU}} </td>
-    <td>{{product.Name}} </td>
-    <td>{{product.Price}} </td>
-    <td>
-      <a type="button" class="btn btn-xs btn-default" ng-click="main.setViewProduct(product)"><i class = "fa fa-file"></i></a>      &nbsp;
-      <a type="button" class="btn btn-xs btn-warning" ng-click="main.setEditedProduct(product)"><i class = "fa fa-pencil"></i></a>      &nbsp;
-      <a type="button" class="btn btn-xs btn-danger" ng-click="main.deleteProduct(product.Code)"><i class = "fa fa-trash"></i></a>      &nbsp;
-      <a type="button" class="btn btn-xs btn-success" ng-click="main.goTo(product.Code)"><i class = "fa fa-map-o"></i></a>      &nbsp;
+  <tr dir-paginate="pc in main.productCategories | filter:search |itemsPerPage:10" ng-class="{'active':main.isCurrentProductCategory(pc.Code)}">
+    <td> {{pc.Code}} </td>
+    <td> {{pc.Name}} </td>
+    <td> {{pc.BrandCode}} </td>
+    <td>      
+      <a type="button" class="btn btn-xs btn-warning" ng-click="main.setEditedProductCategory(pc)"><i class = "fa fa-pencil"></i></a>      &nbsp;
+      <a type="button" class="btn btn-xs btn-danger" ng-click="main.removeProductCategory(pc.Code)"><i class = "fa fa-trash"></i></a>      &nbsp;
+      
     </td>
   </tr>
 </tbody>
