@@ -3,9 +3,9 @@ var accesstoken = "A0sHANIiZHnI8xFGWVcUG9UOws3xtRBmeMkFZP1ewFy10DxVbgdDMrZtmkCGN
 angular.module('CrudAngular')
     .controller("UserRegisterController", UserRegisterController);
 
-UserRegisterController.$inject = ['User', "Urls", "$http"]
+UserRegisterController.$inject = ['User', "Constants", "$http"]
 
-function UserRegisterController(User, Urls, $http) {
+function UserRegisterController(User, Constants, $http) {
     var main = this;
     main.user = {
         username: "",

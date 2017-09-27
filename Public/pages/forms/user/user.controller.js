@@ -1,9 +1,9 @@
 angular.module('CrudAngular')
     .controller("UserController", UserController);
 
-UserController.$inject = ['User', "Urls", "$http"]
+UserController.$inject = ['User', "Constants", "$http"]
 
-function UserController(User, Urls, $http) {
+function UserController(User, Constants, $http) {
     var main = this;
     main.hello = "";
     var query = {
@@ -36,7 +36,7 @@ function UserController(User, Urls, $http) {
                 skip: (query.page - 1) * query.limit
             };
 
-            $http.get(Urls.BASE_API + '/users?access_token=' + Urls.AccessToken, { params: { filter: JSON.stringify(q) } })
+            $http.get(Constants.BASE_API + '/users?access_token=' + Constants.AccessToken, { params: { filter: JSON.stringify(q) } })
                 .then(results => {
                     main.users = results.data;
                 });
@@ -48,7 +48,7 @@ function UserController(User, Urls, $http) {
             var q = {
                 keyword: query.keyword
             }
-            $http.get(Urls.BASE_API + '/users/count?access_token=' + Urls.AccessToken, { params: { filter: JSON.stringify(q) } })
+            $http.get(Constants.BASE_API + '/users/count?access_token=' + Constants.AccessToken, { params: { filter: JSON.stringify(q) } })
                 .then(results => {
                     main.totalData = results.data.count;
                     main.totalPage = Math.ceil(main.totalData / query.limit);
