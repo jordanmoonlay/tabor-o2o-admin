@@ -40,6 +40,18 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
         url: '/index',
         templateUrl: 'pages/forms/home.html'
       })
+      .state('users',{
+          url:'/users',
+          templateUrl: 'pages/forms/user/list.html',
+          controller: 'UserController',
+          controllerAs: 'vm'
+      })
+      .state('users-register',{
+          url:'/users/register',
+          templateUrl: 'pages/forms/user/register.html',
+          controller: 'UserController',
+          controllerAs: 'vm'
+      })
     $urlRouterProvider.otherwise('index');
   }])
     .controller('MainCtrl', function (Brand) {
