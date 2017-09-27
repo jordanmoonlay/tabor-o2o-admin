@@ -1,0 +1,125 @@
+<div class="row" ng-controller="kioskCtrl as main">
+  <div class="col-sm-12">
+    <div class="box box-primary">
+      <div class="box-header with-border">
+        <h3 class="box-title">Kiosk List</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body" ng-if="main.isShow">
+        <form class="form-inline">
+          <div class="row">
+            <div class="col-md-6">
+              <a class="btn btn-sm btn-primary" ui-sref="newKiosk"><i class="fa fa-plus"></i> Create</a>
+            </div>
+            <div class="col-md-6 text-right form-group">
+              <label>
+                    Search :
+                    <input type="text" ng-model="search" class="form-control input-sm">
+                  </label>
+
+            </div>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                <th>Outlet Id</th>
+                <th>Outlet Code</th>
+                <th>Outlet Name</th>
+                <th>Branch Id</th>
+                <th>Branch Code</th>
+                <th>Branch Name</th>
+                <th style="width:150px;"></th>
+</thead>
+<tbody>
+  <tr dir-paginate="kiosk in main.kiosks | filter:search |itemsPerPage:10" ng-class="{'active':main.isCurrentKiosk(kiosk.Code)}">
+    <td> {{kiosk.Code}} </td>
+    <td>{{kiosk.Name}} </td>
+    <td>{{kiosk.Address}}</td>
+    <td> {{kiosk.PhoneNumber}} </td>
+    <td>{{kiosk.OutletId}} </td>
+    <td>{{kiosk.OutletCode}}</td>
+    <td> {{kiosk.OutletName}} </td>
+    <td>{{kiosk.BranchId}} </td>
+    <td>{{kiosk.BranchCode}}</td>
+    <td>{{kiosk.BranchName}}</td>
+    <td>
+      <a type="button" class="btn btn-xs btn-warning" ng-click="main.setEditedKiosk(kiosk)"><i class = "fa fa-pencil"></i></a>      &nbsp;
+      <a type="button" class="btn btn-xs btn-danger" ng-click="main.deleteKiosk(kiosk.Code)"><i class = "fa fa-trash"></i></a>      &nbsp;
+    </td>
+  </tr>
+</tbody>
+
+</table>
+<dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+</dir-pagination-controls>
+<!-- /.box-body -->
+</div>
+</div>
+</div>
+<div ng-if="main.isEditing">
+  <h4> <b>Editing {{main.editedKiosk.Name}}</b></h4>
+  <form role="form" ng-submit="main.updateKiosk(main.editedKiosk)" novalidate>
+    <div class="box-body">
+      <div class="form-group">
+        <label for="exampleEditCode">Kiosk Code</label>
+        <input type="text" class="form-control" ng-model="main.editedKiosk.Code" placeholder="Kiosk Code" >
+      </div>
+      <div class="form-group">
+        <label for="exampleEditCode">Kiosk Name</label>
+        <input type="text" class="form-control" ng-model="main.editedKiosk.Name" placeholder="Kiosk Name" >
+      </div>
+      <div class="form-group">
+        <label for="exampleEditCode">Kiosk Address</label>
+        <input type="text" class="form-control" ng-model="main.editedKiosk.Address" placeholder="Kiosk Address" >
+      </div>
+      <div class="form-group">
+        <label for="exampleEditName">Phone Number</label>
+        <input type="text" class="form-control" ng-model="main.editedKiosk.PhoneNumber" placeholder="Phone Number">
+      </div>
+      <div class="form-group">
+        <label for="exampleEditDescription">Outlet Id</label>
+        <input type="text" class="form-control" ng-model="main.editedKiosk.OutletId" placeholder="Outlet Id" disabled>
+      </div>
+      <div class="form-group">
+        <label for="exampleEditDescription">Outlet Code</label>
+        <input type="text" class="form-control" ng-model="main.editedKiosk.OutletCode" placeholder="Outlet Code" disabled>
+      </div>
+      <div class="form-group">
+        <label for="exampleEditDescription">Outlet Name</label>
+        <input type="text" class="form-control" ng-model="main.editedKiosk.OutletName" placeholder="Outlet Name" >
+      </div>
+      <div class="form-group">
+        <label for="exampleEditDescription">Branch Id</label>
+        <input type="text" class="form-control" ng-model="main.editedKiosk.OutletId" placeholder="Branch Id" disabled>
+      </div>
+      <div class="form-group">
+        <label for="exampleEditDescription">Branch Code</label>
+        <input type="text" class="form-control" ng-model="main.editedKiosk.OutletCode" placeholder="Branch Code " disabled>
+      </div>
+      <div class="form-group">
+        <label for="exampleEditDescription">Branch Name</label>
+        <input type="text" class="form-control" ng-model="main.editedKiosk.OutletName" placeholder="Branch Name" disabled>
+      </div>
+      
+    </div>
+    <!-- /.box-body -->
+
+    <div class="box-footer">
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="button" class="btn btn-primary" ng-click="main.cancelEditing()">Cancel</button>
+    </div>
+  </form>
+</div>
+<!-- /.box -->
+
+<!-- /.box -->
+</div>
+<!-- /.col -->
+</div>
+</div>

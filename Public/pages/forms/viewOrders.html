@@ -1,20 +1,28 @@
-
 <div class="row" ng-controller="orderCtrl as main">
-        <div class="col-xs-12">
-          <div class="box">
-            <div class="box-header">
-              <center><strong><h3 class="box-title">ORDERS DATA TABEL</h3></strong></center>
+  <div class="col-sm-12">
+    <div class="box box-primary">
+      <div class="box-header">
+        <h3 class="box-title">ORDERS DATA TABEL</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body" ng-if="main.isShow">
+        <form class="form-inline">
+          <div class="row">
+            <div class="col-md-6">
             </div>
-            <!-- /.box-header -->
-            <form class="form-inline">
-              <div class="form-group">
-                <label >Search</label>
-                <input type="text" ng-model="search" class="form-control" placeholder="Search">
-              </div>
-            </form>
-          <div class="box-body">
-              <table class="table table-bordered table-hover">
-                <thead>
+            <div class="col-md-6 text-right form-group">
+              <label>
+                    Search :
+                    <input type="text" ng-model="search" class="form-control input-sm">
+                  </label>
+
+            </div>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-bordered table-hover">
+              <thead>
                 <th>Code</th>
                 <th>Kiosk</th>
                 <th>Dealer</th>
@@ -22,47 +30,86 @@
                 <th>Disc</th>
                 <th>Disc Nominal</th>
                 <th>Total Price</th>
-                <th>Request Date</th>
-                <th>Delivery Date</th>
                 <th>Total Qty</th>
                 <th>Destination</th>
                 <th>Phone</th>
-                <th>Status</th>
                 <th>Payment Type</th>
-                </thead>
-                <tbody>
-                    <tr dir-paginate="order in main.orders | filter:search |itemsPerPage:10 "  ng-click="main.setEditedBrand(order)" ng-class="{'active':main.isCurrentOrder(order.Code)}" >
-                    <td> {{order.Code}} </td>
-                    <td>{{order.KioskCode}} </td>
-                    <td>{{order.DealerCode}} </td>
-                    <td>{{order.DP}} </td>
-                    <td>{{order.Discount}} </td>
-                    <td>{{order.DiscountNominal}} </td>
-                    <td>{{order.TotalPrice}} </td>
-                    <td>{{order.RequestDate}} </td>
-                    <td>{{order.DeliveryDate}} </td>
-                    <td>{{order.TotalQty}} </td>
-                    <td>{{order.Destination}} </td>
-                    <td>{{order.Phone}} </td>
-                    <td>{{order.Status}} </td>
-                    <td>{{order.PaymentType}} <button type="button" class="close" ng-click="main.deleteOrder(order.Code)">&times;</button></td>
-                    </tr>
-                </tbody>
-                
-              </table>
-              <dir-pagination-controls
-                max-size="5"
-                direction-links="true"
-                boundary-links="true" >
-              </dir-pagination-controls>
+              </thead>
+              <tbody>
+                <tr dir-paginate="order in main.orders | filter:search |itemsPerPage:10 " ng-class="{'active':main.isCurrentOrder(order.Code)}">
+                  <td> {{order.Code}} </td>
+                  <td>{{order.KioskCode}} </td>
+                  <td>{{order.DealerCode}} </td>
+                  <td>{{order.DP}} </td>
+                  <td>{{order.Discount}} </td>
+                  <td>{{order.DiscountNominal}} </td>
+                  <td>{{order.TotalPrice}} </td>
+                  <td>{{order.TotalQty}} </td>
+                  <td>{{order.Destination}} </td>
+                  <td>{{order.Phone}} </td>
+                  <td>{{order.PaymentType}}
+                    <td>
+                      <a type="button" class="btn btn-xs btn-default" ng-click="main.setViewOrder(order)"><i class = "fa fa-file"></i></a>                      &nbsp;
+                      <a type="button" class="btn btn-xs btn-danger" ng-click="main.deleteOrder(order.Code)"><i class = "fa fa-trash"></i></a>                      &nbsp;
+                    </td>
+                </tr>
+              </tbody>
+
+            </table>
+            <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+            </dir-pagination-controls>
             <!-- /.box-body -->
           </div>
-          
-          <!-- /.box -->
-
-          <!-- /.box -->
         </div>
-        <!-- /.col -->
       </div>
+      <div class="box-body" ng-if="main.isView">
+        <form class="form-inline">
+          <div class="row">
+            <div class="col-md-6 text-right form-group">
+            </div>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <th>Code</th>
+                <th>Product Code</th>
+                <th>Retur</th>
+                <th>Price</th>
+                <th>DP Nominal</th>
+                <th>IMEI</th>
+                <th>Status</th>
+              </thead>
+              <tbody>
+                <tr dir-paginate="orderDetail in main.ordersDetails | filter:search |itemsPerPage:10 " ng-class="{'active':main.isCurrentOrderDetail(orderDetail.Code)}">
+                  <td>{{orderDetail.Code}} </td>
+                  <td>{{orderDetail.ProductCode}} </td>
+                  <td>{{orderDetail.IsRetur}} </td>
+                  <td>{{orderDetail.Price}} </td>
+                  <td>{{orderDetail.DPNominal}} </td>
+                  <td>{{orderDetail.IMEI}} </td>
+                  <td>{{orderDetail.Status}} </td>
+                </tr>
+              </tbody>
+
+            </table>
+            <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+            </dir-pagination-controls>
+            <!-- /.box-body -->
+          </div>
+        </div>
+        <div class="box-footer">
+          <div class="form-group">
+            <button type="button" class="btn btn-primary" ng-click="main.cancelView()">Back</button>
+          </div>
+
+        </div>
+      </div>
+      <!-- /.box -->
+
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
   </div>
-  
+</div>

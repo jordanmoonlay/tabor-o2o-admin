@@ -32,7 +32,7 @@
 <tbody>
   <tr dir-paginate="brand in main.brands | filter:search |itemsPerPage:10" ng-class="{'active':main.isCurrentBrand(brand.Code)}">
     <td> {{brand.Code}} </td>
-    <td>{{brand.Nama}} </td>
+    <td>{{brand.Name}} </td>
     <td>{{brand.Description}}</td>
     <td>
       <a type="button" class="btn btn-xs btn-warning" ng-click="main.setEditedBrand(brand)"><i class = "fa fa-pencil"></i></a>      &nbsp;
@@ -49,7 +49,7 @@
 </div>
 </div>
 <div ng-if="main.isEditing">
-  <h4> <b>Editing {{main.editedBrand.Nama}}</b></h4>
+  <h4> <b>Editing {{main.editedBrand.Name}}</b></h4>
   <form role="form" ng-submit="main.updateBrand(main.editedBrand)" novalidate>
     <div class="box-body">
       <div class="form-group">
@@ -58,7 +58,7 @@
       </div>
       <div class="form-group">
         <label for="exampleEditName">Name</label>
-        <input type="text" class="form-control" ng-model="main.editedBrand.Nama" placeholder="Name">
+        <input type="text" class="form-control" ng-model="main.editedBrand.Name" placeholder="Name">
       </div>
       <div class="form-group">
         <label for="exampleEditDescription">Description</label>

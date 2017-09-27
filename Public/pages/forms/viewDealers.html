@@ -4,7 +4,7 @@
       <div class="box-header with-border">
         <h3 class="box-title">Dealer List</h3>
       </div>
-      <div class="box-body">
+      <div class="box-body" ng-if=main.isShow >
         <!-- /.box-header -->
         <form class="form-inline">
           <div class="row">
@@ -35,7 +35,7 @@
                 <th></th>
               </thead>
               <tbody>
-                <tr dir-paginate="dealer in main.dealers | filter:search |itemsPerPage:10" ng-click="main.setEditedDealer(dealer)" ng-class="{'active':main.isCurrentDealer(dealer.Code)}">
+                <tr dir-paginate="dealer in main.dealers | filter:search |itemsPerPage:10" ng-class="{'active':main.isCurrentDealer(dealer.Code)}">
                   <td>{{dealer.Code}} </td>
                   <td>{{dealer.Name}} </td>
                   <td>{{dealer.BranchId}} </td>
@@ -45,7 +45,8 @@
                   <td>{{dealer.Address}} </td>
                   <td>{{dealer.PhoneNumber}} </td>
                   <td>
-                    <a type="button" class="btn btn-xs btn-danger" ng-click="main.deleteDealer(dealer.Code)"><i class="fa fa-trash"></i></button>
+                    <a type="button" class="btn btn-xs btn-warning" ng-click="main.setEditedDealer(dealer)"><i class = "fa fa-pencil"></i></a>      &nbsp;
+                    <a type="button" class="btn btn-xs btn-danger" ng-click="main.deleteDealer(dealer.Code)"><i class="fa fa-trash"></i></a>    &nbsp;
                     </td>
                 </tr>
               </tbody>
@@ -53,7 +54,7 @@
             </table>
             <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
             </dir-pagination-controls>
-
+            </div>
             <!-- /.box-body -->
           </div>
         </div>

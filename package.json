@@ -6,9 +6,10 @@
   "author": "Richard Key <rich@busyrich.com>",
   "dependencies": {
     "azure": "^2.0.0-preview",
+    "delayed-stream": "^1.0.0",
     "express": "^4.8.5"
   },
   "scripts": {
-    "start": "node ."
+    "start": "node site.js"
   }
 }
