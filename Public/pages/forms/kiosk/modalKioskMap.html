@@ -10,13 +10,17 @@
         <tbody>
         <tr dir-paginate="dealer in main.dealers | filter:search |itemsPerPage:10" ng-class="{'active':main.isCurrentDealer(dealer.Code)}">
             <td> {{$index+1}} </td>
-            <td> {{dealer.DealerName}} </td>            
+            <td> {{dealer.DealerName}} </td>
+            <td><input type="radio" ng-model="main.dealer" ng-value="dealer"></td>            
         </tr>
         </tbody>
     </table>
     <table>
         <tr>
-            <td>Code product : {{main.items.code}}</td>
+            <td>Code product : {{main.items.code}}</td>            
+        </tr>
+        <tr>
+            <td>Dealer : {{main.dealer | json}}</td>
         </tr>
     </table> 
     
