@@ -2,8 +2,8 @@ angular.module('CrudAngular')
     .controller("UserKioskMappingController", UserKioskMappingController)
 
 
-UserKioskMappingController.$inject = ['User', 'Kiosk', "Constants", "$http", '$stateParams']
-function UserKioskMappingController(User, Kiosk, Constants, $http, $stateParams) {
+UserKioskMappingController.$inject = ['User', 'Kiosk', "Constants", "$http", '$stateParams','AuthenticationState']
+function UserKioskMappingController(User, Kiosk, Constants, $http, $stateParams,AuthenticationState) {
     var main = this;
     main.selectedKiosk = {};
     main.USER_BASE_URL = Constants.BASE_API + "/users";
@@ -16,7 +16,7 @@ function UserKioskMappingController(User, Kiosk, Constants, $http, $stateParams)
         // User.findById(id).then(result => {
         //     main.User = result.data;
         // });
-        $http.get(main.USER_BASE_URL + "/" + id + "?access_token=" + Constants.AccessToken).then(
+        $http.get(main.USER_BASE_URL + "/" + id + "?access_token=" + AuthenticationState.getToken()).then(
             result => {
                 main.user = result.data;
             }

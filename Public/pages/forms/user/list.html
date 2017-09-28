@@ -20,8 +20,10 @@
         <td> {{user.email}} </td>
         <td> {{user.username}} </td>
         <td>
-            <a class="btn btn-xs btn-success" ui-sref="users-mapping-kiosk({ id:user.id })">Mapping Kiosk</a>
-            <a class="btn btn-xs btn-success" ui-sref="users-mapping-dealer({ id:user.id })">Mapping Dealer</a>
+            <span>Mapping : </span>
+            <a class="btn btn-xs btn-success" ui-sref="users-mapping-kiosk({ id:user.id })">Kiosk</a>
+            <a class="btn btn-xs btn-success" ui-sref="users-mapping-dealer({ id:user.id })">Dealer</a>
+            <a class="btn btn-xs btn-success" ui-sref="users-mapping-roles({ id:user.id })">Roles</a>
         </td>
     </tr>
 </tbody>
