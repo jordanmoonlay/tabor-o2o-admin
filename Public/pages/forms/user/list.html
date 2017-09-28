@@ -12,7 +12,7 @@
                         <th>Id</th>
                         <th>Email</th>
                         <th>Username</th>
-                        <th style="width:150px;"></th>
+                        <th></th>
 </thead>
 <tbody>
     <tr ng-repeat="user in vm.users">
@@ -20,7 +20,8 @@
         <td> {{user.email}} </td>
         <td> {{user.username}} </td>
         <td>
-
+            <a class="btn btn-xs btn-success" ui-sref="users-mapping-kiosk({ id:user.id })">Mapping Kiosk</a>
+            <a class="btn btn-xs btn-success" ui-sref="users-mapping-dealer({ id:user.id })">Mapping Dealer</a>
         </td>
     </tr>
 </tbody>
