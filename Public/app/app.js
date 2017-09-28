@@ -1,67 +1,118 @@
-angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directives.dirPagination','lbServices'])
+angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.directives.dirPagination', 'lbServices'])
 
-    
-    .config(['$stateProvider', '$urlRouterProvider', function($stateProvider,
-    $urlRouterProvider) {
-    $stateProvider
-      .state('viewBrands', {
-        url: '/viewBrands',
-        templateUrl: 'pages/forms/viewBrands.html'
-      })
-      .state('newBrand', {
-        url: '/newBrand',
-        templateUrl: 'pages/forms/newBrand.html'
-      })
-      .state('viewProducts', {
-        url: '/viewProducts',
-        templateUrl: 'pages/forms/viewProducts.html'
-      })
-      .state('newProduct', {
-        url: '/newProduct',
-        templateUrl: 'pages/forms/newProduct.html'
-      })
-      .state('viewDealers', {
-        url: '/viewDealers',
-        templateUrl: 'pages/forms/viewDealers.html'
-      })
-      .state('viewOrders', {
-        url: '/viewOrders',
-        templateUrl: 'pages/forms/viewOrders.html'
-      })
-      .state('newDealer', {
-        url: '/newDealer',
-        templateUrl: 'pages/forms/newDealer.html'
-      })
-      .state('newOrder', {
-        url: '/newOrder',
-        templateUrl: 'pages/forms/viewNewOrders.html'
-      })
-      .state('home', {
-        url: '/index',
-        templateUrl: 'pages/forms/home.html'
-      })
-      .state('users',{
-          url:'/users',
-          templateUrl: 'pages/forms/user/list.html',
-          controller: 'UserController',
-          controllerAs: 'vm'
-      })
-      .state('users-register',{
-          url:'/users/register',
-          templateUrl: 'pages/forms/user/register.html',
-          controller: 'UserController',
-          controllerAs: 'vm'
-      })
-      .state('users-mapping-kiosk',{
-          url:'/users/{id}/mapping-kiosk',
-          templateUrl:'pages/forms/user/kiosk-mapping.html'
-      })
-      .state('users-mapping-dealer',{
-          url:'/users/{id}/mapping-dealer',
-          templateUrl:'pages/forms/user/dealer-mapping.html'
-      })
-    $urlRouterProvider.otherwise('index');
-  }])
+    .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider,
+        $urlRouterProvider) {
+        $stateProvider
+            .state('login', {
+                url: '/login',
+                templateUrl: 'pages/forms/login.html'
+            }).state('viewBrands', {
+                url: '/viewBrands',
+                templateUrl: 'pages/forms/viewBrands.html'
+            })
+            .state('newBrand', {
+                url: '/newBrand',
+                templateUrl: 'pages/forms/brand/newBrand.html'
+            })
+            .state('viewProducts', {
+                url: '/viewProducts',
+                templateUrl: 'pages/forms/product/viewProducts.html'
+            })
+            .state('viewProductCategoryMap', {
+                url: '/ProductCategory/map/:productId',                
+                templateUrl: 'pages/forms/product/newProductCategoryMap.html',
+                controller:'productCategoryMapCtrl',
+                controllerAs:'main',            
+            })
+            .state('viewProductCategory', {
+                url: '/ProductCategory',
+                templateUrl: 'pages/forms/product/viewProductCategory.html'
+            })
+            .state('editProductCategory', {
+                url: '/ProductCategory/edit/:pcId',
+                templateUrl: 'pages/forms/product/editProductCategory.html',
+                controller:'productCategoryEditCtrl',
+                controllerAs:'main'
+            })
+            .state('newProduct', {
+                url: '/newProduct',
+                templateUrl: 'pages/forms/product/newProduct.html'
+            })
+            .state('newProductCategory', {
+                url: '/newProductCategory',
+                templateUrl: 'pages/forms/product/newProductCategory.html'
+            })
+            .state('viewKiosks', {
+                url: '/viewKiosks',
+                templateUrl: 'pages/forms/kiosk/viewKiosks.html'
+            })
+            .state('viewKioskMap', {
+                url: '/viewKiosks/map/:kioskId',                
+                templateUrl: 'pages/forms/kiosk/viewKioskMap.html',
+                controller:'kioskMapCtrl',
+                controllerAs:'main',
+                // params:{
+                //     obj:null
+                // }
+
+                // resolve:{
+                //     listProduct:['$http', function($http){
+                //         return $http({
+                //             method: 'GET',
+                //             url:"http://localhost:1337/api" + "/Products",
+                //             data: {}
+                //         }).then(function (result) {
+                //             return result;
+                //         })
+                //     }
+                //     ]} 
+            })
+            .state('newKiosk', {
+                url: '/newKiosk',
+                templateUrl: 'pages/forms/kiosk/newKiosk.html'
+            })
+            .state('viewDealers', {
+                url: '/viewDealers',
+                templateUrl: 'pages/forms/dealer/viewDealers.html'
+            })
+            .state('viewOrders', {
+                url: '/viewOrders',
+                templateUrl: 'pages/forms/order/viewOrders.html'
+            })
+            .state('newDealer', {
+                url: '/newDealer',
+                templateUrl: 'pages/forms/dealer/newDealer.html'
+            })
+            .state('newOrder', {
+                url: '/newOrder',
+                templateUrl: 'pages/forms/order/viewNewOrders.html'
+            })
+            .state('home', {
+                url: '/index',
+                templateUrl: 'pages/forms/home.html'
+            }).state('users',{
+                url:'/users',
+                templateUrl: 'pages/forms/user/list.html',
+                controller: 'UserController',
+                controllerAs: 'vm'
+            })
+            .state('users-register',{
+                url:'/users/register',
+                templateUrl: 'pages/forms/user/register.html',
+                controller: 'UserController',
+                controllerAs: 'vm'
+            })
+            .state('users-mapping-kiosk',{
+                url:'/users/{id}/mapping-kiosk',
+                templateUrl:'pages/forms/user/kiosk-mapping.html'
+            })
+            .state('users-mapping-dealer',{
+                url:'/users/{id}/mapping-dealer',
+                templateUrl:'pages/forms/user/dealer-mapping.html'
+            })
+            
+        $urlRouterProvider.otherwise('index');
+    }])
     .controller('MainCtrl', function (Brand) {
         var main = this;
         var defDate = new Date();
@@ -171,7 +222,7 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
         initCreateForm();
         getBrands();
     })
-    .controller('productCtrl', function (Product, $http) {
+    .controller('productCtrl', function (Product, $http,$state) {
         var main = this;
         var defDate = new Date();
         var submain = this;
@@ -287,6 +338,12 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
             main.newProduct.Specification = getSpecJSON;
         }
 
+        function goTo(code)
+        {
+            console.log(code)
+            $state.go('viewProductCategoryMap',{productId:code})
+        }
+
 
         var specifications = [3];
         specifications[0] = { key: "RAM", value: "" };
@@ -329,13 +386,15 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
         main.getSpec = getSpec;
         main.AddSpecification = AddSpecification;
         main.RemoveSpecification = RemoveSpecification;
+        main.goTo = goTo
 
         initCreateForm();
         getProducts();
         getBrands();
 
     })
-    .controller('dealerCtrl', function (Dealer, $http) {
+    .controller('dealerCtrl', function (Dealer, $http) 
+    {
         var main = this;
         var defDate = new Date();
 
@@ -569,7 +628,7 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
             $http({
                 method : 'GET',
               url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-//                url : 'http://localhost:10010/api/orderDetails?filter={"where":{"OrderCode":"'+order.Code+'"}}',
+                //url : 'http://localhost:10010/api/orderDetails?filter={"where":{"OrderCode":"'+order.Code+'"}}',
                 data:{}
             }).then(function (result){
                 main.ordersDetails = result.data;
@@ -937,7 +996,252 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
         
 
     }])
-    .controller('kioskCtrl', function (Kiosk, $http) {
+
+    .controller('productCategoryMapCtrl', function (ProductCategory,Product_productCategory,Product, $http,$stateParams,$q) {
+        var main = this;
+        var defDate = new Date();
+        main.productCategories = []
+        main.productProductCategories = []
+        main.product = {}
+        
+        //main.newMapProductCategory.ProductCode = $stateParams.productId
+        
+        
+        function getProductCategoriesByBranchCode(code) {
+            console.log(code)
+            ProductCategory.find({
+                filter:{
+                    where:{
+                        BrandCode:code
+                    }
+                }
+            },
+            function success(result) {
+                main.productCategories = result;
+                console.log(main.productCategories)
+                
+            },
+            function error(err){
+                main.errors = errors.data.error;
+            });
+        }
+
+        function getProductCategoriesByProductCode(code){
+            Product_productCategory.find({
+                filter:{
+                    where:{
+                        ProductCode:code
+                    },
+                    include:{
+                        relation:'ProductCategory',
+                        scope:{
+                            fields:['Name']
+                        }
+                    }
+                }
+            },
+            function success(result) {
+                main.productProductCategories = result;
+                console.log(main.productProductCategories)
+                
+            },
+            function error(err){
+                main.errors = errors.data.error;
+            });
+        }
+
+        function createMapProductCategory(){
+            Product_productCategory.upsert(main.newMapProductCategory
+                ,function success(result){
+                    getProductCategoriesByProductCode(main.product.Code)
+                    //main.productProductCategories.push(result)
+                    alert("Insert success")
+                },function error(err){
+                    main.errors = errors.data.error;
+                });
+        }
+
+        function selectProductCategory(category){
+            main.newMapProductCategory.ProductCategoryCode =  category.Code
+        }
+
+        function getProductDetail(code){
+         
+            Product.findById({Code:code},function(result){
+                    main.product = result;
+                    console.log(main.product)
+                    getProductCategoriesByBranchCode(main.product.BrandCode)
+                    getProductCategoriesByProductCode(main.product.Code)
+            } );
+        }
+
+        function removePPC(ppdId) {
+            if (confirm("Are You Sure to Delete?")) {
+                console.log(ppdId)
+                Product_productCategory.deleteById({ Id: ppdId },
+                    function (result) {
+                        main.productProductCategories = main.productProductCategories.filter(function(ppd){
+                            return ppd.id != ppdId
+                        })
+                        alert("Deleted");
+                    });
+            } else {
+                alert("Cancelled");
+            }
+        }
+
+        function initForm()
+        {
+            main.newMapProductCategory = {ProductCode:$stateParams.productId,ProductCategoryCode:'', Active:1,Deleted:0,CreatedBy:'AUTO', CreatedDate:defDate, CreateAgent:'AUTO', UpdatedBy:'AUTO', UpdatedDate:defDate, UpdateAgent:'AUTO'}
+        }
+
+        main.selectProductCategory = selectProductCategory
+        main.createMapProductCategory = createMapProductCategory
+        main.removePPC = removePPC
+
+        getProductDetail($stateParams.productId);
+        initForm()
+
+
+
+    })
+
+    .controller('productCategoryCtrl', function (ProductCategory,Brand, $http,$state) {
+        var main = this;
+        var defDate = new Date();
+        var submain = this;
+
+        function getProductCategories() {
+            ProductCategory.find(
+                function (result) {
+                    main.productCategories = result;
+                    console.log(main.productCategories)
+                });
+        }
+
+        function getBrands() {
+            Brand.find(
+                function (result) {
+                    main.brands = result;
+                    console.log(main.brands)
+                });
+        }
+
+        function createProductCategory(productCategory) {
+            if (confirm("Are You Sure to Create?")) {
+                ProductCategory.create(productCategory,
+                    function (result) {
+                        initCreateForm();
+                        alert("Create Successfuly");
+                    }, function (errors) {
+                        main.errors = errors.data.error;
+                        alert('Create Error:' + main.errors);
+                    }
+                );
+            } else {
+                alert("Cancelled");
+            }
+        }
+
+        function removeProductCategory(code) {
+            if (confirm("Are You Sure to Delete?")) {
+                console.log(code)
+                ProductCategory.deleteById({ Code: code },
+                    function (result) {
+                        getProductCategories()
+                        alert("Deleted");
+                    });
+            } else {
+                alert("Cancelled");
+            }
+
+        }
+
+        function goToEditPage(code){
+            console.log(code)
+            $state.go('editProductCategory',{pcId:code})
+        }
+
+
+        function initCreateForm() {
+            main.newProductCategory = { BrandCode: '', Code: '', Name: '', Active: 1, Deleted: 0, CreatedBy: 'AUTO', CreatedDate: defDate, CreateAgent: 'AUTO', UpdatedBy: 'AUTO', UpdatedDate: defDate, UpdateAgent: 'AUTO' };
+        }
+
+        function selectBrand(brand){
+            main.newProductCategory.BrandCode = brand.Code;
+        }
+
+        main.newProductCategory = {}
+        main.createProductCategory = createProductCategory
+        main.selectBrand = selectBrand
+        main.removeProductCategory = removeProductCategory
+        main.goToEditPage = goToEditPage
+        //main.getProductCategories = getProductCategories
+
+        getBrands()
+        getProductCategories()
+        initCreateForm();
+      
+
+    })
+
+    .controller('productCategoryEditCtrl', function (ProductCategory,Brand, $http,$state,$stateParams) {
+        var main = this;
+        var defDate = new Date();
+        var submain = this;
+        var pcId = $stateParams.pcId
+        main.productCategory = {}
+        function getProductCategory(pcId) {
+            ProductCategory.findById({Code:pcId},
+                function (result) {
+                    main.productCategory = result;
+                    console.log(main.productCategory)
+                });
+        }
+
+        function getBrands() {
+            Brand.find(
+                function (result) {
+                    main.brands = result;
+                    console.log(main.brands)
+                });
+        }
+
+
+        function editProductCategory(){
+            if (confirm("Are You Sure to Continue?") == true) {
+                ProductCategory.replaceById({Code:main.productCategory.Code},main.productCategory,
+                    function success(result){
+                        alert("update success")
+                        $state.go('viewProductCategory')
+                    },function error(err){
+                        main.errors = err.data.error;
+                        alert("Create Error");
+                    })
+            } else {
+                alert("Cancelled");
+            }
+            
+        }
+
+
+        function selectBrand(brand){
+            main.productCategory.BrandCode = brand.Code;
+        }
+
+        main.editProductCategory = editProductCategory
+        main.selectBrand = selectBrand
+       
+        //main.getProductCategories = getProductCategories
+
+        getBrands()
+        getProductCategory(pcId)
+      
+
+    })
+
+
+    .controller('kioskCtrl', function (Kiosk, $http,$state) {
         var main = this;
         var defDate = new Date();
         var submain = this;
@@ -1044,6 +1348,11 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
 
         }
 
+        function goTo(kiosk){
+            
+            $state.go('viewKioskMap',{kioskId:kiosk.Code});
+        }
+
 
 
         main.kiosks = [];
@@ -1059,6 +1368,7 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
         main.isCurrentKiosk = isCurrentKiosk;
         main.cancelEditing = cancelEditing;
         main.selectOutlet = selectOutlet;
+        main.goTo = goTo;
 
 
 
@@ -1066,6 +1376,232 @@ angular.module('CrudAngular', ['ui.router','ui.bootstrap','angularUtils.directiv
         getKiosks();
         getOutlets();
 
+    })
+    .controller('kioskMapCtrl', function (Kiosk,Product,KioskProductDealer,VKioskProductDealer, $http,$uibModal,$rootScope,$log,$scope,$stateParams,$q) {
+        var main = this;
+        var defDate = new Date();
+        var submain = this;
+        var defer = $q.defer()
+        var promise = defer.promise
+        main.products = [];
+        main.kiosk = null
+        main.dealers = [];
+
+        function getProduct() {
+            Product.find(
+                function (result) {
+                    main.products = result
+                    defer.resolve(main.products);
+                });
+        }
+
+        function getKiosksDetail(code){
+            console.log(code)
+            Kiosk.findById({Code:code},function(result){
+                    main.kiosk = result;
+                    //console.log(main.kiosk)
+            } );
+        }
+
+        function getDealerFromKiosk(code_p,index) {
+            //console.log(main.kiosk)
+            VKioskProductDealer.find({
+                filter:{
+                    where:{
+                        and:[
+                            {
+                                KioskCode:main.kiosk.Code
+                            },
+                            {
+                                ProductCode:code_p
+                            }
+                        ]
+                    }
+                }
+
+            },
+            function (result) {
+                main.products[index].kioskDealer = result;
+                //console.log(main.products[index])
+            });
+        }
+  
+        
+        function init(){
+            defer = $q.defer()
+            promise = defer.promise
+            main.products = [];
+            main.kiosk = null
+            main.dealers = [];
+            getProduct();
+            getKiosksDetail($stateParams.kioskId)
+            promise.then(function success (data){
+                var index;
+                for(index = 0;index < data.length;++index)
+                {
+                    getDealerFromKiosk(data[index].Code,index)
+                }
+            }, function error (msg){
+                $log.info(msg)
+            })
+            
+        }
+
+        main.openModal = function (size,kiosk,product) {
+        
+        var modalInstance = $uibModal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'pages/forms/kiosk/modalKioskMap.html',
+            controller: 'modalMapDealerCtrl',
+            controllerAs: 'main',
+            size: size,
+            resolve: {
+                items: function () {
+                    var data = {}
+                    data.kiosk = kiosk
+                    data.product = product
+                    return data
+                },               
+            }
+        });
+
+        modalInstance.result.then(function (Obj) {
+            
+                if (confirm("Are You Sure?")) {
+                console.log("id: "+Obj.id)
+                    if(Obj.id == null)
+                    {
+                        KioskProductDealer.upsert(Obj.data,
+                            function (result) {
+                                alert("Insert Successfuly");
+                            });
+                    }else{
+                        KioskProductDealer.replaceById({Id:Obj.id},Obj.data,
+                            function (result) {
+                                alert("Update Successfuly");
+                            });
+                    }
+                    init()
+                    
+                } else {
+                    alert("Update Failed");
+                }
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+        
+        init();
+
+    })
+    .controller('modalMapDealerCtrl', function ($uibModalInstance, items,VProductDealer,Product,$rootScope) {
+
+    var vm = this;
+    console.log(items)
+    vm.items = items
+   
+    vm.dealers = []
+    vm.products = []
+    vm.dealer = null
+    vm.codeDealer = null
+    productDealer = null
+    
+    function getProductDealer() {
+            // VProductDealer.find({"where":{"and":[{"BranchId":vm.branchId},{"ProductCode":vm.items.code}]}},
+            VProductDealer.find({
+                filter:{
+                    where:{
+                        and:[
+                            {
+                                BranchId:vm.items.kiosk.BranchId
+                            },
+                            {
+                                ProductCode:vm.items.product.Code
+                            }
+                        ]
+                    }
+                }
+
+            },
+        function (result) {
+            vm.dealers = result;
+            
+            //defaultValDealer();
+            getProductDefault()
+            if(vm.codeDealer == null && vm.dealers[0] != null)
+            {
+                vm.dealer = vm.dealers[0]
+               
+                console.log(vm.dealer)
+            }
+        });
+    }
+
+
+    function getProductDefault()
+    {
+        if(vm.items.product.kioskDealer[0] != null)
+        {
+            VProductDealer.findById({
+                Id:vm.items.product.kioskDealer[0].ProductDealerId
+            },
+            function success (result) {
+                vm.dealer = result;
+                vm.codeDealer = vm.dealer.DealerCode
+                console.log(vm.codeDealer)
+            }
+            );
+        }
+        
+    }
+//     function defaultValDealer(){
+//         if(vm.dealers.length > 0)
+//         {
+//             if(isEmptyKioskId)
+//             {
+//                 console.log("masuk")
+//                 vm.dealer = vm.dealers[0]
+//             }
+//         }
+     
+            
+//    }
+   //console.log("kiosk:" +vm.items.kiosk)
+   function populateKioskProductDealer(data){
+        if(data != null){
+            objKioskProductDealer = {               
+                KioskCode:vm.items.kiosk.Code,
+                ProductDealerId:data.id,
+                Active:1,
+                Deleted:0
+            }
+            
+        }
+   }
+
+   function isEmptyKioskId()
+   {
+        if(vm.items.product.kioskDealer != null && vm.items.product.kioskDealer.length > 0 )
+            return false
+        return true
+   }
+ 
+    getProductDealer();
+
+    vm.ok = function () {
+        populateKioskProductDealer(vm.dealer)
+        var objReturn = {}
+        objReturn.data = objKioskProductDealer
+        
+        if(!isEmptyKioskId())
+            objReturn.id = vm.items.product.kioskDealer[0].id
+        $uibModalInstance.close(objReturn);
+    };
+
+    vm.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
     })
 
     //     .controller('LoginController', ['$scope', '$state', 'authService', '$location', function ($scope, $state, authService, $location) {

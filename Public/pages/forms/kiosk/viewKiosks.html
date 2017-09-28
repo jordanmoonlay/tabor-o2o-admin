@@ -51,6 +51,8 @@
     <td>
       <a type="button" class="btn btn-xs btn-warning" ng-click="main.setEditedKiosk(kiosk)"><i class = "fa fa-pencil"></i></a>      &nbsp;
       <a type="button" class="btn btn-xs btn-danger" ng-click="main.deleteKiosk(kiosk.Code)"><i class = "fa fa-trash"></i></a>      &nbsp;
+      <a type="button" class="btn btn-xs btn-success" ng-click="main.goTo(kiosk)"><i class = "fa fa-map-o"></i></a>      &nbsp;
+      <!--<a ui-sref="viewKioskMap({kioskId:kiosk.Code})"> mapping</a>      &nbsp;-->
     </td>
   </tr>
 </tbody>
