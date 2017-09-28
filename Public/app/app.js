@@ -102,6 +102,14 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 controller: 'UserController',
                 controllerAs: 'vm'
             })
+            .state('users-mapping-kiosk',{
+                url:'/users/{id}/mapping-kiosk',
+                templateUrl:'pages/forms/user/kiosk-mapping.html'
+            })
+            .state('users-mapping-dealer',{
+                url:'/users/{id}/mapping-dealer',
+                templateUrl:'pages/forms/user/dealer-mapping.html'
+            })
             
         $urlRouterProvider.otherwise('index');
     }])
