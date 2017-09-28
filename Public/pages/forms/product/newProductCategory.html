@@ -1,0 +1,37 @@
+<!-- /.box-header -->
+<!-- form start -->
+<div ng-controller="productCategoryCtrl as main">
+
+  <div  class="box box-primary">
+    <form role="form" name="productCategoryFormValidate" ng-submit="main.createProductCategory(main.newProductCategory)" novalidate>
+      <div class="box-header with-border">
+        <h3 class="box-title">New Product Category</h3>
+      </div>
+      <div class="box-body">
+        <div class="form-group" id="scrollable-dropdown-menu">
+            <label for="exampleInputBranch">Brand</label></br>
+            <input type="text" class="form-control" name="brandId" autocomplete="off" ng-model="selectedBrand" uib-typeahead="item as item.Code +' ('+ item.Name +')' for item in main.brands | filter:$viewValue"
+              typeahead-on-select="main.selectBrand(selectedBrand)" placeholder="Brand" required>
+              <div ng-if="main.errors.details.messages.BrandCode[0]">
+                <div style="color:red"> {{main.errors.details.messages.BrandCode[0]}}</div>
+               </div>
+        </div>
+        <div class="form-group">
+            <label>Code</label>
+            <input type="text" class="form-control" ng-model="main.newProductCategory.Code" placeholder="example: SMGA"  max-length="50" required>
+            <span style="color:red" ng-show="productCategoryFormValidate.Code.$dirty && productCategoryFormValidate.Code.$invalid "> 
+        </div>
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" class="form-control" ng-model="main.newProductCategory.Name" placeholder="example: samsung a series" max-length="255" required >
+            <span style="color:red" ng-show="productCategoryFormValidate.Name.$dirty && productCategoryFormValidate.Name.$invalid "> 
+        </div>
+
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+    </div>
+  </div>

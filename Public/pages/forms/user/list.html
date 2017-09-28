@@ -1,0 +1,40 @@
+<div class="row" ng-controller="UserController as vm">
+    <div class="col-sm-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Users List</h3>
+            </div>
+
+            <div class="box-body">
+                <div>page {{vm.query.page}} of {{vm.totalPage}}</div>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <th>Id</th>
+                        <th>Email</th>
+                        <th>Username</th>
+                        <th></th>
+</thead>
+<tbody>
+    <tr ng-repeat="user in vm.users">
+        <td> {{user.id}} </td>
+        <td> {{user.email}} </td>
+        <td> {{user.username}} </td>
+        <td>
+            <a class="btn btn-xs btn-success" ui-sref="users-mapping-kiosk({ id:user.id })">Mapping Kiosk</a>
+            <a class="btn btn-xs btn-success" ui-sref="users-mapping-dealer({ id:user.id })">Mapping Dealer</a>
+        </td>
+    </tr>
+</tbody>
+</table>
+<br>
+<button class="btn btn-info" ng-click="vm.first()"><<</button>
+<button class="btn btn-info" ng-click="vm.prev()"><</button>
+<button class="btn btn-info" ng-click="vm.next()">></button>
+<button class="btn btn-info" ng-click="vm.last()">>></button>
+
+</div>
+</div>
+</div>
+</div>
+
+<ui-view></ui-view>

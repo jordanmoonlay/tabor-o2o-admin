@@ -1,0 +1,56 @@
+<!-- /.box-header -->
+<!-- form start -->
+<div ng-controller="productCategoryMapCtrl as main">
+    
+    <div  class="box box-primary">
+      <form role="form" name="productCategoryFormValidate" ng-submit="main.createMapProductCategory()" novalidate>
+        <div class="box-header with-border">
+          <h3 class="box-title">Mapping product with category</h3>
+        </div>
+        <div class="box-body">
+            <div class="form-group">
+                <label>Product Name</label>
+                <input type="text" class="form-control" ng-model="main.product.Name"readonly>                  
+            </div>
+          <div class="form-group" id="scrollable-dropdown-menu">
+              <label for="exampleInputBranch">Product Category</label></br>
+              <input type="text" class="form-control" name="productCategoryId" autocomplete="off" ng-model="selectedPC" uib-typeahead="item as item.Code +' ('+ item.Name +')' for item in main.productCategories | filter:$viewValue"
+                typeahead-on-select="main.selectProductCategory(selectedPC)" placeholder="Category" required>
+                <div ng-if="main.errors.details.messages.Code[0]">
+                  <div style="color:red"> {{main.errors.details.messages.Code[0]}}</div>
+                  </div>
+          </div>
+  
+        </div>
+          <!-- /.box-body -->
+          <div class="box-footer">
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+      </form>
+      <div class="box-body">
+          <!-- <div class="form-group">
+              <label for="exampleInputSpecification">Specification :</label><a class="btn btn-default" ng-click="main.AddSpecification()"><i class="fa fa-plus"></i></a> &nbsp;
+              <input type="hidden" name="Spec" class="form-control" ng-model="main.newProduct.Specification"  placeholder="Specification" required>
+              <div ng-if="main.errors.details.messages.Specification[0]">
+                  <div style="color:red"> {{main.errors.details.messages.Specification[0]}}</div>
+                </div>
+          </div> -->
+    
+          
+          
+        
+          <div class="box-header with-border">
+              <h3 class="box-title">List Product Category</h3>
+            </div>
+          <div ng-repeat="ppc in main.productProductCategories" class="form-group">
+            <div class="col-md-10">
+            <input type="text" autocomplete="off" class="form-control" ng-model="ppc.ProductCategory.Name" readonly>
+            </div>
+            <div class="col-md-2">
+            <a class="btn btn-default" ng-click="main.removePPC(ppc.id)"><i class="fa fa-times"></i></a>
+            </div>
+    
+          </div>
+      </div>  
+    </div>  
+</div>
