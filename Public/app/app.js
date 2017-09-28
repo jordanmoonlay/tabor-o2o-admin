@@ -1138,6 +1138,11 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
         }
 
+        function goToEditPage(code){
+            console.log(code)
+            $state.go('editProductCategory',{pcId:code})
+        }
+
 
         function initCreateForm() {
             main.newProductCategory = { BrandCode: '', Code: '', Name: '', Active: 1, Deleted: 0, CreatedBy: 'AUTO', CreatedDate: defDate, CreateAgent: 'AUTO', UpdatedBy: 'AUTO', UpdatedDate: defDate, UpdateAgent: 'AUTO' };
@@ -1151,11 +1156,67 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         main.createProductCategory = createProductCategory
         main.selectBrand = selectBrand
         main.removeProductCategory = removeProductCategory
+        main.goToEditPage = goToEditPage
         //main.getProductCategories = getProductCategories
 
         getBrands()
         getProductCategories()
         initCreateForm();
+      
+
+    })
+
+    .controller('productCategoryEditCtrl', function (ProductCategory,Brand, $http,$state,$stateParams) {
+        var main = this;
+        var defDate = new Date();
+        var submain = this;
+        var pcId = $stateParams.pcId
+        main.productCategory = {}
+        function getProductCategory(pcId) {
+            ProductCategory.findById({Code:pcId},
+                function (result) {
+                    main.productCategory = result;
+                    console.log(main.productCategory)
+                });
+        }
+
+        function getBrands() {
+            Brand.find(
+                function (result) {
+                    main.brands = result;
+                    console.log(main.brands)
+                });
+        }
+
+
+        function editProductCategory(){
+            if (confirm("Are You Sure to Continue?") == true) {
+                ProductCategory.replaceById({Code:main.productCategory.Code},main.productCategory,
+                    function success(result){
+                        alert("update success")
+                        $state.go('viewProductCategory')
+                    },function error(err){
+                        main.errors = err.data.error;
+                        alert("Create Error");
+                    })
+            } else {
+                alert("Cancelled");
+            }
+            
+        }
+
+
+        function selectBrand(brand){
+            main.productCategory.BrandCode = brand.Code;
+        }
+
+        main.editProductCategory = editProductCategory
+        main.selectBrand = selectBrand
+       
+        //main.getProductCategories = getProductCategories
+
+        getBrands()
+        getProductCategory(pcId)
       
 
     })
