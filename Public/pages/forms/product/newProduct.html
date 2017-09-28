@@ -1,0 +1,172 @@
+
+<div ng-controller="productCtrl as main">
+  <!-- /.box-header -->
+  <!-- form start -->
+  <div class="box box-primary" ng-if="!main.isEditing">
+    <form role="form" name="productFormValidate" ng-submit="main.createProduct(main.newProduct)" novalidate>
+      <div class="box-header with-border">
+        <h3 class="box-title">Create Product</h3>
+      </div>
+      <div class="box-body">
+        <!--<div class="form-group" id="scrollable-dropdown-menu">
+                  <label for="exampleInputBrands">Brands</label></br>
+                  <input type="text" ng-model="selectedTestBrand" typeahead="item as item.code for item in main.brands | filter:$viewValue" typeahead-on-select="main.selectBrand(selectedTestBrand)" placeholder="Brands">
+                  <pre>selectedTestBrand|json</pre>
+                </div>-->
+        <div class="form-group" id="scrollable-dropdown-menu">
+          <label for="exampleInputBranch">BrandCode</label></br>
+          <input type="text" class="form-control" name="brandId" autocomplete="off" ng-model="selectedTestBrand" uib-typeahead="item as item.Code +' ('+ item.Name +')' for item in main.brands | filter:$viewValue"
+            typeahead-on-select="main.selectBrand(selectedTestBrand)" placeholder="Brand" required>
+            <div ng-if="main.errors.details.messages.BrandCode[0]">
+              <div style="color:red"> {{main.errors.details.messages.BrandCode[0]}}</div>
+            </div>
+            
+        </div>
+        <div class="form-group">
+          <input type="hidden" class="form-control" name="brandCode" ng-model="main.newProduct.BrandCode" max-length="4" placeholder="BrandCode" required>
+          <span style="color:red" ng-show="productFormValidate.brandCode.$dirty && productFormValidate.brandCode.$invalid "> 
+        </div>
+        <div class="form-group">
+          <label for="exampleInputCode">Code</label>
+          <input type="text" name="Code" autocomplete="off" class="form-control" ng-model="main.newProduct.Code" placeholder="Code" required>
+          <div ng-if="main.errors.details.messages.Code[0]">
+              <div style="color:red"> {{main.errors.details.messages.Code[0]}}</div>
+            </div>
+            
+        </div>
+        <div class="form-group">
+          <label for="exampleInputSKU">SKU</label>
+          <input type="text" name="SKU" autocomplete="off" class="form-control" ng-model="main.newProduct.SKU" placeholder="SKU" required>
+         <div ng-if="main.errors.details.messages.Code[0]">
+              <div style="color:red"> {{main.errors.details.messages.Code[0]}}</div>
+            </div>
+            
+        </div>
+        <div class="form-group">
+          <label for="exampleInputName">Name</label>
+          <input type="text" name="Name" autocomplete="off" class="form-control" ng-model="main.newProduct.Name" placeholder="Name" required>
+          <div ng-if="main.errors.details.messages.Name[0]">
+              <div style="color:red"> {{main.errors.details.messages.Name[0]}}</div>
+            </div>
+            
+        </div>
+        <div class="form-group">
+          <label for="exampleInputDescription">Description</label>
+          <input type="text" name="Desc" autocomplete="off" class="form-control" ng-model="main.newProduct.Description" placeholder="Description" required>
+          <div ng-if="main.errors.details.messages.Description[0]">
+              <div style="color:red"> {{main.errors.details.messages.Description[0]}}</div>
+            </div>
+            
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPrice">Price</label>
+          <input type="text" name="Price" autocomplete="off" class="form-control" ng-model="main.newProduct.Price" placeholder="Price" required>
+          <div ng-if="main.errors.details.messages.Price[0]">
+              <div style="color:red"> {{main.errors.details.messages.Price[0]}}</div>
+            </div>
+          <div ng-if="main.errors.details.messages.Price[1]">
+              <div style="color:red"> {{main.errors.details.messages.Price[1]}}</div>
+            </div>
+            
+        </div>
+        <div class="form-group">
+          <label for="exampleInputDP">DP</label>
+          <input type="text" name="DP" autocomplete="off" class="form-control" ng-model="main.newProduct.DP" placeholder="DP" required>
+          <div ng-if="main.errors.details.messages.DP[0]">
+              <div style="color:red"> {{main.errors.details.messages.DP[0]}}</div>
+            </div>
+            
+        </div>
+        
+        <div class="form-group">
+          <label for="exampleInputSpecification">Specification :</label><a class="btn btn-default" ng-click="main.AddSpecification()"><i class="fa fa-plus"></i></a> &nbsp;
+          <input type="hidden" name="Spec" class="form-control" ng-model="main.newProduct.Specification"  placeholder="Specification" required>
+          <div ng-if="main.errors.details.messages.Specification[0]">
+              <div style="color:red"> {{main.errors.details.messages.Specification[0]}}</div>
+            </div>
+        </div>
+
+        
+        
+        <!--<div class="form-group">
+          <label for="exampleInputSpecification">RAM</label>
+          <input type="text" name="Spec" autocomplete="off" class="form-control" ng-model="SpecRam" 
+          ng-change="main.getSpec(SpecRam, SpecColor)" placeholder="RAM" required>
+          <div ng-if="main.errors.details.messages.SpecRam[0]">
+              <div style="color:red"> {{main.errors.details.messages.SpecRam[0]}}</div>
+            </div>
+            <span style="color:green" ng-if ="productFormValidate.Spec.$valid"> Valid </span>
+        </div>-->
+        <div ng-repeat="spec in main.specifications" class="form-group">
+          <div class="col-md-3">
+          <input type="text" autocomplete="off" class="form-control" ng-model="spec.key" ng-change="main.getSpec()" required>
+          </div>
+          <div class="col-md-7">
+          <input type="text" autocomplete="off" class="form-control" ng-model="spec.value" ng-change="main.getSpec()" required>
+          </div>
+          <div class="col-md-2">
+          <a class="btn btn-default" ng-click="main.RemoveSpecification()"><i class="fa fa-times"></i></a>
+          </div>
+
+        </div>
+        
+        
+<div class="form-group">
+          <label for="exampleInputWeight">Weight</label>
+          <input type="text" name="Weight" autocomplete="off" class="form-control" ng-model="main.newProduct.Weight" placeholder="Weight" required>
+          <div ng-if="main.errors.details.messages.Weight[0]">
+              <div style="color:red"> {{main.errors.details.messages.Weight[0]}}</div>
+            </div>
+            
+        </div>
+        <div class="form-group">
+          <label for="exampleInputWidth">Width</label>
+          <input type="text" name="Width" autocomplete="off" class="form-control" ng-model="main.newProduct.Width" placeholder="Width" required>
+          <div ng-if="main.errors.details.messages.Width[0]">
+              <div style="color:red"> {{main.errors.details.messages.Width[0]}}</div>
+            </div>
+            
+        </div>
+        <div class="form-group">
+          <label for="exampleInputHeight">Height</label>
+          <input type="text" name="Height" autocomplete="off" class="form-control" ng-model="main.newProduct.Height" placeholder="Height" required>
+          <div ng-if="main.errors.details.messages.Height[0]">
+              <div style="color:red"> {{main.errors.details.messages.Height[0]}}</div>
+            </div>
+            
+        </div>
+        <div class="form-group">
+          <label for="exampleInputDP">Length</label>
+          <input type="text" name="Length" autocomplete="off" class="form-control" ng-model="main.newProduct.Length" placeholder="Length" required>
+          <div ng-if="main.errors.details.messages.Length[0]">
+              <div style="color:red"> {{main.errors.details.messages.Length[0]}}</div>
+            </div>
+            
+        </div>
+        <!--<div class="form-group">
+          <label for="exampleInputSpecification">COLOR</label>
+          <input type="text" name="Spec" autocomplete="off" class="form-control" ng-model="SpecColor"
+          ng-change="main.getSpec(SpecRam, SpecColor)" placeholder="COLOR" required>
+          <div ng-if="main.errors.details.messages.SpecColor[0]">
+              <div style="color:red"> {{main.errors.details.messages.SpecColor[0]}}</div>
+            </div>
+            <span style="color:green" ng-if ="productFormValidate.Spec.$valid"> Valid </span>
+        </div>-->
+
+        <div class="form-group">
+          <label for="exampleInputFile">Logo</label>
+          <input type="file" fileread="main.newProduct.Image" required ng-model="main.newProduct.Image">
+          <img src="{{main.newProduct.Image}}" class="img-responsive" alt="Image preview..." />
+          <input type="hidden" ng-model="main.newProduct.Image" value="{{main.newProduct.Image}}"  required>
+
+      </div>
+
+      </div>
+      <!-- /.box-body -->
+
+      <div class="box-footer">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

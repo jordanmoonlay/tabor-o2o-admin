@@ -1,0 +1,54 @@
+<div ng-controller="UserKioskMappingController as main">
+    <div class="box box-primary">
+        <form role="form" name="brandForm" ng-submit="main.register(main.newBrand)" novalidate>
+            <div class="box-header with-border">
+                <h3 class="box-title">Mapping Kiosk</h3>
+            </div>
+            <div class="box-body row">
+                <div class="col-sm-12 form-group">
+                    <label class="col-sm-2" for="">Username</label>
+                    <div class="col-sm-10"><input type="text" class="form-control" name="username" ng-model="main.user.username" placeholder="Code"
+                            readonly></div>
+                </div>
+                <div class="col-sm-12 form-group">
+                    <label class="col-sm-2" for="">Email</label>
+                    <div class="col-sm-10"><input type="email" name="email" class="form-control" ng-model="main.user.email" placeholder="Name" readonly></div>
+                </div>
+                <div class="col-sm-12 form-group">
+                    <label class="col-sm-2" for="">Kiosk</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="kiosk" autocomplete="off" ng-model="selectedKiosk" uib-typeahead="kiosk as kiosk.Name for kiosk in main.getKiosk($viewValue)"
+                            typeahead-on-select="main.selectKiosk(selectedKiosk)" placeholder="Type Kiosk" required>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-body">
+                <button type="submit" ng-click="main.saveKioskMapping()" class="btn btn-primary">Save</button>
+            </div>
+            <hr>
+            <div class="box-header with-border">
+                <h3 class="box-title">This user mapped to following Kiosk:</h3>
+            </div>
+            <div class="box-body row">
+                <div class="col-sm-12">
+                    <table class="table table-bordered table-hovered">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Name</th>
+                                <th>Active?</th>
+                            </tr>
+                        </thead>
+                        <tr ng-repeat="kiosk in main.mappedKiosk">
+                            <td>{{kiosk.KioskCode}}</td>
+                            <td>{{kiosk.Kiosk.Name}}</td>
+                            <td>{{kiosk.Active}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
