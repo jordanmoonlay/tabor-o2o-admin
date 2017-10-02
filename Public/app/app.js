@@ -1438,7 +1438,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             Kiosk.findById({Code:code},function(result){
                     main.kiosk = result;
                     d.resolve(main.kiosk)
-                    //console.log(main.kiosk)
+                    console.log(main.kiosk)
             } );
             return d.promise
         }
@@ -1565,13 +1565,14 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         productDealer = null
 
         function getProductDealer() {
+           
             // VProductDealer.find({"where":{"and":[{"BranchId":vm.branchId},{"ProductCode":vm.items.code}]}},
             VProductDealer.find({
                 filter: {
                     where: {
                         and: [
                             {
-                                BranchId: vm.items.kiosk.BranchId
+                                BranchCode: vm.items.kiosk.BranchCode
                             },
                             {
                                 ProductCode: vm.items.product.Code
@@ -1582,6 +1583,10 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
             },
         function (result) {
+            // console.log("masuk get product")
+            // console.log(vm.items.product.Code)
+            // console.log(vm.items.kiosk.BranchId)
+            // console.log(result)
             vm.dealers = result;
             
             
