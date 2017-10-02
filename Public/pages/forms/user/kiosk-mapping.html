@@ -1,6 +1,6 @@
 <div ng-controller="UserKioskMappingController as main">
     <div class="box box-primary">
-        <form role="form" name="brandForm">
+        <form role="form" name="brandForm" ng-submit="main.register(main.newBrand)" novalidate>
             <div class="box-header with-border">
                 <h3 class="box-title">Mapping Kiosk</h3>
             </div>
