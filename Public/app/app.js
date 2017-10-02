@@ -10,7 +10,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             })
             .state('viewBrands', {
                 url: '/viewBrands',
-                templateUrl: 'pages/forms/viewBrands.html'
+                templateUrl: 'pages/forms/brand/viewBrands.html'
             })
             .state('newBrand', {
                 url: '/newBrand',
@@ -1054,15 +1054,46 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 });
         }
 
-        function createMapProductCategory() {
-            Product_productCategory.upsert(main.newMapProductCategory
-                , function success(result) {
-                    getProductCategoriesByProductCode(main.product.Code)
-                    //main.productProductCategories.push(result)
-                    alert("Insert success")
-                }, function error(err) {
-                    main.errors = errors.data.error;
-                });
+        function isMapProductExist(pcCode,pCode){
+            var defer = $q.defer()
+            console.log("pcCode:"+pcCode+"pCode:"+pCode)
+            Product_productCategory.count({
+                where:{
+                    and:
+                    [
+                        {
+                            ProductCategoryCode:pcCode
+                        },
+                        {
+                            ProductCode:pCode
+                        }
+                    ]
+                }
+            },function success(result){
+                console.log(result)
+                defer.resolve(result)
+            })
+
+            return defer.promise
+        }
+
+        function createMapProductCategory(){
+            isMapProductExist(main.newMapProductCategory.ProductCategoryCode,main.newMapProductCategory.ProductCode)
+            .then(function success(data){
+                console.log(data)
+                console.log(data.count)
+                if(data.count == 0 ){
+                    Product_productCategory.upsert(main.newMapProductCategory
+                        ,function success(result){
+                            getProductCategoriesByProductCode(main.product.Code)
+                            //main.productProductCategories.push(result)
+                        },function error(err){
+                            main.errors = errors.data.error;
+                    });
+                }else{
+                    alert("this category is already exist in this product")
+                }
+            })
         }
 
         function selectProductCategory(category) {
@@ -1384,30 +1415,36 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         var main = this;
         var defDate = new Date();
         var submain = this;
-        var defer = $q.defer()
-        var promise = defer.promise
+        // var defer = $q.defer()
+        // var promise = defer.promise
         main.products = [];
         main.kiosk = null
         main.dealers = [];
 
         function getProduct() {
+            var d = $q.defer()
             Product.find(
                 function (result) {
                     main.products = result
-                    defer.resolve(main.products);
+                    d.resolve(main.products)
+                    //defer.resolve(main.products);
                 });
+            return d.promise;
         }
 
-        function getKiosksDetail(code) {
+        function getKiosksDetail(code){
+            var d = $q.defer()
             console.log(code)
-            Kiosk.findById({ Code: code }, function (result) {
-                main.kiosk = result;
-                //console.log(main.kiosk)
-            });
+            Kiosk.findById({Code:code},function(result){
+                    main.kiosk = result;
+                    d.resolve(main.kiosk)
+                    //console.log(main.kiosk)
+            } );
+            return d.promise
         }
 
-        function getDealerFromKiosk(code_p, index) {
-            //console.log(main.kiosk)
+        function getDealerFromKiosk(code_p,index) {
+            //main.products[index].kioskDealer[index] = null   
             VKioskProductDealer.find({
                 filter: {
                     where: {
@@ -1423,30 +1460,50 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 }
 
             },
-                function (result) {
-                    main.products[index].kioskDealer = result;
-                    //console.log(main.products[index])
-                });
+            function (result) {
+                main.products[index].kioskDealer = result;
+                //console.log(main.products[index])
+            });
         }
 
-
-        function init() {
-            defer = $q.defer()
-            promise = defer.promise
+        function removeMapping(id)
+        {
+            console.log(id)
+            if (confirm("Are You Sure?")) {
+                KioskProductDealer.deleteById({Id:id}
+                ,function success(result){
+                    alert("delete success")
+                    init();
+                },function error (err){
+                    alert("delete failed, see log")
+                    $log.info(err)
+                })
+            } else {
+                alert("Update Failed");
+            }
+        }
+  
+        
+        function init(){
             main.products = [];
             main.kiosk = null
             main.dealers = [];
-            getProduct();
-            getKiosksDetail($stateParams.kioskId)
-            promise.then(function success(data) {
+            
+            $q.all([
+                getProduct(),
+                getKiosksDetail($stateParams.kioskId)
+            ])
+            .then(function success (data){
                 var index;
-                for (index = 0; index < data.length; ++index) {
-                    getDealerFromKiosk(data[index].Code, index)
+                //console.log(data)
+                for(index = 0;index < data[0].length;++index)
+                {
+                    getDealerFromKiosk(data[0][index].Code,index)
                 }
             }, function error(msg) {
                 $log.info(msg)
             })
-
+            
         }
 
         main.openModal = function (size, kiosk, product) {
@@ -1468,9 +1525,8 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             });
 
             modalInstance.result.then(function (Obj) {
-
                 if (confirm("Are You Sure?")) {
-                    console.log("id: " + Obj.id)
+                    //console.log("id: " + Obj.id)
                     if (Obj.id == null) {
                         KioskProductDealer.upsert(Obj.data,
                             function (result) {
@@ -1492,7 +1548,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             });
         };
 
-
+        main.removeMapping = removeMapping
         init();
 
     })
@@ -1525,58 +1581,50 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 }
 
             },
-                function (result) {
-                    vm.dealers = result;
-
-                    //defaultValDealer();
-                    getProductDefault()
-                    if (vm.codeDealer == null && vm.dealers[0] != null) {
-                        vm.dealer = vm.dealers[0]
-
-                        console.log(vm.dealer)
-                    }
-                });
-        }
-
-
-        function getProductDefault() {
-            if (vm.items.product.kioskDealer[0] != null) {
-                VProductDealer.findById({
-                    Id: vm.items.product.kioskDealer[0].ProductDealerId
-                },
-                    function success(result) {
-                        vm.dealer = result;
-                        vm.codeDealer = vm.dealer.DealerCode
-                        console.log(vm.codeDealer)
-                    }
-                );
-            }
-
-        }
-        //     function defaultValDealer(){
-        //         if(vm.dealers.length > 0)
-        //         {
-        //             if(isEmptyKioskId)
-        //             {
-        //                 console.log("masuk")
-        //                 vm.dealer = vm.dealers[0]
-        //             }
-        //         }
-
-
-        //    }
-        //console.log("kiosk:" +vm.items.kiosk)
-        function populateKioskProductDealer(data) {
-            if (data != null) {
-                objKioskProductDealer = {
-                    KioskCode: vm.items.kiosk.Code,
-                    ProductDealerId: data.id,
-                    Active: 1,
-                    Deleted: 0
+        function (result) {
+            vm.dealers = result;
+            
+            
+            //defaultValDealer();
+            //getProductDefault()
+            // if(vm.codeDealer == null && vm.dealers[0] != null)
+            // {
+            //     vm.dealer = vm.dealers[0]
+            // }
+            if(vm.items.product.hasOwnProperty("kioskDealer"))
+            {
+                if(vm.items.product.kioskDealer.hasOwnProperty("0")){
+                    var list = $.grep(vm.dealers, function(element, index) {
+                    return (element.id == vm.items.product.kioskDealer[0].ProductDealerId);
+                    });
+                    vm.dealer = list[0]
+                }else{
+                    vm.dealer = vm.dealers[0]
                 }
+            }else {
+                vm.dealer = vm.dealers[0]
+            }
+        });
+    }
+    /* 
+            }
 
+        }
+
+        
+    } */
+
+   function populateKioskProductDealer(data){
+        if(data != null){
+            objKioskProductDealer = {               
+                KioskCode:vm.items.kiosk.Code,
+                ProductDealerId:data.id,
+                Active:1,
+                Deleted:0
             }
         }
+   }
+        
 
         function isEmptyKioskId() {
             if (vm.items.product.kioskDealer != null && vm.items.product.kioskDealer.length > 0)
