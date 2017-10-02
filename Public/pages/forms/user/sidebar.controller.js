@@ -12,10 +12,8 @@ function SidebarController(AuthenticationService,AuthenticationState){
 })();
 
     function logout() {
-        debugger
         AuthenticationService.signOut()
         AuthenticationState.remove();
-        Order.initiateOrder();
 
         $state.go('authentication.login');
     }
