@@ -2,8 +2,8 @@ angular.module('CrudAngular')
     .controller("UserDealerMappingController", UserDealerMappingController)
 
 
-UserDealerMappingController.$inject = ['User', 'Dealer', "Constants", "$http", '$stateParams']
-function UserDealerMappingController(User, Dealer, Constants, $http, $stateParams) {
+UserDealerMappingController.$inject = ['User', 'Dealer', "Constants", "$http", '$stateParams','AuthenticationState']
+function UserDealerMappingController(User, Dealer, Constants, $http, $stateParams,AuthenticationState) {
     var main = this;
     main.selectedDealer = {};
     main.USER_BASE_URL = Constants.BASE_API + "/users";
@@ -16,7 +16,7 @@ function UserDealerMappingController(User, Dealer, Constants, $http, $stateParam
         // User.findById(id).then(result => {
         //     main.User = result.data;
         // });
-        $http.get(main.USER_BASE_URL + "/" + id + "?access_token=" + Constants.AccessToken).then(
+        $http.get(main.USER_BASE_URL + "/" + id + "?access_token=" + AuthenticationState.getToken()).then(
             result => {
                 main.user = result.data;
             }
