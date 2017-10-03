@@ -10,7 +10,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             })
             .state('viewBrands', {
                 url: '/viewBrands',
-                templateUrl: 'pages/forms/brand/viewBrands.html'
+                templateUrl: 'pages/forms/viewBrands.html'
             })
             .state('newBrand', {
                 url: '/newBrand',
@@ -227,176 +227,6 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
         initCreateForm();
         getBrands();
-    })
-    .controller('productCtrl', function (Product, $http, $state) {
-        var main = this;
-        var defDate = new Date();
-        var submain = this;
-
-        function getProducts() {
-            Product.find(
-                function (result) {
-                    main.products = result;
-                });
-        }
-
-        function createProduct(product) {
-            if (confirm("Are You Sure to Create?")) {
-                Product.create(product,
-                    function (result) {
-                        initCreateForm();
-                        getProducts();
-                        alert("Create Successfuly");
-                    }, function (errors) {
-                        main.errors = errors.data.error;
-                        alert('Create Error:' + main.errors);
-                    }
-                );
-            } else {
-                alert("Cancelled");
-            }
-
-        }
-
-        function updateProduct(product) {
-            if (confirm("Are You Sure to Update?")) {
-                Product.upsert(product,
-                    function (result) {
-                        cancelEditing();
-                        getProducts();
-                        alert("Update Successfuly");
-                    });
-
-            } else {
-                alert("Cancelled");
-            }
-
-        }
-
-        function deleteProduct(productId) {
-            if (confirm("Are You Sure to Delete?")) {
-                Product.deleteById({ Code: productId },
-                    function (result) {
-                        cancelEditing();
-                        getProducts();
-                        alert("Deleted");
-                    });
-            } else {
-                alert("Cancelled");
-            }
-
-        }
-
-        function getBrands() {
-            $http({
-                method: 'GET',
-                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/brands',
-                //                 url : 'http://localhost:10010/api/brands',
-                data: {}
-            }).then(function (result) {
-                main.brands = result.data;
-            });
-        }
-
-
-        function initCreateForm() {
-            main.newProduct = { Code: '', BrandCode: '', Name: '', Description: '', Price: '', DP: '', Specification: '', Weight: '', Width: '', Height: '', Length: '', Image: '', Active: 1, Deleted: 0, CreatedBy: 'AUTO', CreatedDate: defDate, CreateAgent: 'AUTO', UpdatedBy: 'AUTO', UpdatedDate: defDate, UpdateAgent: 'AUTO' };
-        }
-
-        function setEditedProduct(product) {
-            main.editedProduct = angular.copy(product);
-            main.isEditing = true;
-            main.isShow = false;
-            main.isView = false;
-        }
-
-        function setViewProduct(product) {
-            main.viewProduct = angular.copy(product);
-            main.isView = true;
-            main.isShow = false;
-        }
-
-
-        function isCurrentProduct(productId) {
-            return main.editedProduct !== null || main.viewProduct !== null && main.editedProduct.Code === productId;
-        }
-
-        function cancelEditing() {
-            main.editedProduct = null;
-            main.isEditing = false;
-            main.isShow = true;
-
-        }
-
-        function cancelView() {
-            main.viewProduct = null;
-            main.isShow = true;
-            main.isView = false;
-        }
-
-        function selectBrand(brand) {
-            console.log(brand);
-            main.newProduct.BrandCode = brand.Code;
-        }
-
-        function getSpec() {
-            var getSpecJSON = JSON.stringify(main.specifications);
-            main.newProduct.Specification = getSpecJSON;
-        }
-
-        function goTo(code) {
-            console.log(code)
-            $state.go('viewProductCategoryMap', { productId: code })
-        }
-
-
-        var specifications = [3];
-        specifications[0] = { key: "RAM", value: "" };
-        specifications[1] = { key: "Camera", value: "" };
-        specifications[2] = { key: "Battery", value: "" };
-
-
-        main.specifications = specifications;
-
-        function AddSpecification() {
-            main.specifications.push({ key: "", value: "" });
-        }
-
-        function RemoveSpecification() {
-            if (specifications > specifications[3]) {
-                main.specifications.pop();
-                var getSpecJSON = JSON.stringify(main.specifications);
-                main.newProduct.Specification = getSpecJSON;
-            } else {
-                alert("Can't Be Deleted");
-            }
-        }
-
-        main.products = [];
-        main.editedProduct = null;
-        main.viewProduct = null;
-        main.isEditing = false;
-        main.isView = false;
-        main.isShow = true;
-        main.getProducts = getProducts;
-        main.createProduct = createProduct;
-        main.updateProduct = updateProduct;
-        main.deleteProduct = deleteProduct;
-        main.setEditedProduct = setEditedProduct;
-        main.setViewProduct = setViewProduct;
-        main.isCurrentProduct = isCurrentProduct;
-        main.cancelEditing = cancelEditing;
-        main.cancelView = cancelView;
-        main.selectBrand = selectBrand;
-        main.getSpec = getSpec;
-        main.AddSpecification = AddSpecification;
-        main.RemoveSpecification = RemoveSpecification;
-        main.goTo = goTo
-
-        initCreateForm();
-        getProducts();
-        getBrands();
-
     })
     .controller('dealerCtrl', function (Dealer, $http) {
         var main = this;
@@ -1054,46 +884,15 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 });
         }
 
-        function isMapProductExist(pcCode,pCode){
-            var defer = $q.defer()
-            console.log("pcCode:"+pcCode+"pCode:"+pCode)
-            Product_productCategory.count({
-                where:{
-                    and:
-                    [
-                        {
-                            ProductCategoryCode:pcCode
-                        },
-                        {
-                            ProductCode:pCode
-                        }
-                    ]
-                }
-            },function success(result){
-                console.log(result)
-                defer.resolve(result)
-            })
-
-            return defer.promise
-        }
-
-        function createMapProductCategory(){
-            isMapProductExist(main.newMapProductCategory.ProductCategoryCode,main.newMapProductCategory.ProductCode)
-            .then(function success(data){
-                console.log(data)
-                console.log(data.count)
-                if(data.count == 0 ){
-                    Product_productCategory.upsert(main.newMapProductCategory
-                        ,function success(result){
-                            getProductCategoriesByProductCode(main.product.Code)
-                            //main.productProductCategories.push(result)
-                        },function error(err){
-                            main.errors = errors.data.error;
-                    });
-                }else{
-                    alert("this category is already exist in this product")
-                }
-            })
+        function createMapProductCategory() {
+            Product_productCategory.upsert(main.newMapProductCategory
+                , function success(result) {
+                    getProductCategoriesByProductCode(main.product.Code)
+                    //main.productProductCategories.push(result)
+                    alert("Insert success")
+                }, function error(err) {
+                    main.errors = errors.data.error;
+                });
         }
 
         function selectProductCategory(category) {
@@ -1415,36 +1214,34 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         var main = this;
         var defDate = new Date();
         var submain = this;
-        // var defer = $q.defer()
-        // var promise = defer.promise
+        var defer = $q.defer()
+        var promise = defer.promise
         main.products = [];
         main.kiosk = null
         main.dealers = [];
 
         function getProduct() {
-            var d = $q.defer()
             Product.find(
                 function (result) {
                     main.products = result
-                    d.resolve(main.products)
-                    //defer.resolve(main.products);
+                    defer.resolve(main.products);
                 });
-            return d.promise;
         }
 
-        function getKiosksDetail(code){
-            var d = $q.defer()
+        function getKiosksDetail(code) {
             console.log(code)
+
             Kiosk.findById({Code:code},function(result){
                     main.kiosk = result;
                     d.resolve(main.kiosk)
                     console.log(main.kiosk)
             } );
             return d.promise
+
         }
 
-        function getDealerFromKiosk(code_p,index) {
-            //main.products[index].kioskDealer[index] = null   
+        function getDealerFromKiosk(code_p, index) {
+            //console.log(main.kiosk)
             VKioskProductDealer.find({
                 filter: {
                     where: {
@@ -1460,50 +1257,30 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 }
 
             },
-            function (result) {
-                main.products[index].kioskDealer = result;
-                //console.log(main.products[index])
-            });
+                function (result) {
+                    main.products[index].kioskDealer = result;
+                    //console.log(main.products[index])
+                });
         }
 
-        function removeMapping(id)
-        {
-            console.log(id)
-            if (confirm("Are You Sure?")) {
-                KioskProductDealer.deleteById({Id:id}
-                ,function success(result){
-                    alert("delete success")
-                    init();
-                },function error (err){
-                    alert("delete failed, see log")
-                    $log.info(err)
-                })
-            } else {
-                alert("Update Failed");
-            }
-        }
-  
-        
-        function init(){
+
+        function init() {
+            defer = $q.defer()
+            promise = defer.promise
             main.products = [];
             main.kiosk = null
             main.dealers = [];
-            
-            $q.all([
-                getProduct(),
-                getKiosksDetail($stateParams.kioskId)
-            ])
-            .then(function success (data){
+            getProduct();
+            getKiosksDetail($stateParams.kioskId)
+            promise.then(function success(data) {
                 var index;
-                //console.log(data)
-                for(index = 0;index < data[0].length;++index)
-                {
-                    getDealerFromKiosk(data[0][index].Code,index)
+                for (index = 0; index < data.length; ++index) {
+                    getDealerFromKiosk(data[index].Code, index)
                 }
             }, function error(msg) {
                 $log.info(msg)
             })
-            
+
         }
 
         main.openModal = function (size, kiosk, product) {
@@ -1525,8 +1302,9 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             });
 
             modalInstance.result.then(function (Obj) {
+
                 if (confirm("Are You Sure?")) {
-                    //console.log("id: " + Obj.id)
+                    console.log("id: " + Obj.id)
                     if (Obj.id == null) {
                         KioskProductDealer.upsert(Obj.data,
                             function (result) {
@@ -1548,7 +1326,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             });
         };
 
-        main.removeMapping = removeMapping
+
         init();
 
     })
@@ -1582,6 +1360,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 }
 
             },
+
         function (result) {
             // console.log("masuk get product")
             // console.log(vm.items.product.Code)
@@ -1614,22 +1393,59 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
     /* 
             }
 
+                function (result) {
+                    vm.dealers = result;
+
+                    //defaultValDealer();
+                    getProductDefault()
+                    if (vm.codeDealer == null && vm.dealers[0] != null) {
+                        vm.dealer = vm.dealers[0]
+
+
+                        console.log(vm.dealer)
+                    }
+                });
         }
 
-        
-    } */
 
-   function populateKioskProductDealer(data){
-        if(data != null){
-            objKioskProductDealer = {               
-                KioskCode:vm.items.kiosk.Code,
-                ProductDealerId:data.id,
-                Active:1,
-                Deleted:0
+        function getProductDefault() {
+            if (vm.items.product.kioskDealer[0] != null) {
+                VProductDealer.findById({
+                    Id: vm.items.product.kioskDealer[0].ProductDealerId
+                },
+                    function success(result) {
+                        vm.dealer = result;
+                        vm.codeDealer = vm.dealer.DealerCode
+                        console.log(vm.codeDealer)
+                    }
+                );
+            }
+
+        }
+        //     function defaultValDealer(){
+        //         if(vm.dealers.length > 0)
+        //         {
+        //             if(isEmptyKioskId)
+        //             {
+        //                 console.log("masuk")
+        //                 vm.dealer = vm.dealers[0]
+        //             }
+        //         }
+
+
+        //    }
+        //console.log("kiosk:" +vm.items.kiosk)
+        function populateKioskProductDealer(data) {
+            if (data != null) {
+                objKioskProductDealer = {
+                    KioskCode: vm.items.kiosk.Code,
+                    ProductDealerId: data.id,
+                    Active: 1,
+                    Deleted: 0
+                }
+
             }
         }
-   }
-        
 
         function isEmptyKioskId() {
             if (vm.items.product.kioskDealer != null && vm.items.product.kioskDealer.length > 0)
