@@ -1364,7 +1364,6 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         productDealer = null
 
         function getProductDealer() {
-           
             // VProductDealer.find({"where":{"and":[{"BranchId":vm.branchId},{"ProductCode":vm.items.code}]}},
             VProductDealer.find({
                 filter: {
@@ -1381,6 +1380,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 }
 
             },
+
         function (result) {
             // console.log("masuk get product")
             // console.log(vm.items.product.Code)
@@ -1413,10 +1413,12 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
     /* 
             }
 
+
         }
 
         
     } */
+
 
    function populateKioskProductDealer(data){
         if(data != null){
@@ -1425,6 +1427,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 ProductDealerId:data.id,
                 Active:1,
                 Deleted:0
+
             }
         }
    }
