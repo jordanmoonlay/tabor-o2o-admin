@@ -1230,10 +1230,14 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
         function getKiosksDetail(code) {
             console.log(code)
-            Kiosk.findById({ Code: code }, function (result) {
-                main.kiosk = result;
-                //console.log(main.kiosk)
-            });
+
+            Kiosk.findById({Code:code},function(result){
+                    main.kiosk = result;
+                    d.resolve(main.kiosk)
+                    console.log(main.kiosk)
+            } );
+            return d.promise
+
         }
 
         function getDealerFromKiosk(code_p, index) {
@@ -1339,7 +1343,6 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         productDealer = null
 
         function getProductDealer() {
-
             // VProductDealer.find({"where":{"and":[{"BranchId":vm.branchId},{"ProductCode":vm.items.code}]}},
             VProductDealer.find({
                 filter: {
