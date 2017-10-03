@@ -1,12 +1,14 @@
-angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.directives.dirPagination', 'lbServices'])
+angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.directives.dirPagination', 'ngStorage', 'lbServices', 'app.authentication'])
 
     .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider,
         $urlRouterProvider) {
         $stateProvider
             .state('login', {
                 url: '/login',
-                templateUrl: 'pages/forms/login.html'
-            }).state('viewBrands', {
+                templateUrl: 'app/authentication/login.html',
+                data: { pageTitle: 'Login' }
+            })
+            .state('viewBrands', {
                 url: '/viewBrands',
                 templateUrl: 'pages/forms/viewBrands.html'
             })
@@ -19,10 +21,10 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 templateUrl: 'pages/forms/product/viewProducts.html'
             })
             .state('viewProductCategoryMap', {
-                url: '/ProductCategory/map/:productId',                
+                url: '/ProductCategory/map/:productId',
                 templateUrl: 'pages/forms/product/newProductCategoryMap.html',
-                controller:'productCategoryMapCtrl',
-                controllerAs:'main',            
+                controller: 'productCategoryMapCtrl',
+                controllerAs: 'main',
             })
             .state('viewProductCategory', {
                 url: '/ProductCategory',
@@ -31,8 +33,8 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             .state('editProductCategory', {
                 url: '/ProductCategory/edit/:pcId',
                 templateUrl: 'pages/forms/product/editProductCategory.html',
-                controller:'productCategoryEditCtrl',
-                controllerAs:'main'
+                controller: 'productCategoryEditCtrl',
+                controllerAs: 'main'
             })
             .state('newProduct', {
                 url: '/newProduct',
@@ -47,10 +49,10 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 templateUrl: 'pages/forms/kiosk/viewKiosks.html'
             })
             .state('viewKioskMap', {
-                url: '/viewKiosks/map/:kioskId',                
+                url: '/viewKiosks/map/:kioskId',
                 templateUrl: 'pages/forms/kiosk/viewKioskMap.html',
-                controller:'kioskMapCtrl',
-                controllerAs:'main',
+                controller: 'kioskMapCtrl',
+                controllerAs: 'main',
                 // params:{
                 //     obj:null
                 // }
@@ -90,28 +92,32 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             .state('home', {
                 url: '/index',
                 templateUrl: 'pages/forms/home.html'
-            }).state('users',{
-                url:'/users',
+            }).state('users', {
+                url: '/users',
                 templateUrl: 'pages/forms/user/list.html',
                 controller: 'UserController',
                 controllerAs: 'vm'
             })
-            .state('users-register',{
-                url:'/users/register',
+            .state('users-register', {
+                url: '/users/register',
                 templateUrl: 'pages/forms/user/register.html',
                 controller: 'UserController',
                 controllerAs: 'vm'
             })
-            .state('users-mapping-kiosk',{
-                url:'/users/{id}/mapping-kiosk',
-                templateUrl:'pages/forms/user/kiosk-mapping.html'
+            .state('users-mapping-kiosk', {
+                url: '/users/{id}/mapping-kiosk',
+                templateUrl: 'pages/forms/user/kiosk-mapping.html'
             })
-            .state('users-mapping-dealer',{
-                url:'/users/{id}/mapping-dealer',
-                templateUrl:'pages/forms/user/dealer-mapping.html'
+            .state('users-mapping-dealer', {
+                url: '/users/{id}/mapping-dealer',
+                templateUrl: 'pages/forms/user/dealer-mapping.html'
             })
-            
-        $urlRouterProvider.otherwise('index');
+            .state('users-mapping-roles', {
+                url: '/users/{id}/mapping-roles',
+                templateUrl: 'pages/forms/user/role-mapping.html'
+            })
+
+        $urlRouterProvider.otherwise('/');
     }])
     .controller('MainCtrl', function (Brand) {
         var main = this;
@@ -222,179 +228,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         initCreateForm();
         getBrands();
     })
-    .controller('productCtrl', function (Product, $http,$state) {
-        var main = this;
-        var defDate = new Date();
-        var submain = this;
-
-        function getProducts() {
-            Product.find(
-                function (result) {
-                    main.products = result;
-                });
-        }
-
-        function createProduct(product) {
-            if (confirm("Are You Sure to Create?")) {
-                Product.create(product,
-                    function (result) {
-                        initCreateForm();
-                        getProducts();
-                        alert("Create Successfuly");
-                    }, function (errors) {
-                        main.errors = errors.data.error;
-                        alert('Create Error:' + main.errors);
-                    }
-                );
-            } else {
-                alert("Cancelled");
-            }
-
-        }
-
-        function updateProduct(product) {
-            if (confirm("Are You Sure to Update?")) {
-                Product.upsert(product,
-                    function (result) {
-                        cancelEditing();
-                        getProducts();
-                        alert("Update Successfuly");
-                    });
-
-            } else {
-                alert("Cancelled");
-            }
-
-        }
-
-        function deleteProduct(productId) {
-            if (confirm("Are You Sure to Delete?")) {
-                Product.deleteById({ Code: productId },
-                    function (result) {
-                        cancelEditing();
-                        getProducts();
-                        alert("Deleted");
-                    });
-            } else {
-                alert("Cancelled");
-            }
-
-        }
-
-        function getBrands() {
-            $http({
-                method : 'GET',
-                url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/brands',
- //                 url : 'http://localhost:10010/api/brands',
-                data:{}
-            }).then(function (result){
-                main.brands = result.data;
-            });
-        }
-
-
-        function initCreateForm() {
-            main.newProduct = { Code: '', BrandCode: '', Name: '', Description: '', Price: '', DP: '', Specification: '',Weight:'',Width:'',Height:'',Length:'', Image: '', Active: 1, Deleted: 0, CreatedBy: 'AUTO', CreatedDate: defDate, CreateAgent: 'AUTO', UpdatedBy: 'AUTO', UpdatedDate: defDate, UpdateAgent: 'AUTO' };
-        }
-
-        function setEditedProduct(product) {
-            main.editedProduct = angular.copy(product);
-            main.isEditing = true;
-            main.isShow = false;
-            main.isView = false;
-        }
-
-        function setViewProduct(product) {
-            main.viewProduct = angular.copy(product);
-            main.isView = true;
-            main.isShow = false;
-        }
-
-
-        function isCurrentProduct(productId) {
-            return main.editedProduct !== null || main.viewProduct !== null && main.editedProduct.Code === productId;
-        }
-
-        function cancelEditing() {
-            main.editedProduct = null;
-            main.isEditing = false;
-            main.isShow = true;
-
-        }
-
-        function cancelView() {
-            main.viewProduct = null;
-            main.isShow = true;
-            main.isView = false;
-        }
-
-        function selectBrand(brand) {
-            console.log(brand);
-            main.newProduct.BrandCode = brand.Code;
-        }
-
-        function getSpec() {
-            var getSpecJSON = JSON.stringify(main.specifications);
-            main.newProduct.Specification = getSpecJSON;
-        }
-
-        function goTo(code)
-        {
-            console.log(code)
-            $state.go('viewProductCategoryMap',{productId:code})
-        }
-
-
-        var specifications = [3];
-        specifications[0] = { key: "RAM", value: "" };
-        specifications[1] = { key: "Camera", value: "" };
-        specifications[2] = { key: "Battery", value: "" };
-
-
-        main.specifications = specifications;
-
-        function AddSpecification() {
-            main.specifications.push({ key: "", value: "" });
-        }
-
-        function RemoveSpecification() {
-            if (specifications > specifications[3]) {
-                main.specifications.pop();
-                var getSpecJSON = JSON.stringify(main.specifications);
-                main.newProduct.Specification = getSpecJSON;
-            } else {
-                alert("Can't Be Deleted");
-            }
-        }
-
-        main.products = [];
-        main.editedProduct = null;
-        main.viewProduct = null;
-        main.isEditing = false;
-        main.isView = false;
-        main.isShow = true;
-        main.getProducts = getProducts;
-        main.createProduct = createProduct;
-        main.updateProduct = updateProduct;
-        main.deleteProduct = deleteProduct;
-        main.setEditedProduct = setEditedProduct;
-        main.setViewProduct = setViewProduct;
-        main.isCurrentProduct = isCurrentProduct;
-        main.cancelEditing = cancelEditing;
-        main.cancelView = cancelView;
-        main.selectBrand = selectBrand;
-        main.getSpec = getSpec;
-        main.AddSpecification = AddSpecification;
-        main.RemoveSpecification = RemoveSpecification;
-        main.goTo = goTo
-
-        initCreateForm();
-        getProducts();
-        getBrands();
-
-    })
-    .controller('dealerCtrl', function (Dealer, $http) 
-    {
+    .controller('dealerCtrl', function (Dealer, $http) {
         var main = this;
         var defDate = new Date();
 
@@ -626,11 +460,11 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
         function setViewOrder(order) {
             $http({
-                method : 'GET',
-              url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
+                method: 'GET',
+                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
                 //url : 'http://localhost:10010/api/orderDetails?filter={"where":{"OrderCode":"'+order.Code+'"}}',
-                data:{}
-            }).then(function (result){
+                data: {}
+            }).then(function (result) {
                 main.ordersDetails = result.data;
                 main.isShow = false;
                 main.isView = true;
@@ -722,7 +556,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         getOrders();
 
     })
-    .controller('newOrderCtrl', ['$scope','Order', '$http',  '$uibModal', function ($scope, Order, $http, $uibModal) {
+    .controller('newOrderCtrl', ['$scope', 'Order', '$http', '$uibModal', function ($scope, Order, $http, $uibModal) {
         var main = this;
         var defDate = new Date();
         var submain = this;
@@ -735,24 +569,24 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             //         console.log(res);
             //     });
             $http({
-                method : 'GET',
-                url : 'http://tabor-o2o-webapi-internal-dev/api/Order?filter={"where":{"Status":"CREATED"}}',
+                method: 'GET',
+                url: 'http://tabor-o2o-webapi-internal-dev/api/Order?filter={"where":{"Status":"CREATED"}}',
                 // url : 'http://localhost:10010/api/Order?filter={"where":{"Status":"CREATED"}}',
-                data:{}
-            }).then(function (result){
+                data: {}
+            }).then(function (result) {
                 main.orders = result.data;
             });
         }
 
-        function getDealers(){
+        function getDealers() {
             $http({
-                method : 'GET',
-             url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
+                method: 'GET',
+                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
                 // url : 'http://localhost:10010/api/dealers',
-                data:{}
-            }).then(function (result){
+                data: {}
+            }).then(function (result) {
                 main.dealers = result.data;
-            });   
+            });
         }
 
         function createOrder(order) {
@@ -760,10 +594,10 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 function (result) {
                     initCreateForm();
                     getOrders();
-                }, function(errors){
+                }, function (errors) {
                     main.errors = errors.data.error;
                 }
-                );
+            );
         }
 
         function updateOrder(order) {
@@ -870,29 +704,29 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         // getDealers();
 
     }])
-    .controller('assignCtrl', ['Order' ,'$http', '$uibModalInstance', 'data', function (Order,$http, $uibModalInstance, data) {
+    .controller('assignCtrl', ['Order', '$http', '$uibModalInstance', 'data', function (Order, $http, $uibModalInstance, data) {
         var main = this;
 
         main.data = data;
 
         main.updateOrder = updateOrder;
         main.cancelEditing = cancelEditing;
-        
+
 
         setAssignOrder(data);
-        main.orderDetails =[];
+        main.orderDetails = [];
         main.assignOrder.DealerCode = '';
 
         function setAssignOrder(data) {
             main.assignOrder = angular.copy(data);
         }
 
-        function getKiosks(data){
+        function getKiosks(data) {
             $http({
                 method: 'GET',
                 //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/kiosks?filter={"where":{"Code":"'+ data.KioskCode +'"}}',
-                data:{}
+                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/kiosks?filter={"where":{"Code":"' + data.KioskCode + '"}}',
+                data: {}
             }).then(function successCallback(result) {
                 main.kiosks = result.data[0].BranchCode;
                 getDealers();
@@ -900,55 +734,55 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 console.log(main.kiosks);
             });
         }
-    
+
 
         function getDealers() {
             $http({
                 method: 'GET',
                 //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/dealers?filter={"where":{"BranchCode":"'+main.kiosks+'"}}',
-                data:{}
+                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/dealers?filter={"where":{"BranchCode":"' + main.kiosks + '"}}',
+                data: {}
             }).then(function (result) {
                 main.dealers = result.data;
-                var convDealers = main.dealers.map(x=>x.Code.toString());
-                var joinConvDealers = "\""+ convDealers.join("\",\"")+"\"";
+                var convDealers = main.dealers.map(x => x.Code.toString());
+                var joinConvDealers = "\"" + convDealers.join("\",\"") + "\"";
                 getOrderDetails(joinConvDealers)
             });
         }
 
-        function getOrderDetails(joinConvDealers){
+        function getOrderDetails(joinConvDealers) {
             $http({
                 method: 'GET',
                 //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
                 url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/orderDetails?filter={"where":{"OrderCode":"' + data.Code + '"}}',
-                data:{}
+                data: {}
             }).then(function (result) {
                 main.orderDetails = result.data;
-                var convOrderDetails = main.orderDetails.map(x=>x.ProductCode.toString());
-                var joinConvOrderDetails = "\""+ convOrderDetails.join("\",\"")+"\"";
-                getProductDealers(joinConvOrderDetails,joinConvDealers);
-            }); 
+                var convOrderDetails = main.orderDetails.map(x => x.ProductCode.toString());
+                var joinConvOrderDetails = "\"" + convOrderDetails.join("\",\"") + "\"";
+                getProductDealers(joinConvOrderDetails, joinConvDealers);
+            });
         }
-        
-        
-        function getProductDealers(joinConvOrderDetails,joinConvDealers){
+
+
+        function getProductDealers(joinConvOrderDetails, joinConvDealers) {
             $http({
                 method: 'GET',
                 //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/ProductDealers?filter={"where":{"and":[{"ProductCode":{"inq":['+joinConvOrderDetails+']}},{"DealerCode":{"inq":['+joinConvDealers+']}}]}}',
-                data:{}
+                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/ProductDealers?filter={"where":{"and":[{"ProductCode":{"inq":[' + joinConvOrderDetails + ']}},{"DealerCode":{"inq":[' + joinConvDealers + ']}}]}}',
+                data: {}
             }).then(function (result) {
                 main.productDealers = result.data;
                 console.log(convOrderDetails);
             });
         }
         function setDealerCode(dealer) {
-            if(dealer.IsAvailable == 1){
+            if (dealer.IsAvailable == 1) {
                 main.assignOrder.DealerCode = angular.copy(dealer.DealerCode);
-            }else{
+            } else {
                 alert("CANNOT ASSIGN , PRODUCT IS NOT AVAILABLE");
             }
-            
+
         }
 
 
@@ -961,7 +795,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                         alert('Assigned Successfuly');
                         $uibModalInstance.close();
                         location.reload();
-                        
+
                     }, function (errors) {
                         main.errors = errors.data.error;
                         alert('Assign Failed');
@@ -972,14 +806,14 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 alert('Cancelled');
                 $uibModalInstance.close();
             }
-            
+
         }
 
         function cancelEditing() {
             $uibModalInstance.dismiss('Cancel');
         }
 
-        function updateProperty(){
+        function updateProperty() {
             main.assignOrder.Status = 'ASSIGNED';
             main.assignOrder.CreatedBy = 'Outlet1';
             main.assignOrder.CreateAgent = 'Admin';
@@ -991,88 +825,88 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         main.updateOrder = updateOrder;
         main.getProductDealers = getProductDealers;
         main.setDealerCode = setDealerCode;
-        getKiosks(data);     
+        getKiosks(data);
 
-        
+
 
     }])
 
-    .controller('productCategoryMapCtrl', function (ProductCategory,Product_productCategory,Product, $http,$stateParams,$q) {
+    .controller('productCategoryMapCtrl', function (ProductCategory, Product_productCategory, Product, $http, $stateParams, $q) {
         var main = this;
         var defDate = new Date();
         main.productCategories = []
         main.productProductCategories = []
         main.product = {}
-        
+
         //main.newMapProductCategory.ProductCode = $stateParams.productId
-        
-        
+
+
         function getProductCategoriesByBranchCode(code) {
             console.log(code)
             ProductCategory.find({
-                filter:{
-                    where:{
-                        BrandCode:code
+                filter: {
+                    where: {
+                        BrandCode: code
                     }
                 }
             },
-            function success(result) {
-                main.productCategories = result;
-                console.log(main.productCategories)
-                
-            },
-            function error(err){
-                main.errors = errors.data.error;
-            });
-        }
+                function success(result) {
+                    main.productCategories = result;
+                    console.log(main.productCategories)
 
-        function getProductCategoriesByProductCode(code){
-            Product_productCategory.find({
-                filter:{
-                    where:{
-                        ProductCode:code
-                    },
-                    include:{
-                        relation:'ProductCategory',
-                        scope:{
-                            fields:['Name']
-                        }
-                    }
-                }
-            },
-            function success(result) {
-                main.productProductCategories = result;
-                console.log(main.productProductCategories)
-                
-            },
-            function error(err){
-                main.errors = errors.data.error;
-            });
-        }
-
-        function createMapProductCategory(){
-            Product_productCategory.upsert(main.newMapProductCategory
-                ,function success(result){
-                    getProductCategoriesByProductCode(main.product.Code)
-                    //main.productProductCategories.push(result)
-                    alert("Insert success")
-                },function error(err){
+                },
+                function error(err) {
                     main.errors = errors.data.error;
                 });
         }
 
-        function selectProductCategory(category){
-            main.newMapProductCategory.ProductCategoryCode =  category.Code
+        function getProductCategoriesByProductCode(code) {
+            Product_productCategory.find({
+                filter: {
+                    where: {
+                        ProductCode: code
+                    },
+                    include: {
+                        relation: 'ProductCategory',
+                        scope: {
+                            fields: ['Name']
+                        }
+                    }
+                }
+            },
+                function success(result) {
+                    main.productProductCategories = result;
+                    console.log(main.productProductCategories)
+
+                },
+                function error(err) {
+                    main.errors = errors.data.error;
+                });
         }
 
-        function getProductDetail(code){
-         
-            Product.findById({Code:code},function(result){
-                    main.product = result;
-                    console.log(main.product)
-                    getProductCategoriesByBranchCode(main.product.BrandCode)
+        function createMapProductCategory() {
+            Product_productCategory.upsert(main.newMapProductCategory
+                , function success(result) {
                     getProductCategoriesByProductCode(main.product.Code)
-            } );
+                    //main.productProductCategories.push(result)
+                    alert("Insert success")
+                }, function error(err) {
+                    main.errors = errors.data.error;
+                });
+        }
+
+        function selectProductCategory(category) {
+            main.newMapProductCategory.ProductCategoryCode = category.Code
+        }
+
+        function getProductDetail(code) {
+
+            Product.findById({ Code: code }, function (result) {
+                main.product = result;
+                console.log(main.product)
+                getProductCategoriesByBranchCode(main.product.BrandCode)
+                getProductCategoriesByProductCode(main.product.Code)
+            });
         }
 
         function removePPC(ppdId) {
@@ -1080,7 +914,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 console.log(ppdId)
                 Product_productCategory.deleteById({ Id: ppdId },
                     function (result) {
-                        main.productProductCategories = main.productProductCategories.filter(function(ppd){
+                        main.productProductCategories = main.productProductCategories.filter(function (ppd) {
                             return ppd.id != ppdId
                         })
                         alert("Deleted");
@@ -1090,9 +924,8 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             }
         }
 
-        function initForm()
-        {
-            main.newMapProductCategory = {ProductCode:$stateParams.productId,ProductCategoryCode:'', Active:1,Deleted:0,CreatedBy:'AUTO', CreatedDate:defDate, CreateAgent:'AUTO', UpdatedBy:'AUTO', UpdatedDate:defDate, UpdateAgent:'AUTO'}
+        function initForm() {
+            main.newMapProductCategory = { ProductCode: $stateParams.productId, ProductCategoryCode: '', Active: 1, Deleted: 0, CreatedBy: 'AUTO', CreatedDate: defDate, CreateAgent: 'AUTO', UpdatedBy: 'AUTO', UpdatedDate: defDate, UpdateAgent: 'AUTO' }
         }
 
         main.selectProductCategory = selectProductCategory
@@ -1106,7 +939,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
     })
 
-    .controller('productCategoryCtrl', function (ProductCategory,Brand, $http,$state) {
+    .controller('productCategoryCtrl', function (ProductCategory, Brand, $http, $state) {
         var main = this;
         var defDate = new Date();
         var submain = this;
@@ -1157,9 +990,9 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
         }
 
-        function goToEditPage(code){
+        function goToEditPage(code) {
             console.log(code)
-            $state.go('editProductCategory',{pcId:code})
+            $state.go('editProductCategory', { pcId: code })
         }
 
 
@@ -1167,7 +1000,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             main.newProductCategory = { BrandCode: '', Code: '', Name: '', Active: 1, Deleted: 0, CreatedBy: 'AUTO', CreatedDate: defDate, CreateAgent: 'AUTO', UpdatedBy: 'AUTO', UpdatedDate: defDate, UpdateAgent: 'AUTO' };
         }
 
-        function selectBrand(brand){
+        function selectBrand(brand) {
             main.newProductCategory.BrandCode = brand.Code;
         }
 
@@ -1181,18 +1014,18 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         getBrands()
         getProductCategories()
         initCreateForm();
-      
+
 
     })
 
-    .controller('productCategoryEditCtrl', function (ProductCategory,Brand, $http,$state,$stateParams) {
+    .controller('productCategoryEditCtrl', function (ProductCategory, Brand, $http, $state, $stateParams) {
         var main = this;
         var defDate = new Date();
         var submain = this;
         var pcId = $stateParams.pcId
         main.productCategory = {}
         function getProductCategory(pcId) {
-            ProductCategory.findById({Code:pcId},
+            ProductCategory.findById({ Code: pcId },
                 function (result) {
                     main.productCategory = result;
                     console.log(main.productCategory)
@@ -1208,40 +1041,40 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         }
 
 
-        function editProductCategory(){
+        function editProductCategory() {
             if (confirm("Are You Sure to Continue?") == true) {
-                ProductCategory.replaceById({Code:main.productCategory.Code},main.productCategory,
-                    function success(result){
+                ProductCategory.replaceById({ Code: main.productCategory.Code }, main.productCategory,
+                    function success(result) {
                         alert("update success")
                         $state.go('viewProductCategory')
-                    },function error(err){
+                    }, function error(err) {
                         main.errors = err.data.error;
                         alert("Create Error");
                     })
             } else {
                 alert("Cancelled");
             }
-            
+
         }
 
 
-        function selectBrand(brand){
+        function selectBrand(brand) {
             main.productCategory.BrandCode = brand.Code;
         }
 
         main.editProductCategory = editProductCategory
         main.selectBrand = selectBrand
-       
+
         //main.getProductCategories = getProductCategories
 
         getBrands()
         getProductCategory(pcId)
-      
+
 
     })
 
 
-    .controller('kioskCtrl', function (Kiosk, $http,$state) {
+    .controller('kioskCtrl', function (Kiosk, $http, $state) {
         var main = this;
         var defDate = new Date();
         var submain = this;
@@ -1348,9 +1181,9 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
         }
 
-        function goTo(kiosk){
-            
-            $state.go('viewKioskMap',{kioskId:kiosk.Code});
+        function goTo(kiosk) {
+
+            $state.go('viewKioskMap', { kioskId: kiosk.Code });
         }
 
 
@@ -1377,7 +1210,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         getOutlets();
 
     })
-    .controller('kioskMapCtrl', function (Kiosk,Product,KioskProductDealer,VKioskProductDealer, $http,$uibModal,$rootScope,$log,$scope,$stateParams,$q) {
+    .controller('kioskMapCtrl', function (Kiosk, Product, KioskProductDealer, VKioskProductDealer, $http, $uibModal, $rootScope, $log, $scope, $stateParams, $q) {
         var main = this;
         var defDate = new Date();
         var submain = this;
@@ -1395,39 +1228,39 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 });
         }
 
-        function getKiosksDetail(code){
+        function getKiosksDetail(code) {
             console.log(code)
-            Kiosk.findById({Code:code},function(result){
-                    main.kiosk = result;
-                    //console.log(main.kiosk)
-            } );
+            Kiosk.findById({ Code: code }, function (result) {
+                main.kiosk = result;
+                //console.log(main.kiosk)
+            });
         }
 
-        function getDealerFromKiosk(code_p,index) {
+        function getDealerFromKiosk(code_p, index) {
             //console.log(main.kiosk)
             VKioskProductDealer.find({
-                filter:{
-                    where:{
-                        and:[
+                filter: {
+                    where: {
+                        and: [
                             {
-                                KioskCode:main.kiosk.Code
+                                KioskCode: main.kiosk.Code
                             },
                             {
-                                ProductCode:code_p
+                                ProductCode: code_p
                             }
                         ]
                     }
                 }
 
             },
-            function (result) {
-                main.products[index].kioskDealer = result;
-                //console.log(main.products[index])
-            });
+                function (result) {
+                    main.products[index].kioskDealer = result;
+                    //console.log(main.products[index])
+                });
         }
-  
-        
-        function init(){
+
+
+        function init() {
             defer = $q.defer()
             promise = defer.promise
             main.products = [];
@@ -1435,54 +1268,52 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             main.dealers = [];
             getProduct();
             getKiosksDetail($stateParams.kioskId)
-            promise.then(function success (data){
+            promise.then(function success(data) {
                 var index;
-                for(index = 0;index < data.length;++index)
-                {
-                    getDealerFromKiosk(data[index].Code,index)
+                for (index = 0; index < data.length; ++index) {
+                    getDealerFromKiosk(data[index].Code, index)
                 }
-            }, function error (msg){
+            }, function error(msg) {
                 $log.info(msg)
             })
-            
+
         }
 
-        main.openModal = function (size,kiosk,product) {
-        
-        var modalInstance = $uibModal.open({
-            animation: $scope.animationsEnabled,
-            templateUrl: 'pages/forms/kiosk/modalKioskMap.html',
-            controller: 'modalMapDealerCtrl',
-            controllerAs: 'main',
-            size: size,
-            resolve: {
-                items: function () {
-                    var data = {}
-                    data.kiosk = kiosk
-                    data.product = product
-                    return data
-                },               
-            }
-        });
+        main.openModal = function (size, kiosk, product) {
 
-        modalInstance.result.then(function (Obj) {
-            
+            var modalInstance = $uibModal.open({
+                animation: $scope.animationsEnabled,
+                templateUrl: 'pages/forms/kiosk/modalKioskMap.html',
+                controller: 'modalMapDealerCtrl',
+                controllerAs: 'main',
+                size: size,
+                resolve: {
+                    items: function () {
+                        var data = {}
+                        data.kiosk = kiosk
+                        data.product = product
+                        return data
+                    },
+                }
+            });
+
+            modalInstance.result.then(function (Obj) {
+
                 if (confirm("Are You Sure?")) {
-                console.log("id: "+Obj.id)
-                    if(Obj.id == null)
-                    {
+                    console.log("id: " + Obj.id)
+                    if (Obj.id == null) {
                         KioskProductDealer.upsert(Obj.data,
                             function (result) {
                                 alert("Insert Successfuly");
                             });
-                    }else{
-                        KioskProductDealer.replaceById({Id:Obj.id},Obj.data,
+                    } else {
+                        KioskProductDealer.replaceById({ Id: Obj.id }, Obj.data,
                             function (result) {
                                 alert("Update Successfuly");
                             });
                     }
                     init()
-                    
+
                 } else {
                     alert("Update Failed");
                 }
@@ -1491,117 +1322,113 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             });
         };
 
-        
+
         init();
 
     })
-    .controller('modalMapDealerCtrl', function ($uibModalInstance, items,VProductDealer,Product,$rootScope) {
+    .controller('modalMapDealerCtrl', function ($uibModalInstance, items, VProductDealer, Product, $rootScope) {
 
-    var vm = this;
-    console.log(items)
-    vm.items = items
-   
-    vm.dealers = []
-    vm.products = []
-    vm.dealer = null
-    vm.codeDealer = null
-    productDealer = null
-    
-    function getProductDealer() {
+        var vm = this;
+        console.log(items)
+        vm.items = items
+
+        vm.dealers = []
+        vm.products = []
+        vm.dealer = null
+        vm.codeDealer = null
+        productDealer = null
+
+        function getProductDealer() {
             // VProductDealer.find({"where":{"and":[{"BranchId":vm.branchId},{"ProductCode":vm.items.code}]}},
             VProductDealer.find({
-                filter:{
-                    where:{
-                        and:[
+                filter: {
+                    where: {
+                        and: [
                             {
-                                BranchId:vm.items.kiosk.BranchId
+                                BranchId: vm.items.kiosk.BranchId
                             },
                             {
-                                ProductCode:vm.items.product.Code
+                                ProductCode: vm.items.product.Code
                             }
                         ]
                     }
                 }
 
             },
-        function (result) {
-            vm.dealers = result;
-            
-            //defaultValDealer();
-            getProductDefault()
-            if(vm.codeDealer == null && vm.dealers[0] != null)
-            {
-                vm.dealer = vm.dealers[0]
-               
-                console.log(vm.dealer)
-            }
-        });
-    }
+                function (result) {
+                    vm.dealers = result;
 
+                    //defaultValDealer();
+                    getProductDefault()
+                    if (vm.codeDealer == null && vm.dealers[0] != null) {
+                        vm.dealer = vm.dealers[0]
 
-    function getProductDefault()
-    {
-        if(vm.items.product.kioskDealer[0] != null)
-        {
-            VProductDealer.findById({
-                Id:vm.items.product.kioskDealer[0].ProductDealerId
-            },
-            function success (result) {
-                vm.dealer = result;
-                vm.codeDealer = vm.dealer.DealerCode
-                console.log(vm.codeDealer)
-            }
-            );
+                        console.log(vm.dealer)
+                    }
+                });
         }
-        
-    }
-//     function defaultValDealer(){
-//         if(vm.dealers.length > 0)
-//         {
-//             if(isEmptyKioskId)
-//             {
-//                 console.log("masuk")
-//                 vm.dealer = vm.dealers[0]
-//             }
-//         }
-     
-            
-//    }
-   //console.log("kiosk:" +vm.items.kiosk)
-   function populateKioskProductDealer(data){
-        if(data != null){
-            objKioskProductDealer = {               
-                KioskCode:vm.items.kiosk.Code,
-                ProductDealerId:data.id,
-                Active:1,
-                Deleted:0
+
+
+        function getProductDefault() {
+            if (vm.items.product.kioskDealer[0] != null) {
+                VProductDealer.findById({
+                    Id: vm.items.product.kioskDealer[0].ProductDealerId
+                },
+                    function success(result) {
+                        vm.dealer = result;
+                        vm.codeDealer = vm.dealer.DealerCode
+                        console.log(vm.codeDealer)
+                    }
+                );
             }
-            
+
         }
-   }
+        //     function defaultValDealer(){
+        //         if(vm.dealers.length > 0)
+        //         {
+        //             if(isEmptyKioskId)
+        //             {
+        //                 console.log("masuk")
+        //                 vm.dealer = vm.dealers[0]
+        //             }
+        //         }
 
-   function isEmptyKioskId()
-   {
-        if(vm.items.product.kioskDealer != null && vm.items.product.kioskDealer.length > 0 )
-            return false
-        return true
-   }
- 
-    getProductDealer();
 
-    vm.ok = function () {
-        populateKioskProductDealer(vm.dealer)
-        var objReturn = {}
-        objReturn.data = objKioskProductDealer
-        
-        if(!isEmptyKioskId())
-            objReturn.id = vm.items.product.kioskDealer[0].id
-        $uibModalInstance.close(objReturn);
-    };
+        //    }
+        //console.log("kiosk:" +vm.items.kiosk)
+        function populateKioskProductDealer(data) {
+            if (data != null) {
+                objKioskProductDealer = {
+                    KioskCode: vm.items.kiosk.Code,
+                    ProductDealerId: data.id,
+                    Active: 1,
+                    Deleted: 0
+                }
 
-    vm.cancel = function () {
-        $uibModalInstance.dismiss('cancel');
-    };
+            }
+        }
+
+        function isEmptyKioskId() {
+            if (vm.items.product.kioskDealer != null && vm.items.product.kioskDealer.length > 0)
+                return false
+            return true
+        }
+
+        getProductDealer();
+
+        vm.ok = function () {
+            populateKioskProductDealer(vm.dealer)
+            var objReturn = {}
+            objReturn.data = objKioskProductDealer
+
+            if (!isEmptyKioskId())
+                objReturn.id = vm.items.product.kioskDealer[0].id
+            $uibModalInstance.close(objReturn);
+        };
+
+        vm.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
     })
 
     //     .controller('LoginController', ['$scope', '$state', 'authService', '$location', function ($scope, $state, authService, $location) {
@@ -1669,4 +1496,21 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         }
     ]);
 
-;
+runBlock.$inject = [
+    '$state',
+    '$transitions',
+    'AuthenticationState'
+];
+
+function runBlock($state, $transitions, AuthenticationState) {
+    $transitions.onStart({}, function (trans) {
+        if (!AuthenticationState.isLoggedIn()) {
+            console.log("transition changed")
+            $state.go('login');
+        }
+    });
+}
+
+angular
+    .module('CrudAngular')
+    .run(runBlock);
