@@ -59,7 +59,6 @@ function UserDealerMappingController(User, Dealer, Constants, $http, $stateParam
         return $http.post(main.DEALERUSER_BASE_URL + "/mapping", { data: main.userDealer }).then(
             result => {
                 if (result.data) {
-                    main.userDealer = {};
                     main.selectedDealer = {};
                 }
                 getMappedDealer(main.UserId);
@@ -87,6 +86,22 @@ function UserDealerMappingController(User, Dealer, Constants, $http, $stateParam
         })
     }
     main.getMappedDealer = getMappedDealer;
+
+    function removeDealer(role) {
+        if (confirm("Are you sure want to unmap this dealer?")) {
+            $http.delete(`${main.DEALERUSER_BASE_URL}/${role.id}`).then(
+                result => {
+                    if (result && result.data.count > 0) {
+                        getMappedDealer(main.UserId);
+                    }
+                }
+            ).catch(
+                error => {
+                }
+                )
+        }
+    }
+    main.removeDealer = removeDealer;
 
     (function () {
         main.UserId = $stateParams.id;
