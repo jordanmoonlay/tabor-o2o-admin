@@ -7,7 +7,9 @@
   "dependencies": {
     "azure": "^2.0.0-preview",
     "delayed-stream": "^1.0.0",
-    "express": "^4.8.5"
+    "express": "^4.8.5",
+    "ngstorage": "^0.3.11",
+    "transitions": "^1.0.0"
   },
   "scripts": {
     "start": "node site.js"
