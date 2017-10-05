@@ -37,10 +37,14 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tr ng-repeat="role in main.mappedRole">
                             <td>{{role.role.name}}</td>
+                            <td>
+                                <button type="button" class="btn btn-xs btn-warning" ng-click="main.removeRole(role)"><i class="fa fa-times"></i></button>    
+                            </td>
                         </tr>
                     </table>
                 </div>

@@ -39,12 +39,16 @@
                                 <th>Code</th>
                                 <th>Name</th>
                                 <th>Active?</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tr ng-repeat="kiosk in main.mappedKiosk">
                             <td>{{kiosk.KioskCode}}</td>
                             <td>{{kiosk.Kiosk.Name}}</td>
                             <td>{{kiosk.Active}}</td>
+                            <td>
+                                <button type="button" class="btn btn-xs btn-warning" ng-click="main.removeKiosk(kiosk)"><i class="fa fa-times"></i></button>    
+                            </td>
                         </tr>
                     </table>
                 </div>
