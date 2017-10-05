@@ -1231,18 +1231,18 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             return d.promise;
         }
 
-        function getKiosksDetail(code){
+        function getKiosksDetail(code) {
             var d = $q.defer()
             console.log(code)
-            Kiosk.findById({Code:code},function(result){
-                    main.kiosk = result;
-                    d.resolve(main.kiosk)
-                    console.log(main.kiosk)
-            } );
+            Kiosk.findById({ Code: code }, function (result) {
+                main.kiosk = result;
+                d.resolve(main.kiosk)
+                console.log(main.kiosk)
+            });
             return d.promise
         }
 
-        function getDealerFromKiosk(code_p,index) {
+        function getDealerFromKiosk(code_p, index) {
             //main.products[index].kioskDealer[index] = null   
             VKioskProductDealer.find({
                 filter: {
@@ -1259,50 +1259,48 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 }
 
             },
-            function (result) {
-                main.products[index].kioskDealer = result;
-                //console.log(main.products[index])
-            });
+                function (result) {
+                    main.products[index].kioskDealer = result;
+                    //console.log(main.products[index])
+                });
         }
 
-        function removeMapping(id)
-        {
+        function removeMapping(id) {
             console.log(id)
             if (confirm("Are You Sure?")) {
-                KioskProductDealer.deleteById({Id:id}
-                ,function success(result){
-                    alert("delete success")
-                    init();
-                },function error (err){
-                    alert("delete failed, see log")
-                    $log.info(err)
-                })
+                KioskProductDealer.deleteById({ Id: id }
+                    , function success(result) {
+                        alert("delete success")
+                        init();
+                    }, function error(err) {
+                        alert("delete failed, see log")
+                        $log.info(err)
+                    })
             } else {
                 alert("Update Failed");
             }
         }
-  
-        
-        function init(){
+
+
+        function init() {
             main.products = [];
             main.kiosk = null
             main.dealers = [];
-            
+
             $q.all([
                 getProduct(),
                 getKiosksDetail($stateParams.kioskId)
             ])
-            .then(function success (data){
-                var index;
-                //console.log(data)
-                for(index = 0;index < data[0].length;++index)
-                {
-                    getDealerFromKiosk(data[0][index].Code,index)
-                }
-            }, function error(msg) {
-                $log.info(msg)
-            })
-            
+                .then(function success(data) {
+                    var index;
+                    //console.log(data)
+                    for (index = 0; index < data[0].length; ++index) {
+                        getDealerFromKiosk(data[0][index].Code, index)
+                    }
+                }, function error(msg) {
+                    $log.info(msg)
+                })
+
         }
 
         main.openModal = function (size, kiosk, product) {
@@ -1381,57 +1379,56 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
             },
 
-        function (result) {
-            // console.log("masuk get product")
-            // console.log(vm.items.product.Code)
-            // console.log(vm.items.kiosk.BranchId)
-            // console.log(result)
-            vm.dealers = result;
-            
-            
-            //defaultValDealer();
-            //getProductDefault()
-            // if(vm.codeDealer == null && vm.dealers[0] != null)
-            // {
-            //     vm.dealer = vm.dealers[0]
-            // }
-            if(vm.items.product.hasOwnProperty("kioskDealer"))
-            {
-                if(vm.items.product.kioskDealer.hasOwnProperty("0")){
-                    var list = $.grep(vm.dealers, function(element, index) {
-                    return (element.id == vm.items.product.kioskDealer[0].ProductDealerId);
-                    });
-                    vm.dealer = list[0]
-                }else{
-                    vm.dealer = vm.dealers[0]
+                function (result) {
+                    // console.log("masuk get product")
+                    // console.log(vm.items.product.Code)
+                    // console.log(vm.items.kiosk.BranchId)
+                    // console.log(result)
+                    vm.dealers = result;
+
+
+                    //defaultValDealer();
+                    //getProductDefault()
+                    // if(vm.codeDealer == null && vm.dealers[0] != null)
+                    // {
+                    //     vm.dealer = vm.dealers[0]
+                    // }
+                    if (vm.items.product.hasOwnProperty("kioskDealer")) {
+                        if (vm.items.product.kioskDealer.hasOwnProperty("0")) {
+                            var list = $.grep(vm.dealers, function (element, index) {
+                                return (element.id == vm.items.product.kioskDealer[0].ProductDealerId);
+                            });
+                            vm.dealer = list[0]
+                        } else {
+                            vm.dealer = vm.dealers[0]
+                        }
+                    } else {
+                        vm.dealer = vm.dealers[0]
+                    }
+                });
+        }
+        /* 
                 }
-            }else {
-                vm.dealer = vm.dealers[0]
+    
+    
             }
-        });
-    }
-    /* 
-            }
+    
+            
+        } */
 
 
-        }
+        function populateKioskProductDealer(data) {
+            if (data != null) {
+                objKioskProductDealer = {
+                    KioskCode: vm.items.kiosk.Code,
+                    ProductDealerId: data.id,
+                    Active: 1,
+                    Deleted: 0
 
-        
-    } */
-
-
-   function populateKioskProductDealer(data){
-        if(data != null){
-            objKioskProductDealer = {               
-                KioskCode:vm.items.kiosk.Code,
-                ProductDealerId:data.id,
-                Active:1,
-                Deleted:0
-
+                }
             }
         }
-   }
-        
+
 
         function isEmptyKioskId() {
             if (vm.items.product.kioskDealer != null && vm.items.product.kioskDealer.length > 0)
@@ -1523,12 +1520,13 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
 runBlock.$inject = [
     '$state',
-    '$transitions',
-    'AuthenticationState'
+    'AuthenticationState',
+    '$rootScope'
 ];
 
-function runBlock($state, $transitions, AuthenticationState) {
-    $transitions.onStart({}, function (trans) {
+function runBlock($state, AuthenticationState, $rootScope) {
+
+    $rootScope.$on("$locationChangeStart", function (event, next, current) {
         if (!AuthenticationState.isLoggedIn()) {
             console.log("transition changed")
             $state.go('login');
@@ -1538,4 +1536,6 @@ function runBlock($state, $transitions, AuthenticationState) {
 
 angular
     .module('CrudAngular')
-    .run(runBlock);
+    .run(
+    runBlock
+    );
