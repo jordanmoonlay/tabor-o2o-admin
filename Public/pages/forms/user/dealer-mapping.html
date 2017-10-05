@@ -39,12 +39,16 @@
                                 <th>Code</th>
                                 <th>Name</th>
                                 <th>Active?</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tr ng-repeat="dealer in main.mappedDealer">
                             <td>{{dealer.DealerCode}}</td>
                             <td>{{dealer.Dealers.Name}}</td>
                             <td>{{dealer.Active}}</td>
+                            <td>
+                                <button type="button" class="btn btn-xs btn-warning" ng-click="main.removeDealer(dealer)"><i class="fa fa-times"></i></button>    
+                            </td>
                         </tr>
                     </table>
                 </div>
