@@ -244,7 +244,7 @@ function ProductCreateController(Product, $http, $state, Constants) {
     }
 
     function RemoveSpecification(index) {
-        if (specifications > specifications[3]) {
+        if (index > 2) {
             main.specifications.splice(index, 1);
             var getSpecJSON = JSON.stringify(main.specifications);
             main.newProduct.Specification = getSpecJSON;

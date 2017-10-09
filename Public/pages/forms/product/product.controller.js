@@ -181,11 +181,10 @@ function ProductEditController($stateParams, $http, Constants, Product, $state) 
     }
 
     function RemoveSpecification(index) {
-        debugger
-        if (main.specifications > main.specifications[3]) {
+        if (index > 2) {
             main.specifications.splice(index, 1)
             var getSpecJSON = JSON.stringify(main.specifications);
-            main.newProduct.Specification = getSpecJSON;
+            main.editProduct.Specification = getSpecJSON;
         } else {
             alert("Can't Be Deleted");
         }
