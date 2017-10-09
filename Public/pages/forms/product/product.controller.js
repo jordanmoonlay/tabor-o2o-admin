@@ -16,51 +16,6 @@ function ProductController(Product, $http, $state, Constants) {
             });
     }
 
-    // function uploadProduct(product) {
-    //     return new Promise((resolve, reject) => {
-    //         var fd = new FormData();
-    //         fd.append('file', product.Image);
-    //         console.log(fd);
-    //         $http.post(Constants.BASE_API + "/containers/products/upload", {
-    //             data: fd,
-    //             headers: {
-    //                 'Content-Type': 'multipart/form-data',
-    //                 Accept: undefined
-    //             }
-    //         }).then(
-    //             result => { resolve(result) }
-    //             ).catch(
-    //             error => {
-    //                 debugger
-    //                 console.log(error)
-    //             }
-    //             );
-    //     });
-    // }
-
-    function createProduct(product) {
-        if (confirm("Are You Sure to Create?")) {
-            // uploadProduct(product).then(res => {
-            //     debugger
-            // product.Image = res.data;
-            Product.create(product,
-                function (result) {
-                    initCreateForm();
-                    getProducts();
-                    alert("Create Successfuly");
-                }, function (errors) {
-                    main.errors = errors.data.error;
-                    alert('Create Error:' + main.errors);
-                }
-            );
-            // })
-
-        } else {
-            alert("Cancelled");
-        }
-
-    }
-
     function updateProduct(product) {
         if (confirm("Are You Sure to Update?")) {
             Product.upsert(product,
@@ -98,21 +53,6 @@ function ProductController(Product, $http, $state, Constants) {
         }).then(function (result) {
             main.brands = result.data;
         });
-    }
-
-
-    function initCreateForm() {
-        main.newProduct = {
-            Code: '', BrandCode: '', Name: '', Description: '', Price: '', DP: '', Specification: '', Weight: '', Width: '', Height: '', Length: '', Image: '', Active: 1, Deleted: 0, CreatedBy: 'AUTO', CreatedDate: defDate, CreateAgent: 'AUTO', UpdatedBy: 'AUTO', UpdatedDate: defDate,
-            UpdateAgent: 'AUTO'
-        };
-    }
-
-    function setEditedProduct(product) {
-        main.editedProduct = angular.copy(product);
-        main.isEditing = true;
-        main.isShow = false;
-        main.isView = false;
     }
 
     function setViewProduct(product) {
@@ -184,10 +124,8 @@ function ProductController(Product, $http, $state, Constants) {
     main.isView = false;
     main.isShow = true;
     main.getProducts = getProducts;
-    main.createProduct = createProduct;
     main.updateProduct = updateProduct;
     main.deleteProduct = deleteProduct;
-    main.setEditedProduct = setEditedProduct;
     main.setViewProduct = setViewProduct;
     main.isCurrentProduct = isCurrentProduct;
     main.cancelEditing = cancelEditing;
@@ -198,7 +136,111 @@ function ProductController(Product, $http, $state, Constants) {
     main.RemoveSpecification = RemoveSpecification;
     main.goTo = goTo
 
-    initCreateForm();
     getProducts();
     getBrands();
+}
+
+
+angular.module('CrudAngular')
+    .controller('productEditCtrl', ProductEditController);
+
+ProductEditController.$inject = ["$stateParams", "$http", "Constants", "Product", "$state"];
+
+function ProductEditController($stateParams, $http, Constants, Product, $state) {
+    var main = this;
+    main.editProduct = {};
+    main.specifications = [];
+    main.brands = [];
+    main.selectedTestBrand = {};
+
+    function setEditedProduct(product) {
+        main.editedProduct = angular.copy(product);
+        main.isEditing = true;
+        main.isShow = false;
+        main.isView = false;
+    }
+
+    function getSpec() {
+        var getSpecJSON = JSON.stringify(main.specifications);
+        main.editProduct.Specification = getSpecJSON;
+    }
+
+    function getProductById(id) {
+        $http.get(`${Constants.BASE_API}/products/${id}`).then(
+            result => {
+                main.editProduct = result.data;
+                for (var spec of JSON.parse(main.editProduct.Specification))
+                    main.specifications.push({ key: spec.key, value: spec.value });
+                getBrandById(main.editProduct.BrandCode);
+            }
+        )
+    }
+
+    function AddSpecification() {
+        main.specifications.push({ key: "", value: "" });
+    }
+
+    function RemoveSpecification(index) {
+        debugger
+        if (main.specifications > main.specifications[3]) {
+            main.specifications.splice(index, 1)
+            var getSpecJSON = JSON.stringify(main.specifications);
+            main.newProduct.Specification = getSpecJSON;
+        } else {
+            alert("Can't Be Deleted");
+        }
+    }
+
+    function updateProduct() {
+        if (confirm("Are You Sure to Update?")) {
+            Product.upsert(main.editProduct,
+                function (result) {
+                    $state.go("viewProducts");
+                    alert("Update Successfuly");
+                });
+
+        } else {
+            alert("Cancelled");
+        }
+    }
+
+    function getBrands() {
+        $http({
+            method: 'GET',
+            url: `${Constants.BASE_API}/brands`,
+            data: {}
+        }).then(function (result) {
+            main.brands = result.data;
+        });
+    }
+
+    function getBrandById(id) {
+        $http({
+            method: 'GET',
+            url: `${Constants.BASE_API}/brands/${id}`,
+            data: {}
+        }).then((result) => {
+            debugger
+            main.selectedTestBrand = result.data;
+        });
+    }
+
+    function selectBrand(brand) {
+        console.log(brand);
+        main.editProduct.BrandCode = brand.Code;
+    }
+
+    main.getSpec = getSpec;
+    main.AddSpecification = AddSpecification;
+    main.RemoveSpecification = RemoveSpecification;
+    main.updateProduct = updateProduct;
+    main.getBrands = getBrands;
+    main.selectBrand = selectBrand;
+
+
+    (function () {
+        main.ProductId = $stateParams.id;
+        getProductById(main.ProductId);
+        getBrands();
+    })();
 }
