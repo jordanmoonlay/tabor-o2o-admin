@@ -44,6 +44,10 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 url: '/editProduct/{id}',
                 templateUrl: 'pages/forms/product/editProduct.html'
             })
+            .state('detailProduct', {
+                url: '/detailProduct/{id}',
+                templateUrl: 'pages/forms/product/detailProduct.html'
+            })
             .state('newProductCategory', {
                 url: '/newProductCategory',
                 templateUrl: 'pages/forms/product/newProductCategory.html'

@@ -16,15 +16,34 @@ function ProductController(Product, $http, $state, Constants) {
             });
     }
 
+
+
     function updateProduct(product) {
         if (confirm("Are You Sure to Update?")) {
-            Product.upsert(product,
-                function (result) {
-                    cancelEditing();
-                    getProducts();
-                    alert("Update Successfuly");
-                });
-
+            var file = document.getElementById("productImage");
+            debugger
+            if (file) {
+                uploadProduct().then(result => {
+                    debugger
+                    if (res.data.result.files.file[0]) {
+                        p = res.data.result.files.file[0];
+                        product.Image = `containers/${p.container}/download/${p.name}`;
+                    }
+                    Product.upsert(product,
+                        function (result) {
+                            cancelEditing();
+                            getProducts();
+                            alert("Update Successfuly");
+                        });
+                })
+            } else {
+                Product.upsert(product,
+                    function (result) {
+                        cancelEditing();
+                        getProducts();
+                        alert("Update Successfuly");
+                    });
+            }
         } else {
             alert("Cancelled");
         }
@@ -190,17 +209,60 @@ function ProductEditController($stateParams, $http, Constants, Product, $state) 
         }
     }
 
-    function updateProduct() {
-        if (confirm("Are You Sure to Update?")) {
-            Product.upsert(main.editProduct,
-                function (result) {
-                    $state.go("viewProducts");
-                    alert("Update Successfuly");
-                });
+    function uploadProduct(product) {
+        return new Promise((resolve, reject) => {
+            var formData = new FormData();
+            var fileInput = document.getElementById("productImage");
 
+            debugger
+            if (fileInput.files[0]) {
+                formData.append("file", fileInput.files[0]);
+                $http.post(Constants.BASE_API + "/containers/products/upload", formData, {
+                    transformRequest: angular.identity,
+                    headers: { 'Content-Type': undefined }
+                }).then(
+                    result => {
+                        debugger
+                        resolve(result)
+                    }
+                    ).catch(
+                    error => {
+                        debugger
+                        console.log(error)
+                    }
+                    );
+            }
+        });
+    }
+
+    function updateProduct(product) {
+        if (confirm("Are You Sure to Update?")) {
+            var file = document.getElementById("productImage");
+            debugger
+            if (file) {
+                uploadProduct().then(res => {
+                    debugger
+                    if (res.data.result.files.file[0]) {
+                        p = res.data.result.files.file[0];
+                        product.Image = `containers/${p.container}/download/${p.name}`;
+                    }
+                    Product.upsert(product,
+                        function (result) {
+                        $state.go("viewProducts");
+                        alert("Update Successfuly");
+                        });
+                })
+            } else {
+                Product.upsert(product,
+                    function (result) {
+                        $state.go("viewProducts");
+                        alert("Update Successfuly");
+                    });
+            }
         } else {
             alert("Cancelled");
         }
+
     }
 
     function getBrands() {
@@ -241,5 +303,29 @@ function ProductEditController($stateParams, $http, Constants, Product, $state) 
         main.ProductId = $stateParams.id;
         getProductById(main.ProductId);
         getBrands();
+    })();
+}
+
+angular.module("CrudAngular")
+    .controller("productDetailCtrl", ProductDetailController);
+
+ProductDetailController.$inject = ["Constants", "$http", "$stateParams"];
+
+function ProductDetailController(Constants, $http, $stateParams) {
+    var main = this;
+    main.viewProduct = {};
+    main.baseapi = Constants.BASE_API + "/";
+
+    function getProductById(id) {
+        $http.get(`${Constants.BASE_API}/products/${id}`)
+            .then(
+            result => {
+                main.viewProduct = result.data;
+            });
+    }
+
+    (function () {
+        var id = $stateParams.id;
+        getProductById(id);
     })();
 }

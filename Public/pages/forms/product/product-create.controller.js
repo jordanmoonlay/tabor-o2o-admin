@@ -45,10 +45,8 @@ function ProductCreateController(Product, $http, $state, Constants) {
             if (fileInput.files[0]) {
                 formData.append("file", fileInput.files[0]);
                 $http.post(Constants.BASE_API + "/containers/products/upload", formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Accept: 'image/*'
-                    }
+                    transformRequest: angular.identity,
+                    headers: { 'Content-Type': undefined }
                 }).then(
                     result => {
                         debugger
@@ -82,8 +80,10 @@ function ProductCreateController(Product, $http, $state, Constants) {
                 }
             }).then(
                 result => {
-                    debugger
-                    resolve(result)
+                    if (result.data.result.files.file[0])
+                        resolve(result)
+                    else
+                        reject("Failed to upload product");
                 }
                 ).catch(
                 error => {
@@ -94,20 +94,22 @@ function ProductCreateController(Product, $http, $state, Constants) {
         });
     }
 
-    function createProduct2(product) {
+    function createProduct(product) {
         if (confirm("Are You Sure to Create?")) {
             uploadProduct(product).then(res => {
                 debugger
-                product.Image = res.data;
+                if (res.data.result.files.file[0]) {
+                    p = res.data.result.files.file[0];
+                    product.Image = `containers/${p.container}/download/${p.name}`;
+                }
                 Product.create(product,
                     function (result) {
                         initCreateForm();
                         getProducts();
                         alert("Create Successfuly");
+                        $state.go("viewProducts")
                     }, function (errors) {
-                        debugger
                         main.errors = errors.data.error;
-                        alert('Create Error:' + main.errors);
                     }
                 );
             })
@@ -118,7 +120,7 @@ function ProductCreateController(Product, $http, $state, Constants) {
 
     }
 
-    function createProduct(product) {
+    function createProduct2(product) {
         if (confirm("Are You Sure to Create?")) {
             Product.create(product,
                 function (result) {
