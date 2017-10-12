@@ -38,8 +38,8 @@
     <td> {{product.SKU}} </td>
     <td>{{product.Name}} </td>
     <td>{{product.Price}} </td>
-    <td>asd
-      <a type="button" class="btn btn-xs btn-default" ng-click="main.setViewProduct(product)"><i class = "fa fa-file"></i></a>      &nbsp;
+    <td>
+      <a type="button" class="btn btn-xs btn-default" ui-sref="detailProduct({ id:product.Code })"><i class = "fa fa-file"></i></a>      &nbsp;
       <a type="button" class="btn btn-xs btn-warning" ui-sref="editProduct({ id:product.Code })"><i class = "fa fa-pencil"></i></a>      &nbsp;
       <a type="button" class="btn btn-xs btn-danger" ng-click="main.deleteProduct(product.Code)"><i class = "fa fa-trash"></i></a>      &nbsp;
       <a type="button" class="btn btn-xs btn-success" ng-click="main.goTo(product.Code)"><i class = "fa fa-map-o"></i></a>      &nbsp;

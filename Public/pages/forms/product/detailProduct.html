@@ -1,0 +1,62 @@
+<div ng-controller="productDetailCtrl as main">
+    <div class="box box-primary">
+        <h4> <b>View Detail {{main.viewProduct.Name}}</b></h4>
+
+        <div class="box-body">
+            <div class="form-group">
+                <label for="exampleViewImage">Logo</label>
+                <img src="{{main.baseapi + main.viewProduct.Image}}" class="img-responsive" alt="Image preview..." />
+            </div>
+            <div class="form-group">
+                <label for="exampleViewBrandCode">Brand Code</label>
+                <input type="text" class="form-control" ng-model="main.viewProduct.BrandCode" placeholder="Brand Code" disabled>
+            </div>
+            <div class="form-group">
+                <label for="exampleViewCode">Code</label>
+                <input type="text" class="form-control" ng-model="main.viewProduct.Code" placeholder="Code" disabled>
+            </div>
+            <div class="form-group">
+                <label for="exampleViewCode">SKU</label>
+                <input type="text" class="form-control" ng-model="main.viewProduct.SKU" placeholder="SKU" disabled>
+            </div>
+            <div class="form-group">
+                <label for="exampleViewName">Name</label>
+                <input type="text" class="form-control" ng-model="main.viewProduct.Name" placeholder="Name" disabled>
+            </div>
+            <div class="form-group">
+                <label for="exampleViewDescription">Description</label>
+                <input type="text" class="form-control" ng-model="main.viewProduct.Description" placeholder="Description" disabled>
+            </div>
+            <div class="form-group">
+                <label for="exampleViewPrice">Price</label>
+                <input type="text" class="form-control" ng-model="main.viewProduct.Price" placeholder="Price" disabled>
+            </div>
+            <div class="form-group">
+                <label for="exampleViewDP">DP</label>
+                <input type="text" class="form-control" ng-model="main.viewProduct.DP" placeholder="DP" disabled>
+            </div>
+            <div class="form-group">
+                <label for="exampleViewSpecification">Specification</label>
+                <input type="text" class="form-control" ng-model="main.viewProduct.Specification" placeholder="Specification" disabled>
+            </div>
+            <div class="form-group">
+                <label for="exampleViewWeight">Weight</label>
+                <input type="text" class="form-control" ng-model="main.viewProduct.Weight" placeholder="Weight" disabled>
+            </div>
+            <div class="form-group">
+                <label for="exampleViewWidth">Width</label>
+                <input type="text" class="form-control" ng-model="main.viewProduct.Width" placeholder="Width" disabled>
+            </div>
+            <div class="form-group">
+                <label for="exampleViewHeight">Height</label>
+                <input type="text" class="form-control" ng-model="main.viewProduct.Height" placeholder="Height" disabled>
+            </div>
+            <div class="form-group">
+                <label for="exampleViewLength">Length</label>
+                <input type="text" class="form-control" ng-model="main.viewProduct.Length" placeholder="Length" disabled>
+            </div>
+
+
+        </div>
+    </div>
+</div>
