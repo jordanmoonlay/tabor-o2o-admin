@@ -839,7 +839,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
     }])
 
-    .controller('productCategoryMapCtrl', function (ProductCategory, Product_productCategory, Product, $http, $stateParams, $q) {
+    .controller('productCategoryMapCtrl', function (ProductCategory, Product_productCategory, Product, $http, $stateParams, $q, $state) {
         var main = this;
         var defDate = new Date();
         main.productCategories = []
@@ -936,9 +936,15 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             main.newMapProductCategory = { ProductCode: $stateParams.productId, ProductCategoryCode: '', Active: 1, Deleted: 0, CreatedBy: 'AUTO', CreatedDate: defDate, CreateAgent: 'AUTO', UpdatedBy: 'AUTO', UpdatedDate: defDate, UpdateAgent: 'AUTO' }
         }
 
+        // function back()
+        // {
+        //     $state.go('viewProducts')
+        // }
+
         main.selectProductCategory = selectProductCategory
         main.createMapProductCategory = createMapProductCategory
         main.removePPC = removePPC
+        //main.back = back
 
         getProductDetail($stateParams.productId);
         initForm()
@@ -1415,14 +1421,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                     }
                 });
         }
-        /* 
-                }
-    
-    
-            }
-    
-            
-        } */
+       
 
 
         function populateKioskProductDealer(data) {
