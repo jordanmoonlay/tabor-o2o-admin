@@ -1380,14 +1380,14 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             VProductDealer.find({
                 filter: {
                     where: {
-                        and: [
-                            {
-                                BranchCode: vm.items.kiosk.BranchCode
-                            },
-                            {
+                        // and: [
+                        //     {
+                        //         BranchCode: vm.items.kiosk.BranchCode
+                        //     },
+                            //{
                                 ProductCode: vm.items.product.Code
-                            }
-                        ]
+                            //}
+                        //]
                     }
                 }
 
