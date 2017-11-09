@@ -22,7 +22,7 @@ function ProductController(Product, $http, $state, Constants) {
         if (confirm("Are You Sure to Update?")) {
             var file = document.getElementById("productImage");
             debugger
-            if (file) {
+            if (file.value != "") {
                 uploadProduct().then(result => {
                     debugger
                     if (res.data.result.files.file[0]) {
@@ -249,7 +249,7 @@ function ProductEditController($stateParams, $http, Constants, Product, $state) 
         if (confirm("Are You Sure to Update?")) {
             var file = document.getElementById("productImage");
             debugger
-            if (file) {
+            if (file.value != "") {
                 uploadProduct().then(res => {
                     debugger
                     if (res.data.result.files.file[0]) {
