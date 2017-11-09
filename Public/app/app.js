@@ -712,132 +712,132 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         // getDealers();
 
     }])
-    .controller('assignCtrl', ['Order', '$http', '$uibModalInstance', 'data', function (Order, $http, $uibModalInstance, data) {
-        var main = this;
+    // .controller('assignCtrl', ['Order', '$http', '$uibModalInstance', 'data', function (Order, $http, $uibModalInstance, data) {
+    //     var main = this;
 
-        main.data = data;
+    //     main.data = data;
 
-        main.updateOrder = updateOrder;
-        main.cancelEditing = cancelEditing;
-
-
-        setAssignOrder(data);
-        main.orderDetails = [];
-        main.assignOrder.DealerCode = '';
-
-        function setAssignOrder(data) {
-            main.assignOrder = angular.copy(data);
-        }
-
-        function getKiosks(data) {
-            $http({
-                method: 'GET',
-                //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/kiosks?filter={"where":{"Code":"' + data.KioskCode + '"}}',
-                data: {}
-            }).then(function successCallback(result) {
-                main.kiosks = result.data[0].BranchCode;
-                getDealers();
-                getOrderDetails();
-                console.log(main.kiosks);
-            });
-        }
+    //     main.updateOrder = updateOrder;
+    //     main.cancelEditing = cancelEditing;
 
 
-        function getDealers() {
-            $http({
-                method: 'GET',
-                //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/dealers?filter={"where":{"BranchCode":"' + main.kiosks + '"}}',
-                data: {}
-            }).then(function (result) {
-                main.dealers = result.data;
-                var convDealers = main.dealers.map(x => x.Code.toString());
-                var joinConvDealers = "\"" + convDealers.join("\",\"") + "\"";
-                getOrderDetails(joinConvDealers)
-            });
-        }
+    //     setAssignOrder(data);
+    //     main.orderDetails = [];
+    //     main.assignOrder.DealerCode = '';
 
-        function getOrderDetails(joinConvDealers) {
-            $http({
-                method: 'GET',
-                //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/orderDetails?filter={"where":{"OrderCode":"' + data.Code + '"}}',
-                data: {}
-            }).then(function (result) {
-                main.orderDetails = result.data;
-                var convOrderDetails = main.orderDetails.map(x => x.ProductCode.toString());
-                var joinConvOrderDetails = "\"" + convOrderDetails.join("\",\"") + "\"";
-                getProductDealers(joinConvOrderDetails, joinConvDealers);
-            });
-        }
+    //     function setAssignOrder(data) {
+    //         main.assignOrder = angular.copy(data);
+    //     }
+
+    //     function getKiosks(data) {
+    //         $http({
+    //             method: 'GET',
+    //             //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
+    //             url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/kiosks?filter={"where":{"Code":"' + data.KioskCode + '"}}',
+    //             data: {}
+    //         }).then(function successCallback(result) {
+    //             main.kiosks = result.data[0].BranchCode;
+    //             getDealers();
+    //             getOrderDetails();
+    //             console.log(main.kiosks);
+    //         });
+    //     }
 
 
-        function getProductDealers(joinConvOrderDetails, joinConvDealers) {
-            $http({
-                method: 'GET',
-                //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/ProductDealers?filter={"where":{"and":[{"ProductCode":{"inq":[' + joinConvOrderDetails + ']}},{"DealerCode":{"inq":[' + joinConvDealers + ']}}]}}',
-                data: {}
-            }).then(function (result) {
-                main.productDealers = result.data;
-                console.log(convOrderDetails);
-            });
-        }
-        function setDealerCode(dealer) {
-            if (dealer.IsAvailable == 1) {
-                main.assignOrder.DealerCode = angular.copy(dealer.DealerCode);
-            } else {
-                alert("CANNOT ASSIGN , PRODUCT IS NOT AVAILABLE");
-            }
+    //     function getDealers() {
+    //         $http({
+    //             method: 'GET',
+    //             //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
+    //             url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/dealers?filter={"where":{"BranchCode":"' + main.kiosks + '"}}',
+    //             data: {}
+    //         }).then(function (result) {
+    //             main.dealers = result.data;
+    //             var convDealers = main.dealers.map(x => x.Code.toString());
+    //             var joinConvDealers = "\"" + convDealers.join("\",\"") + "\"";
+    //             getOrderDetails(joinConvDealers)
+    //         });
+    //     }
 
-        }
-
-
-        function updateOrder(order) {
-            if (confirm('ASSIGN??')) {
-                updateProperty();
-                Order.upsert(order,
-                    function (result) {
-                        cancelEditing();
-                        alert('Assigned Successfuly');
-                        $uibModalInstance.close();
-                        location.reload();
-
-                    }, function (errors) {
-                        main.errors = errors.data.error;
-                        alert('Assign Failed');
-                        $uibModalInstance.close();
-                    }
-                );
-            } else {
-                alert('Cancelled');
-                $uibModalInstance.close();
-            }
-
-        }
-
-        function cancelEditing() {
-            $uibModalInstance.dismiss('Cancel');
-        }
-
-        function updateProperty() {
-            main.assignOrder.Status = 'ASSIGNED';
-            main.assignOrder.CreatedBy = 'Outlet1';
-            main.assignOrder.CreateAgent = 'Admin';
-            main.assignOrder.UpdatedBy = 'Admin';
-            main.assignOrder.UpdateAgent = 'Admin';
-        }
+    //     function getOrderDetails(joinConvDealers) {
+    //         $http({
+    //             method: 'GET',
+    //             //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
+    //             url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/orderDetails?filter={"where":{"OrderCode":"' + data.Code + '"}}',
+    //             data: {}
+    //         }).then(function (result) {
+    //             main.orderDetails = result.data;
+    //             var convOrderDetails = main.orderDetails.map(x => x.ProductCode.toString());
+    //             var joinConvOrderDetails = "\"" + convOrderDetails.join("\",\"") + "\"";
+    //             getProductDealers(joinConvOrderDetails, joinConvDealers);
+    //         });
+    //     }
 
 
-        main.updateOrder = updateOrder;
-        main.getProductDealers = getProductDealers;
-        main.setDealerCode = setDealerCode;
-        getKiosks(data);
+    //     function getProductDealers(joinConvOrderDetails, joinConvDealers) {
+    //         $http({
+    //             method: 'GET',
+    //             //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
+    //             url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/ProductDealers?filter={"where":{"and":[{"ProductCode":{"inq":[' + joinConvOrderDetails + ']}},{"DealerCode":{"inq":[' + joinConvDealers + ']}}]}}',
+    //             data: {}
+    //         }).then(function (result) {
+    //             main.productDealers = result.data;
+    //             console.log(convOrderDetails);
+    //         });
+    //     }
+    //     function setDealerCode(dealer) {
+    //         if (dealer.IsAvailable == 1) {
+    //             main.assignOrder.DealerCode = angular.copy(dealer.DealerCode);
+    //         } else {
+    //             alert("CANNOT ASSIGN , PRODUCT IS NOT AVAILABLE");
+    //         }
+
+    //     }
+
+
+    //     function updateOrder(order) {
+    //         if (confirm('ASSIGN??')) {
+    //             updateProperty();
+    //             Order.upsert(order,
+    //                 function (result) {
+    //                     cancelEditing();
+    //                     alert('Assigned Successfuly');
+    //                     $uibModalInstance.close();
+    //                     location.reload();
+
+    //                 }, function (errors) {
+    //                     main.errors = errors.data.error;
+    //                     alert('Assign Failed');
+    //                     $uibModalInstance.close();
+    //                 }
+    //             );
+    //         } else {
+    //             alert('Cancelled');
+    //             $uibModalInstance.close();
+    //         }
+
+    //     }
+
+    //     function cancelEditing() {
+    //         $uibModalInstance.dismiss('Cancel');
+    //     }
+
+    //     function updateProperty() {
+    //         main.assignOrder.Status = 'ASSIGNED';
+    //         main.assignOrder.CreatedBy = 'Outlet1';
+    //         main.assignOrder.CreateAgent = 'Admin';
+    //         main.assignOrder.UpdatedBy = 'Admin';
+    //         main.assignOrder.UpdateAgent = 'Admin';
+    //     }
+
+
+    //     main.updateOrder = updateOrder;
+    //     main.getProductDealers = getProductDealers;
+    //     main.setDealerCode = setDealerCode;
+    //     getKiosks(data);
 
 
 
-    }])
+    // }])
 
     .controller('productCategoryMapCtrl', function (ProductCategory, Product_productCategory, Product, $http, $stateParams, $q, $state) {
         var main = this;

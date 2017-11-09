@@ -2,7 +2,7 @@
     <div class="box box-primary">
         <form role="form" name="productFormValidate" ng-submit="main.updateProduct(main.editProduct)" novalidate>
             <div class="box-header with-border">
-                <h3 class="box-title">Create Product</h3>
+                <h3 class="box-title">Edit Product</h3>
             </div>
             <div class="box-body">
                 <div class="row">
@@ -11,7 +11,7 @@
                             <label for="exampleInputBranch">BrandCode</label></br>
                             <input type="hidden" name="brandCode" ng-model="main.editProduct.BrandCode">
                             <input type="text" class="form-control" name="brandId" autocomplete="off" ng-model="main.selectedTestBrand" uib-typeahead="item as item.Code +' ('+ item.Name +')' for item in main.brands | filter:$viewValue"
-                                typeahead-on-select="main.selectBrand(main.selectedTestBrand)" placeholder="Type brand code" required>
+                                typeahead-on-select="main.selectBrand(main.selectedTestBrand)" placeholder="Type brand code" required disabled>
                             <div ng-if="main.errors.details.messages.BrandCode[0]">
                                 <div class="text-danger">
                                     {{main.errors.details.messages.BrandCode[0]}}
@@ -22,7 +22,7 @@
                         <div class="form-group">
                             <label for="exampleInputCode">Code</label>
                             <input type="text" name="Code" autocomplete="off" class="form-control" ng-model="main.editProduct.Code" placeholder="Code"
-                                required>
+                                disabled>
                             <div ng-if="main.errors.details.messages.Code[0]">
                                 <div class="text-danger"> {{main.errors.details.messages.Code[0]}}</div>
                             </div>
@@ -56,10 +56,9 @@
 
                         <div class="form-group">
                             <label for="exampleInputFile">Logo</label>
-                            <input type="file" id="productImage" fileread="main.editProduct.Image" required ng-model="main.editProduct.Image">
-                            <img src="{{main.editProduct.Image}}" class="img-responsive" alt="Image preview..." />
+                            <input type="file" id="productImage" fileread="main.editProduct.Image"  required ng-model="main.editProduct.Image">
+                            <img src="{{main.updateImagePreview()}}" class="img-responsive" alt="Image preview..." />
                             <input type="hidden" ng-model="main.editProduct.Image" value="{{main.editProduct.Image}}" required>
-
                         </div>
 
                     </div>
@@ -78,7 +77,7 @@
 
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputDP">DP</label>
+                            <label for="exampleInputDP">DP (%)</label>
                             <input type="number" name="DP" autocomplete="off" class="form-control" maxlength="2" ng-model="main.editProduct.DP" placeholder="example 50 for 50%"
                                 required>
                             <div ng-if="main.errors.details.messages.DP[0]">
@@ -108,7 +107,7 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="exampleInputWeight">Weight</label>
+                                    <label for="exampleInputWeight">Weight (Kilo)</label>
                                     <input type="number" name="Weight" autocomplete="off" class="form-control" ng-model="main.editProduct.Weight" placeholder="in kilos"
                                         required>
                                     <div ng-if="main.errors.details.messages.Weight[0]">
@@ -116,7 +115,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputWidth">Width</label>
+                                    <label for="exampleInputWidth">Width (cm)</label>
                                     <input type="number" name="Width" autocomplete="off" class="form-control" ng-model="main.editProduct.Width" placeholder="in centimeters"
                                         required>
                                     <div ng-if="main.errors.details.messages.Width[0]">
@@ -126,7 +125,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="exampleInputHeight">Height</label>
+                                    <label for="exampleInputHeight">Height (cm)</label>
                                     <input type="number" name="Height" autocomplete="off" class="form-control" ng-model="main.editProduct.Height" placeholder="in centimeters"
                                         required>
                                     <div ng-if="main.errors.details.messages.Height[0]">
@@ -135,7 +134,7 @@
 
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputLength">Length</label>
+                                    <label for="exampleInputLength">Length (cm)</label>
                                     <input type="number" name="Length" autocomplete="off" class="form-control" ng-model="main.editProduct.Length" placeholder="in centimeters"
                                         required>
                                     <div ng-if="main.errors.details.messages.Length[0]">
@@ -151,6 +150,7 @@
 
             <div class="box-footer">
                 <button type="submit" class="btn btn-primary">Submit</button>
+                <a href="#" ui-sref="viewProducts" class="btn btn-warning">Cancel</a>
             </div>
         </form>
     </div>

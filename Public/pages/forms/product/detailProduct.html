@@ -1,62 +1,96 @@
 <div ng-controller="productDetailCtrl as main">
+
     <div class="box box-primary">
-        <h4> <b>View Detail {{main.viewProduct.Name}}</b></h4>
-
+        <div class="box-header with-border">
+            <h3 class="box-title">View Detail {{main.viewProduct.Name}}</h3>
+    <div class="col-md-12 text-right">
+        <a href="#" class="btn btn-default btn-sm" ui-sref="editProduct({ id:main.viewProduct.Code })"><i class="fa fa-pencil"></i> Edit</a>
+        <a href="#" class="btn btn-default btn-sm" ui-sref="viewProducts"><i class="fa fa-arrow-left"></i> Back</a>
+    </div>
+        </div>
         <div class="box-body">
-            <div class="form-group">
-                <label for="exampleViewImage">Logo</label>
-                <img src="{{main.baseapi + main.viewProduct.Image}}" class="img-responsive" alt="Image preview..." />
-            </div>
-            <div class="form-group">
-                <label for="exampleViewBrandCode">Brand Code</label>
-                <input type="text" class="form-control" ng-model="main.viewProduct.BrandCode" placeholder="Brand Code" disabled>
-            </div>
-            <div class="form-group">
-                <label for="exampleViewCode">Code</label>
-                <input type="text" class="form-control" ng-model="main.viewProduct.Code" placeholder="Code" disabled>
-            </div>
-            <div class="form-group">
-                <label for="exampleViewCode">SKU</label>
-                <input type="text" class="form-control" ng-model="main.viewProduct.SKU" placeholder="SKU" disabled>
-            </div>
-            <div class="form-group">
-                <label for="exampleViewName">Name</label>
-                <input type="text" class="form-control" ng-model="main.viewProduct.Name" placeholder="Name" disabled>
-            </div>
-            <div class="form-group">
-                <label for="exampleViewDescription">Description</label>
-                <input type="text" class="form-control" ng-model="main.viewProduct.Description" placeholder="Description" disabled>
-            </div>
-            <div class="form-group">
-                <label for="exampleViewPrice">Price</label>
-                <input type="text" class="form-control" ng-model="main.viewProduct.Price" placeholder="Price" disabled>
-            </div>
-            <div class="form-group">
-                <label for="exampleViewDP">DP</label>
-                <input type="text" class="form-control" ng-model="main.viewProduct.DP" placeholder="DP" disabled>
-            </div>
-            <div class="form-group">
-                <label for="exampleViewSpecification">Specification</label>
-                <input type="text" class="form-control" ng-model="main.viewProduct.Specification" placeholder="Specification" disabled>
-            </div>
-            <div class="form-group">
-                <label for="exampleViewWeight">Weight</label>
-                <input type="text" class="form-control" ng-model="main.viewProduct.Weight" placeholder="Weight" disabled>
-            </div>
-            <div class="form-group">
-                <label for="exampleViewWidth">Width</label>
-                <input type="text" class="form-control" ng-model="main.viewProduct.Width" placeholder="Width" disabled>
-            </div>
-            <div class="form-group">
-                <label for="exampleViewHeight">Height</label>
-                <input type="text" class="form-control" ng-model="main.viewProduct.Height" placeholder="Height" disabled>
-            </div>
-            <div class="form-group">
-                <label for="exampleViewLength">Length</label>
-                <input type="text" class="form-control" ng-model="main.viewProduct.Length" placeholder="Length" disabled>
-            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="exampleInputBranch">BrandCode</label></br>
+                        <input type="text" class="form-control" ng-model="main.viewProduct.BrandCode" disabled>
+                    </div>
 
+                    <div class="form-group">
+                        <label for="exampleInputCode">Code</label>
+                        <input type="text" class="form-control" ng-model="main.viewProduct.Code" disabled>
+                    </div>
 
+                    <div class="form-group">
+                        <label for="exampleInputSKU">SKU</label>
+                        <input type="text" class="form-control" ng-model="main.viewProduct.SKU" disabled>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName">Name</label>
+                        <input type="text" class="form-control" ng-model="main.viewProduct.Name" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputDescription">Description</label>
+                        <label for="exampleInputName">Name</label>
+                        <input type="text" class="form-control" ng-model="main.viewProduct.Description" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputFile">Logo</label>
+                        <img src="{{main.baseapi + main.viewProduct.Image}}" class="img-responsive" alt="Image preview..." />
+                    </div>
+
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label for="exampleInputPrice">Price</label>
+                        <input type="text" class="form-control" ng-model="main.viewProduct.Price" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputDP">DP (%)</label>
+                        <input type="text" class="form-control" ng-model="main.viewProduct.DP" disabled>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputSpecification">Specification :</label>
+                    </div>
+
+                    <div ng-repeat="spec in main.specifications track by $index" class="form-group row">
+                        <div class="col-md-4">
+                            <input type="text" autocomplete="off" class="form-control" ng-model="spec.key" disabled>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" autocomplete="off" class="form-control" ng-model="spec.value" disabled>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="exampleInputWeight">Weight (kilo)</label>
+                                <input type="text" class="form-control" ng-model="main.viewProduct.Weight" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputWidth">Width (cm)</label>
+                                <input type="text" class="form-control" ng-model="main.viewProduct.Width" disabled>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="exampleInputHeight">Height (cm)</label>
+                                <input type="text" class="form-control" ng-model="main.viewProduct.Height" disabled>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputLength">Length (cm)</label>
+                                <input type="text" class="form-control" ng-model="main.viewProduct.Length" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
