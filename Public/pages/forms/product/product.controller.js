@@ -171,6 +171,8 @@ function ProductEditController($stateParams, $http, Constants, Product, $state) 
     main.specifications = [];
     main.brands = [];
     main.selectedTestBrand = {};
+    main.baseapi = Constants.BASE_API + "/";
+    main.imagePreview = "";
 
     function setEditedProduct(product) {
         main.editedProduct = angular.copy(product);
@@ -188,11 +190,19 @@ function ProductEditController($stateParams, $http, Constants, Product, $state) 
         $http.get(`${Constants.BASE_API}/products/${id}`).then(
             result => {
                 main.editProduct = result.data;
+                main.imagePreview = main.baseapi + main.editProduct.Image;
                 for (var spec of JSON.parse(main.editProduct.Specification))
                     main.specifications.push({ key: spec.key, value: spec.value });
                 getBrandById(main.editProduct.BrandCode);
             }
         )
+    }
+
+    function updateImagePreview(){
+        if(main.editProduct.Image.length < main.imagePreview.length)
+        return main.imagePreview;
+        else
+        return main.editProduct.Image;
     }
 
     function AddSpecification() {
@@ -281,7 +291,6 @@ function ProductEditController($stateParams, $http, Constants, Product, $state) 
             url: `${Constants.BASE_API}/brands/${id}`,
             data: {}
         }).then((result) => {
-            debugger
             main.selectedTestBrand = result.data;
         });
     }
@@ -297,6 +306,7 @@ function ProductEditController($stateParams, $http, Constants, Product, $state) 
     main.updateProduct = updateProduct;
     main.getBrands = getBrands;
     main.selectBrand = selectBrand;
+    main.updateImagePreview = updateImagePreview;
 
 
     (function () {
@@ -315,12 +325,15 @@ function ProductDetailController(Constants, $http, $stateParams) {
     var main = this;
     main.viewProduct = {};
     main.baseapi = Constants.BASE_API + "/";
+    main.specifications = [];
 
     function getProductById(id) {
         $http.get(`${Constants.BASE_API}/products/${id}`)
             .then(
             result => {
                 main.viewProduct = result.data;
+                for (var spec of JSON.parse(main.viewProduct.Specification))
+                    main.specifications.push({ key: spec.key, value: spec.value });
             });
     }
 
