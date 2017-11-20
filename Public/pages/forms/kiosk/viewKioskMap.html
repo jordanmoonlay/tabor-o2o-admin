@@ -1,0 +1,48 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="box box-primary">
+      <div class="box-header with-border">
+        <h3 class="box-title">Mapping Product with Dealer</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">      
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <th>No</th>
+                <th>Product</th>
+                <th>Dealer</th>
+                <th>Action</th>                
+              </thead>
+<tbody>
+  <tr dir-paginate="product in main.products | filter:search |itemsPerPage:10" ng-class="{'active':main.isCurrentProduct(product.Code)}">
+    <td> {{$index+1}} </td>
+    <td> {{product.Name}} </td>
+    <td><input type="text" value="{{product.kioskDealer[0].DealerName }}" disabled=true class="form-control"></td>
+    <td><a type="button" class="btn btn-xs btn-warning" ng-click="main.openModal('lg',main.kiosk,product)"><i class = "fa fa-pencil"></i></a> &nbsp;
+    <a type="button" class="btn btn-xs btn-danger" ng-click="main.removeMapping(product.kioskDealer[0].id)"><i class = "fa fa-trash"></i></a></td>
+  </tr>
+</tbody>
+
+
+</table>
+<dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+</dir-pagination-controls>
+<!-- /.box-body -->
+</div>
+</div>
+</div>
+
+
+
+<!-- /.box -->
+
+<!-- /.box -->
+</div>
+<!-- /.col -->
+</div>
+<!-- /.row -->
+</section>
+<!-- /.content -->
+</div>

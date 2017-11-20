@@ -1,0 +1,44 @@
+
+<div ng-controller="UserRegisterController as main">
+  <div class="box box-primary">
+    <form role="form" name="brandForm" ng-submit="main.register(main.newBrand)" novalidate>
+      <div class="box-header with-border">
+        <h3 class="box-title">Create User</h3>
+      </div>
+      <div class="box-body">
+        <div class="form-group">
+          <label for="">Username</label>
+          <input type="text" class="form-control" name="username" ng-model="main.user.username" placeholder="Code" required>
+          <div ng-if="main.errors.details.messages.username[0]">
+            <div style="color:red"> {{main.errors.details.messages.username[0]}}</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="">Email</label>
+          <input type="email" name="email" class="form-control" ng-model="main.user.email" placeholder="Name" required>
+          <div ng-if="main.errors.details.messages.email[0]">
+              <div style="color:red"> {{main.errors.details.messages.email[0]}}</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="">Password</label>
+          <input type="password" name="password" class="form-control" ng-model="main.user.password" placeholder="password" required>
+          <div ng-if="main.errors.details.messages.password[0]">
+            <div style="color:red"> {{main.errors.details.messages.password[0]}}</div>
+        </div>
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input type="password" name="cpassword" class="form-control" ng-model="main.user.cpassword" placeholder="retype password" required>
+          <div ng-if="main.errors.details.messages.cpassword[0]">
+            <div style="color:red"> {{main.errors.details.messages.cpassword[0]}}</div>
+        </div>
+      </div>
+<!-- /.box-body -->
+
+      <div class="box-footer">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
