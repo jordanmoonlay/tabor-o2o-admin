@@ -2,14 +2,14 @@ angular.module('CrudAngular')
     .controller("UserRoleMappingController", UserRoleMappingController)
 
 
-UserRoleMappingController.$inject = ['User', "Constants", "$http", '$stateParams','AuthenticationState']
-function UserRoleMappingController(User, Constants, $http, $stateParams,AuthenticationState) {
+UserRoleMappingController.$inject = ['User', "Constants", "$http", '$stateParams', 'AuthenticationState']
+function UserRoleMappingController(User, Constants, $http, $stateParams, AuthenticationState) {
     var main = this;
     main.selectedRole = {};
     main.USER_BASE_URL = Constants.BASE_API + "/users";
     main.ROLE_BASE_URL = Constants.BASE_API + "/roles";
     main.ROLEMAPPING_BASE_URL = Constants.BASE_API + "/rolemappings";
-    main.rolemapping = {"principalType":"USER"};
+    main.rolemapping = { "principalType": "USER" };
     main.mappedRole = [];
 
     function getUserById(id) {
@@ -29,7 +29,7 @@ function UserRoleMappingController(User, Constants, $http, $stateParams,Authenti
             params: {
                 filter: JSON.stringify({
                     page: 1, limit: 10, where: {
-                                    name: { like: `%${val}%` }
+                        name: { like: `%${val}%` }
                     }
                 })
             }
@@ -45,46 +45,48 @@ function UserRoleMappingController(User, Constants, $http, $stateParams,Authenti
     }
     main.selectRole = selectRole;
 
-    function roleMappingExists(rolemapping){
+    function roleMappingExists(rolemapping) {
         return new Promise((resolve, reject) => {
             var f = {
-                        where : {
-                            roleId : rolemapping.roleId, 
-                            principalId : rolemapping.principalId,
-                            principalType : rolemapping.principalType
-                        }
-                    };
-                    console.log(JSON.stringify(f));
-                    return $http.get(main.ROLEMAPPING_BASE_URL, {params: {
-                        filter : JSON.stringify(f)
-                    }})
-                    .then(
-                        result => {
-                            if(result.data.length > 0){
-                                resolve(true);
-                            }
-                            resolve(false);
-                        }
-                    )
+                where: {
+                    roleId: rolemapping.roleId,
+                    principalId: rolemapping.principalId,
+                    principalType: rolemapping.principalType
+                }
+            };
+            console.log(JSON.stringify(f));
+            return $http.get(main.ROLEMAPPING_BASE_URL, {
+                params: {
+                    filter: JSON.stringify(f)
+                }
+            })
+                .then(
+                result => {
+                    if (result.data.length > 0) {
+                        resolve(true);
+                    }
+                    resolve(false);
+                }
+                )
         });
     }
-    main.roleMappingExists = roleMappingExists; 
+    main.roleMappingExists = roleMappingExists;
 
     function saveRoleMapping() {
-        if(main.rolemapping.roleId){
+        if (main.rolemapping.roleId) {
             roleMappingExists(main.rolemapping).then(
-                isExists=>{
-                    if(!isExists){
-                        return $http.post(main.ROLEMAPPING_BASE_URL , JSON.stringify(main.rolemapping)).then(
-                        result => {
-                            if (result.data) {
-                                main.rolemapping = {"principalType":"USER"};
-                                main.rolemapping.principalId = main.UserId;
-                                main.selectedRole = {};
+                isExists => {
+                    if (!isExists) {
+                        return $http.post(main.ROLEMAPPING_BASE_URL, JSON.stringify(main.rolemapping)).then(
+                            result => {
+                                if (result.data) {
+                                    main.rolemapping = { "principalType": "USER" };
+                                    main.rolemapping.principalId = main.UserId;
+                                    main.selectedRole = {};
+                                }
+                                getMappedRole(main.UserId);
                             }
-                            getMappedRole(main.UserId);
-                        }
-                    )
+                        )
                     }
                 }
             )
@@ -105,6 +107,22 @@ function UserRoleMappingController(User, Constants, $http, $stateParams,Authenti
         })
     }
     main.getMappedRole = getMappedRole;
+
+    function removeRole(role) {
+        if (confirm("Are you sure want to unmap this role?")) {
+            $http.delete(`${main.ROLEMAPPING_BASE_URL}/${role.id}`).then(
+                result => {
+                    if (result && result.data.count > 0) {
+                        getMappedRole(main.UserId);
+                    }
+                }
+            ).catch(
+                error => {
+                }
+                )
+        }
+    }
+    main.removeRole = removeRole;
 
     (function () {
         main.UserId = $stateParams.id;

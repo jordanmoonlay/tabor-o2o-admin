@@ -88,6 +88,22 @@ function UserKioskMappingController(User, Kiosk, Constants, $http, $stateParams,
     }
     main.getMappedKiosk = getMappedKiosk;
 
+    function removeKiosk(role) {
+        if (confirm("Are you sure want to unmap this kiosk?")) {
+            $http.delete(`${main.KIOSKUSER_BASE_URL}/${role.id}`).then(
+                result => {
+                    if (result && result.data.count > 0) {
+                        getMappedKiosk(main.UserId);
+                    }
+                }
+            ).catch(
+                error => {
+                }
+                )
+        }
+    }
+    main.removeKiosk = removeKiosk;
+
     (function () {
         main.UserId = $stateParams.id;
         main.userKiosk.UserId = main.UserId;

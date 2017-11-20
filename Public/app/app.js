@@ -40,6 +40,14 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 url: '/newProduct',
                 templateUrl: 'pages/forms/product/newProduct.html'
             })
+            .state('editProduct', {
+                url: '/editProduct/{id}',
+                templateUrl: 'pages/forms/product/editProduct.html'
+            })
+            .state('detailProduct', {
+                url: '/detailProduct/{id}',
+                templateUrl: 'pages/forms/product/detailProduct.html'
+            })
             .state('newProductCategory', {
                 url: '/newProductCategory',
                 templateUrl: 'pages/forms/product/newProductCategory.html'
@@ -227,176 +235,6 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
         initCreateForm();
         getBrands();
-    })
-    .controller('productCtrl', function (Product, $http, $state) {
-        var main = this;
-        var defDate = new Date();
-        var submain = this;
-
-        function getProducts() {
-            Product.find(
-                function (result) {
-                    main.products = result;
-                });
-        }
-
-        function createProduct(product) {
-            if (confirm("Are You Sure to Create?")) {
-                Product.create(product,
-                    function (result) {
-                        initCreateForm();
-                        getProducts();
-                        alert("Create Successfuly");
-                    }, function (errors) {
-                        main.errors = errors.data.error;
-                        alert('Create Error:' + main.errors);
-                    }
-                );
-            } else {
-                alert("Cancelled");
-            }
-
-        }
-
-        function updateProduct(product) {
-            if (confirm("Are You Sure to Update?")) {
-                Product.upsert(product,
-                    function (result) {
-                        cancelEditing();
-                        getProducts();
-                        alert("Update Successfuly");
-                    });
-
-            } else {
-                alert("Cancelled");
-            }
-
-        }
-
-        function deleteProduct(productId) {
-            if (confirm("Are You Sure to Delete?")) {
-                Product.deleteById({ Code: productId },
-                    function (result) {
-                        cancelEditing();
-                        getProducts();
-                        alert("Deleted");
-                    });
-            } else {
-                alert("Cancelled");
-            }
-
-        }
-
-        function getBrands() {
-            $http({
-                method: 'GET',
-                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/brands',
-                //                 url : 'http://localhost:10010/api/brands',
-                data: {}
-            }).then(function (result) {
-                main.brands = result.data;
-            });
-        }
-
-
-        function initCreateForm() {
-            main.newProduct = { Code: '', BrandCode: '', Name: '', Description: '', Price: '', DP: '', Specification: '', Weight: '', Width: '', Height: '', Length: '', Image: '', Active: 1, Deleted: 0, CreatedBy: 'AUTO', CreatedDate: defDate, CreateAgent: 'AUTO', UpdatedBy: 'AUTO', UpdatedDate: defDate, UpdateAgent: 'AUTO' };
-        }
-
-        function setEditedProduct(product) {
-            main.editedProduct = angular.copy(product);
-            main.isEditing = true;
-            main.isShow = false;
-            main.isView = false;
-        }
-
-        function setViewProduct(product) {
-            main.viewProduct = angular.copy(product);
-            main.isView = true;
-            main.isShow = false;
-        }
-
-
-        function isCurrentProduct(productId) {
-            return main.editedProduct !== null || main.viewProduct !== null && main.editedProduct.Code === productId;
-        }
-
-        function cancelEditing() {
-            main.editedProduct = null;
-            main.isEditing = false;
-            main.isShow = true;
-
-        }
-
-        function cancelView() {
-            main.viewProduct = null;
-            main.isShow = true;
-            main.isView = false;
-        }
-
-        function selectBrand(brand) {
-            console.log(brand);
-            main.newProduct.BrandCode = brand.Code;
-        }
-
-        function getSpec() {
-            var getSpecJSON = JSON.stringify(main.specifications);
-            main.newProduct.Specification = getSpecJSON;
-        }
-
-        function goTo(code) {
-            console.log(code)
-            $state.go('viewProductCategoryMap', { productId: code })
-        }
-
-
-        var specifications = [3];
-        specifications[0] = { key: "RAM", value: "" };
-        specifications[1] = { key: "Camera", value: "" };
-        specifications[2] = { key: "Battery", value: "" };
-
-
-        main.specifications = specifications;
-
-        function AddSpecification() {
-            main.specifications.push({ key: "", value: "" });
-        }
-
-        function RemoveSpecification() {
-            if (specifications > specifications[3]) {
-                main.specifications.pop();
-                var getSpecJSON = JSON.stringify(main.specifications);
-                main.newProduct.Specification = getSpecJSON;
-            } else {
-                alert("Can't Be Deleted");
-            }
-        }
-
-        main.products = [];
-        main.editedProduct = null;
-        main.viewProduct = null;
-        main.isEditing = false;
-        main.isView = false;
-        main.isShow = true;
-        main.getProducts = getProducts;
-        main.createProduct = createProduct;
-        main.updateProduct = updateProduct;
-        main.deleteProduct = deleteProduct;
-        main.setEditedProduct = setEditedProduct;
-        main.setViewProduct = setViewProduct;
-        main.isCurrentProduct = isCurrentProduct;
-        main.cancelEditing = cancelEditing;
-        main.cancelView = cancelView;
-        main.selectBrand = selectBrand;
-        main.getSpec = getSpec;
-        main.AddSpecification = AddSpecification;
-        main.RemoveSpecification = RemoveSpecification;
-        main.goTo = goTo
-
-        initCreateForm();
-        getProducts();
-        getBrands();
-
     })
     .controller('dealerCtrl', function (Dealer, $http) {
         var main = this;
@@ -874,134 +712,134 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         // getDealers();
 
     }])
-    .controller('assignCtrl', ['Order', '$http', '$uibModalInstance', 'data', function (Order, $http, $uibModalInstance, data) {
-        var main = this;
+    // .controller('assignCtrl', ['Order', '$http', '$uibModalInstance', 'data', function (Order, $http, $uibModalInstance, data) {
+    //     var main = this;
 
-        main.data = data;
+    //     main.data = data;
 
-        main.updateOrder = updateOrder;
-        main.cancelEditing = cancelEditing;
-
-
-        setAssignOrder(data);
-        main.orderDetails = [];
-        main.assignOrder.DealerCode = '';
-
-        function setAssignOrder(data) {
-            main.assignOrder = angular.copy(data);
-        }
-
-        function getKiosks(data) {
-            $http({
-                method: 'GET',
-                //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/kiosks?filter={"where":{"Code":"' + data.KioskCode + '"}}',
-                data: {}
-            }).then(function successCallback(result) {
-                main.kiosks = result.data[0].BranchCode;
-                getDealers();
-                getOrderDetails();
-                console.log(main.kiosks);
-            });
-        }
+    //     main.updateOrder = updateOrder;
+    //     main.cancelEditing = cancelEditing;
 
 
-        function getDealers() {
-            $http({
-                method: 'GET',
-                //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/dealers?filter={"where":{"BranchCode":"' + main.kiosks + '"}}',
-                data: {}
-            }).then(function (result) {
-                main.dealers = result.data;
-                var convDealers = main.dealers.map(x => x.Code.toString());
-                var joinConvDealers = "\"" + convDealers.join("\",\"") + "\"";
-                getOrderDetails(joinConvDealers)
-            });
-        }
+    //     setAssignOrder(data);
+    //     main.orderDetails = [];
+    //     main.assignOrder.DealerCode = '';
 
-        function getOrderDetails(joinConvDealers) {
-            $http({
-                method: 'GET',
-                //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/orderDetails?filter={"where":{"OrderCode":"' + data.Code + '"}}',
-                data: {}
-            }).then(function (result) {
-                main.orderDetails = result.data;
-                var convOrderDetails = main.orderDetails.map(x => x.ProductCode.toString());
-                var joinConvOrderDetails = "\"" + convOrderDetails.join("\",\"") + "\"";
-                getProductDealers(joinConvOrderDetails, joinConvDealers);
-            });
-        }
+    //     function setAssignOrder(data) {
+    //         main.assignOrder = angular.copy(data);
+    //     }
+
+    //     function getKiosks(data) {
+    //         $http({
+    //             method: 'GET',
+    //             //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
+    //             url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/kiosks?filter={"where":{"Code":"' + data.KioskCode + '"}}',
+    //             data: {}
+    //         }).then(function successCallback(result) {
+    //             main.kiosks = result.data[0].BranchCode;
+    //             getDealers();
+    //             getOrderDetails();
+    //             console.log(main.kiosks);
+    //         });
+    //     }
 
 
-        function getProductDealers(joinConvOrderDetails, joinConvDealers) {
-            $http({
-                method: 'GET',
-                //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
-                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/ProductDealers?filter={"where":{"and":[{"ProductCode":{"inq":[' + joinConvOrderDetails + ']}},{"DealerCode":{"inq":[' + joinConvDealers + ']}}]}}',
-                data: {}
-            }).then(function (result) {
-                main.productDealers = result.data;
-                console.log(convOrderDetails);
-            });
-        }
-        function setDealerCode(dealer) {
-            if (dealer.IsAvailable == 1) {
-                main.assignOrder.DealerCode = angular.copy(dealer.DealerCode);
-            } else {
-                alert("CANNOT ASSIGN , PRODUCT IS NOT AVAILABLE");
-            }
+    //     function getDealers() {
+    //         $http({
+    //             method: 'GET',
+    //             //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
+    //             url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/dealers?filter={"where":{"BranchCode":"' + main.kiosks + '"}}',
+    //             data: {}
+    //         }).then(function (result) {
+    //             main.dealers = result.data;
+    //             var convDealers = main.dealers.map(x => x.Code.toString());
+    //             var joinConvDealers = "\"" + convDealers.join("\",\"") + "\"";
+    //             getOrderDetails(joinConvDealers)
+    //         });
+    //     }
 
-        }
-
-
-        function updateOrder(order) {
-            if (confirm('ASSIGN??')) {
-                updateProperty();
-                Order.upsert(order,
-                    function (result) {
-                        cancelEditing();
-                        alert('Assigned Successfuly');
-                        $uibModalInstance.close();
-                        location.reload();
-
-                    }, function (errors) {
-                        main.errors = errors.data.error;
-                        alert('Assign Failed');
-                        $uibModalInstance.close();
-                    }
-                );
-            } else {
-                alert('Cancelled');
-                $uibModalInstance.close();
-            }
-
-        }
-
-        function cancelEditing() {
-            $uibModalInstance.dismiss('Cancel');
-        }
-
-        function updateProperty() {
-            main.assignOrder.Status = 'ASSIGNED';
-            main.assignOrder.CreatedBy = 'Outlet1';
-            main.assignOrder.CreateAgent = 'Admin';
-            main.assignOrder.UpdatedBy = 'Admin';
-            main.assignOrder.UpdateAgent = 'Admin';
-        }
+    //     function getOrderDetails(joinConvDealers) {
+    //         $http({
+    //             method: 'GET',
+    //             //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
+    //             url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/orderDetails?filter={"where":{"OrderCode":"' + data.Code + '"}}',
+    //             data: {}
+    //         }).then(function (result) {
+    //             main.orderDetails = result.data;
+    //             var convOrderDetails = main.orderDetails.map(x => x.ProductCode.toString());
+    //             var joinConvOrderDetails = "\"" + convOrderDetails.join("\",\"") + "\"";
+    //             getProductDealers(joinConvOrderDetails, joinConvDealers);
+    //         });
+    //     }
 
 
-        main.updateOrder = updateOrder;
-        main.getProductDealers = getProductDealers;
-        main.setDealerCode = setDealerCode;
-        getKiosks(data);
+    //     function getProductDealers(joinConvOrderDetails, joinConvDealers) {
+    //         $http({
+    //             method: 'GET',
+    //             //url : 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Order/',
+    //             url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/ProductDealers?filter={"where":{"and":[{"ProductCode":{"inq":[' + joinConvOrderDetails + ']}},{"DealerCode":{"inq":[' + joinConvDealers + ']}}]}}',
+    //             data: {}
+    //         }).then(function (result) {
+    //             main.productDealers = result.data;
+    //             console.log(convOrderDetails);
+    //         });
+    //     }
+    //     function setDealerCode(dealer) {
+    //         if (dealer.IsAvailable == 1) {
+    //             main.assignOrder.DealerCode = angular.copy(dealer.DealerCode);
+    //         } else {
+    //             alert("CANNOT ASSIGN , PRODUCT IS NOT AVAILABLE");
+    //         }
+
+    //     }
+
+
+    //     function updateOrder(order) {
+    //         if (confirm('ASSIGN??')) {
+    //             updateProperty();
+    //             Order.upsert(order,
+    //                 function (result) {
+    //                     cancelEditing();
+    //                     alert('Assigned Successfuly');
+    //                     $uibModalInstance.close();
+    //                     location.reload();
+
+    //                 }, function (errors) {
+    //                     main.errors = errors.data.error;
+    //                     alert('Assign Failed');
+    //                     $uibModalInstance.close();
+    //                 }
+    //             );
+    //         } else {
+    //             alert('Cancelled');
+    //             $uibModalInstance.close();
+    //         }
+
+    //     }
+
+    //     function cancelEditing() {
+    //         $uibModalInstance.dismiss('Cancel');
+    //     }
+
+    //     function updateProperty() {
+    //         main.assignOrder.Status = 'ASSIGNED';
+    //         main.assignOrder.CreatedBy = 'Outlet1';
+    //         main.assignOrder.CreateAgent = 'Admin';
+    //         main.assignOrder.UpdatedBy = 'Admin';
+    //         main.assignOrder.UpdateAgent = 'Admin';
+    //     }
+
+
+    //     main.updateOrder = updateOrder;
+    //     main.getProductDealers = getProductDealers;
+    //     main.setDealerCode = setDealerCode;
+    //     getKiosks(data);
 
 
 
-    }])
+    // }])
 
-    .controller('productCategoryMapCtrl', function (ProductCategory, Product_productCategory, Product, $http, $stateParams, $q) {
+    .controller('productCategoryMapCtrl', function (ProductCategory, Product_productCategory, Product, $http, $stateParams, $q, $state) {
         var main = this;
         var defDate = new Date();
         main.productCategories = []
@@ -1054,46 +892,15 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 });
         }
 
-        function isMapProductExist(pcCode,pCode){
-            var defer = $q.defer()
-            console.log("pcCode:"+pcCode+"pCode:"+pCode)
-            Product_productCategory.count({
-                where:{
-                    and:
-                    [
-                        {
-                            ProductCategoryCode:pcCode
-                        },
-                        {
-                            ProductCode:pCode
-                        }
-                    ]
-                }
-            },function success(result){
-                console.log(result)
-                defer.resolve(result)
-            })
-
-            return defer.promise
-        }
-
-        function createMapProductCategory(){
-            isMapProductExist(main.newMapProductCategory.ProductCategoryCode,main.newMapProductCategory.ProductCode)
-            .then(function success(data){
-                console.log(data)
-                console.log(data.count)
-                if(data.count == 0 ){
-                    Product_productCategory.upsert(main.newMapProductCategory
-                        ,function success(result){
-                            getProductCategoriesByProductCode(main.product.Code)
-                            //main.productProductCategories.push(result)
-                        },function error(err){
-                            main.errors = errors.data.error;
-                    });
-                }else{
-                    alert("this category is already exist in this product")
-                }
-            })
+        function createMapProductCategory() {
+            Product_productCategory.upsert(main.newMapProductCategory
+                , function success(result) {
+                    getProductCategoriesByProductCode(main.product.Code)
+                    //main.productProductCategories.push(result)
+                    alert("Insert success")
+                }, function error(err) {
+                    main.errors = errors.data.error;
+                });
         }
 
         function selectProductCategory(category) {
@@ -1129,9 +936,15 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             main.newMapProductCategory = { ProductCode: $stateParams.productId, ProductCategoryCode: '', Active: 1, Deleted: 0, CreatedBy: 'AUTO', CreatedDate: defDate, CreateAgent: 'AUTO', UpdatedBy: 'AUTO', UpdatedDate: defDate, UpdateAgent: 'AUTO' }
         }
 
+        // function back()
+        // {
+        //     $state.go('viewProducts')
+        // }
+
         main.selectProductCategory = selectProductCategory
         main.createMapProductCategory = createMapProductCategory
         main.removePPC = removePPC
+        //main.back = back
 
         getProductDetail($stateParams.productId);
         initForm()
@@ -1432,18 +1245,18 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             return d.promise;
         }
 
-        function getKiosksDetail(code){
+        function getKiosksDetail(code) {
             var d = $q.defer()
             console.log(code)
-            Kiosk.findById({Code:code},function(result){
-                    main.kiosk = result;
-                    d.resolve(main.kiosk)
-                    //console.log(main.kiosk)
-            } );
+            Kiosk.findById({ Code: code }, function (result) {
+                main.kiosk = result;
+                d.resolve(main.kiosk)
+                console.log(main.kiosk)
+            });
             return d.promise
         }
 
-        function getDealerFromKiosk(code_p,index) {
+        function getDealerFromKiosk(code_p, index) {
             //main.products[index].kioskDealer[index] = null   
             VKioskProductDealer.find({
                 filter: {
@@ -1460,50 +1273,48 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 }
 
             },
-            function (result) {
-                main.products[index].kioskDealer = result;
-                //console.log(main.products[index])
-            });
+                function (result) {
+                    main.products[index].kioskDealer = result;
+                    //console.log(main.products[index])
+                });
         }
 
-        function removeMapping(id)
-        {
+        function removeMapping(id) {
             console.log(id)
             if (confirm("Are You Sure?")) {
-                KioskProductDealer.deleteById({Id:id}
-                ,function success(result){
-                    alert("delete success")
-                    init();
-                },function error (err){
-                    alert("delete failed, see log")
-                    $log.info(err)
-                })
+                KioskProductDealer.deleteById({ Id: id }
+                    , function success(result) {
+                        alert("delete success")
+                        init();
+                    }, function error(err) {
+                        alert("delete failed, see log")
+                        $log.info(err)
+                    })
             } else {
                 alert("Update Failed");
             }
         }
-  
-        
-        function init(){
+
+
+        function init() {
             main.products = [];
             main.kiosk = null
             main.dealers = [];
-            
+
             $q.all([
                 getProduct(),
                 getKiosksDetail($stateParams.kioskId)
             ])
-            .then(function success (data){
-                var index;
-                //console.log(data)
-                for(index = 0;index < data[0].length;++index)
-                {
-                    getDealerFromKiosk(data[0][index].Code,index)
-                }
-            }, function error(msg) {
-                $log.info(msg)
-            })
-            
+                .then(function success(data) {
+                    var index;
+                    //console.log(data)
+                    for (index = 0; index < data[0].length; ++index) {
+                        getDealerFromKiosk(data[0][index].Code, index)
+                    }
+                }, function error(msg) {
+                    $log.info(msg)
+                })
+
         }
 
         main.openModal = function (size, kiosk, product) {
@@ -1569,62 +1380,62 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             VProductDealer.find({
                 filter: {
                     where: {
-                        and: [
-                            {
-                                BranchId: vm.items.kiosk.BranchId
-                            },
-                            {
+                        // and: [
+                        //     {
+                        //         BranchCode: vm.items.kiosk.BranchCode
+                        //     },
+                            //{
                                 ProductCode: vm.items.product.Code
-                            }
-                        ]
+                            //}
+                        //]
                     }
                 }
 
             },
-        function (result) {
-            vm.dealers = result;
-            
-            
-            //defaultValDealer();
-            //getProductDefault()
-            // if(vm.codeDealer == null && vm.dealers[0] != null)
-            // {
-            //     vm.dealer = vm.dealers[0]
-            // }
-            if(vm.items.product.hasOwnProperty("kioskDealer"))
-            {
-                if(vm.items.product.kioskDealer.hasOwnProperty("0")){
-                    var list = $.grep(vm.dealers, function(element, index) {
-                    return (element.id == vm.items.product.kioskDealer[0].ProductDealerId);
-                    });
-                    vm.dealer = list[0]
-                }else{
-                    vm.dealer = vm.dealers[0]
+
+                function (result) {
+                    // console.log("masuk get product")
+                    // console.log(vm.items.product.Code)
+                    // console.log(vm.items.kiosk.BranchId)
+                    // console.log(result)
+                    vm.dealers = result;
+
+
+                    //defaultValDealer();
+                    //getProductDefault()
+                    // if(vm.codeDealer == null && vm.dealers[0] != null)
+                    // {
+                    //     vm.dealer = vm.dealers[0]
+                    // }
+                    if (vm.items.product.hasOwnProperty("kioskDealer")) {
+                        if (vm.items.product.kioskDealer.hasOwnProperty("0")) {
+                            var list = $.grep(vm.dealers, function (element, index) {
+                                return (element.id == vm.items.product.kioskDealer[0].ProductDealerId);
+                            });
+                            vm.dealer = list[0]
+                        } else {
+                            vm.dealer = vm.dealers[0]
+                        }
+                    } else {
+                        vm.dealer = vm.dealers[0]
+                    }
+                });
+        }
+       
+
+
+        function populateKioskProductDealer(data) {
+            if (data != null) {
+                objKioskProductDealer = {
+                    KioskCode: vm.items.kiosk.Code,
+                    ProductDealerId: data.id,
+                    Active: 1,
+                    Deleted: 0
+
                 }
-            }else {
-                vm.dealer = vm.dealers[0]
-            }
-        });
-    }
-    /* 
-            }
-
-        }
-
-        
-    } */
-
-   function populateKioskProductDealer(data){
-        if(data != null){
-            objKioskProductDealer = {               
-                KioskCode:vm.items.kiosk.Code,
-                ProductDealerId:data.id,
-                Active:1,
-                Deleted:0
             }
         }
-   }
-        
+
 
         function isEmptyKioskId() {
             if (vm.items.product.kioskDealer != null && vm.items.product.kioskDealer.length > 0)
@@ -1716,12 +1527,13 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
 runBlock.$inject = [
     '$state',
-    '$transitions',
-    'AuthenticationState'
+    'AuthenticationState',
+    '$rootScope'
 ];
 
-function runBlock($state, $transitions, AuthenticationState) {
-    $transitions.onStart({}, function (trans) {
+function runBlock($state, AuthenticationState, $rootScope) {
+
+    $rootScope.$on("$locationChangeStart", function (event, next, current) {
         if (!AuthenticationState.isLoggedIn()) {
             console.log("transition changed")
             $state.go('login');
@@ -1731,4 +1543,6 @@ function runBlock($state, $transitions, AuthenticationState) {
 
 angular
     .module('CrudAngular')
-    .run(runBlock);
+    .run(
+    runBlock
+    );

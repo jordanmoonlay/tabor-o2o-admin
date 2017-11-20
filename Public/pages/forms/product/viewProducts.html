@@ -39,8 +39,8 @@
     <td>{{product.Name}} </td>
     <td>{{product.Price}} </td>
     <td>
-      <a type="button" class="btn btn-xs btn-default" ng-click="main.setViewProduct(product)"><i class = "fa fa-file"></i></a>      &nbsp;
-      <a type="button" class="btn btn-xs btn-warning" ng-click="main.setEditedProduct(product)"><i class = "fa fa-pencil"></i></a>      &nbsp;
+      <a type="button" class="btn btn-xs btn-default" ui-sref="detailProduct({ id:product.Code })"><i class = "fa fa-file"></i></a>      &nbsp;
+      <a type="button" class="btn btn-xs btn-warning" ui-sref="editProduct({ id:product.Code })"><i class = "fa fa-pencil"></i></a>      &nbsp;
       <a type="button" class="btn btn-xs btn-danger" ng-click="main.deleteProduct(product.Code)"><i class = "fa fa-trash"></i></a>      &nbsp;
       <a type="button" class="btn btn-xs btn-success" ng-click="main.goTo(product.Code)"><i class = "fa fa-map-o"></i></a>      &nbsp;
     </td>
@@ -80,50 +80,31 @@
       </div>
       <div class="form-group">
         <label for="exampleEditPrice">Price</label>
-        <input type="text" class="form-control" ng-model="main.editedProduct.Price" placeholder="Price">
+        <input type="number" class="form-control" ng-model="main.editedProduct.Price" placeholder="Price">
       </div>
       <div class="form-group">
         <label for="exampleEditDP">DP</label>
-        <input type="text" class="form-control" ng-model="main.editedProduct.DP" placeholder="DP">
+        <input type="number" class="form-control" ng-model="main.editedProduct.DP" placeholder="50 untuk 50%">
       </div>
       <div class="form-group">
         <label for="exampleEditSpecification">Specification</label>
         <input type="text" class="form-control" ng-model="main.editedProduct.Specification" placeholder="Specification" disabled>
       </div>
-       <div class="form-group">
-          <label for="exampleInputSpecification">RAM</label>
-          <input type="text" name="Spec" autocomplete="off" class="form-control" ng-model="SpecRam" 
-          ng-change="main.getSpec(SpecRam, SpecColor)" placeholder="RAM" required>
-          <div ng-if="main.errors.details.messages.SpecRam[0]">
-              <div style="color:red"> {{main.errors.details.messages.SpecRam[0]}}</div>
-            </div>
-            <span style="color:green" ng-if ="productFormValidate.Spec.$valid"> Valid </span>
-        </div>
-        <div class="form-group">
-          <label for="exampleInputSpecification">COLOR</label>
-          <input type="text" name="Spec" autocomplete="off" class="form-control" ng-model="SpecColor"
-          ng-change="main.getSpec(SpecRam, SpecColor)" placeholder="COLOR" required>
-          <div ng-if="main.errors.details.messages.SpecColor[0]">
-              <div style="color:red"> {{main.errors.details.messages.SpecColor[0]}}</div>
-            </div>
-            <span style="color:green" ng-if ="productFormValidate.Spec.$valid"> Valid </span>
-        </div>
-
       <div class="form-group">
       <label for="exampleViewWeight">Weight</label>
-      <input type="text" class="form-control" ng-model="main.editedProduct.Weight" placeholder="Weight" disabled>
+      <input type="number" class="form-control" ng-model="main.editedProduct.Weight" placeholder="Weight">
     </div>
     <div class="form-group">
       <label for="exampleViewWidth">Width</label>
-      <input type="text" class="form-control" ng-model="main.editedProduct.Width" placeholder="Width" disabled>
+      <input type="number" class="form-control" ng-model="main.editedProduct.Width" placeholder="Width">
     </div>
     <div class="form-group">
       <label for="exampleViewHeight">Height</label>
-      <input type="text" class="form-control" ng-model="main.editedProduct.Height" placeholder="Height" disabled>
+      <input type="number" class="form-control" ng-model="main.editedProduct.Height" placeholder="Height">
     </div>
     <div class="form-group">
       <label for="exampleViewLength">Length</label>
-      <input type="text" class="form-control" ng-model="main.editedProduct.Length" placeholder="Length" disabled>
+      <input type="number" class="form-control" ng-model="main.editedProduct.Length" placeholder="Length">
     </div>
       <div class="form-group">
         <label for="exampleInputFile">Logo</label>

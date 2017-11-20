@@ -26,21 +26,24 @@ function LoginController(AuthenticationService, AuthenticationState, $localStora
                     result => {
                         if (result) {
                             AuthenticationState.setToken(response);
-                            return AuthenticationService.getAuthenticatedUser(response.userId).then(userResult =>{
+                            return AuthenticationService.getAuthenticatedUser(response.userId).then(userResult => {
                                 authenticatedUser.id = userResult.id;
                                 authenticatedUser.email = userResult.email;
                                 authenticatedUser.username = userResult.username;
                                 AuthenticationState.setUser(authenticatedUser);
                                 $state.go('home');
                             })
+                        }else{
+                            vm.message = "Error : Unauthorized user. Please login as admin";
                         }
                     }
-                )
+                ).catch(err => {
+                    vm.message = "Error : Unauthorized user. Please login as admin";
+                })
 
             })
             .catch(function (err) {
                 console.log(err);
-                vm.message = err;
             })
             .finally(function () {
                 vm.loading = false;

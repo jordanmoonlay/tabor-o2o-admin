@@ -8,21 +8,21 @@
         <th>Dealer Name</th>       
         </thead>
         <tbody>
-        <tr dir-paginate="dealer in main.dealers | filter:search |itemsPerPage:10" ng-class="{'active':main.isCurrentDealer(dealer.Code)}">
+        <tr ng-repeat="dealer in main.dealers"  ng-class="{'active':main.isCurrentDealer(dealer.Code)}">
             <td> {{$index+1}} </td>
             <td> {{dealer.DealerName}} </td>
             <td><input type="radio" ng-model="main.dealer" ng-value="dealer"></td>            
         </tr>
         </tbody>
     </table>
-    <table>
+    <!--<table>
         <tr>
             <td>Code product : {{main.items.code}}</td>            
         </tr>
         <tr>
             <td>Dealer : {{main.dealer | json}}</td>
         </tr>
-    </table> 
+    </table> -->
     
 </div>
 <div class="modal-footer">
