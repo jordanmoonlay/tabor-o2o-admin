@@ -28,8 +28,11 @@ function ReportController(Dealer,$http,$state,Constants){
         function getDataReport(startDate, endDate, dealerVal){
             var newStartDate = new Date(startDate).toUTCString;
             var newEndDate = new Date(endDate).toUTCString;
+            console.log(dealerVal);
             main.btnTextSearch = "Searching";
-            $http({
+
+            if(dealerVal!=null){
+                $http({
                 method: `GET`,
                 url: `${Constants.BASE_API}/VMappedReports?filter[where][Status]=COMPLETED&filter[where][DealerCode]=`+dealerVal+`&filter[where][RequestDate][between][0]=`+startDate+`&filter[where][RequestDate][between][1]=`+endDate+`&filter[order]=KioskCode%20ASC&filter[order]=RequestDate%20ASC`,
                 // url : `http://localhost:10010/api/dealers`,
@@ -42,6 +45,22 @@ function ReportController(Dealer,$http,$state,Constants){
                     main.btnTextSearch = "Search";
                 }
             });
+            }else{
+                $http({
+                method: `GET`,
+                url: `${Constants.BASE_API}/VMappedReports?filter[where][Status]=COMPLETED&filter[where][RequestDate][between][0]=`+startDate+`&filter[where][RequestDate][between][1]=`+endDate+`&filter[order]=KioskCode%20ASC&filter[order]=RequestDate%20ASC`,
+                // url : `http://localhost:10010/api/dealers`,
+                data: {}
+            }).then(function (result) {
+                main.reports = result.data;
+                main.btnTextSearch = "Search";
+                if (result.data.length == 0){
+                    alert("Data Not Found");
+                    main.btnTextSearch = "Search";
+                }
+            });
+            }
+            
         }
 
         function getDataCompletedReportExport(startDate, endDate, dealerVal){
@@ -99,9 +118,18 @@ function ReportController(Dealer,$http,$state,Constants){
         }
 
         function selectDealer(dealer){
-            console.log(dealer.Code);
+            debugger
+            if(dealer==null){
+                console.log("ok");
+            }else{
+                console.log(dealer.Code);
             return dealer.Code;
+            }
+            
         }
+
+    
+        
 
         main.isShow = false;
         
