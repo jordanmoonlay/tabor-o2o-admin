@@ -68,17 +68,31 @@ function ReportController(Dealer,$http,$state,Constants){
             var newEndDate2 = new Date(endDate).toUTCString;
             main.isShow = true;
             main.btnExport = "Exporting";
-            $http({
-                method: `GET`,
-                url: `${Constants.BASE_API}/VMappedReports?filter[where][Status]=COMPLETED&filter[where][DealerCode]=`+dealerVal+`&filter[where][RequestDate][between][0]=`+startDate+`&filter[where][RequestDate][between][1]=`+endDate+`&filter[order]=KioskCode%20ASC&filter[order]=RequestDate%20ASC`,
-                // url : `http://localhost:10010/api/dealers`,
-                data: {}
-            }).then(function (result) {
-                main.reportsExport = result.data;
-                if (result.data.length == 0){
-                    alert("Data Not Found");
-                }
-            });
+            if(dealerVal!=null){
+                $http({
+                    method: `GET`,
+                    url: `${Constants.BASE_API}/VMappedReports?filter[where][Status]=COMPLETED&filter[where][DealerCode]=`+dealerVal+`&filter[where][RequestDate][between][0]=`+startDate+`&filter[where][RequestDate][between][1]=`+endDate+`&filter[order]=KioskCode%20ASC&filter[order]=RequestDate%20ASC`,
+                    // url : `http://localhost:10010/api/dealers`,
+                    data: {}
+                }).then(function (result) {
+                    main.reportsExport = result.data;
+                    if (result.data.length == 0){
+                        alert("Data Not Found");
+                    }
+                });
+            }else{
+                $http({
+                    method: `GET`,
+                    url: `${Constants.BASE_API}/VMappedReports?filter[where][Status]=COMPLETED&filter[where][RequestDate][between][0]=`+startDate+`&filter[where][RequestDate][between][1]=`+endDate+`&filter[order]=KioskCode%20ASC&filter[order]=RequestDate%20ASC`,
+                    // url : `http://localhost:10010/api/dealers`,
+                    data: {}
+                }).then(function (result) {
+                    main.reportsExport = result.data;
+                    if (result.data.length == 0){
+                        alert("Data Not Found");
+                    }
+                });
+            }
         }
 
         function getDataAllReport(startDate, endDate){
