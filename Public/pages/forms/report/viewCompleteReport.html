@@ -1,0 +1,189 @@
+
+
+<div  ng-controller="ReportCtrl as main">
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Report List</h3>
+            </div>
+            <div class="box-body" >
+                <form class="form-inline">
+                    <div class="row">
+                        <div class="col-md-6 text-left form-group">
+                            <label>Start Date : <input class="form-control" type ="date"  id="datepicker" name="datepicker" ng-model="startDate" ></label><br/>
+                            <label>End Date &nbsp &nbsp: <input class="form-control"  type ="date"  id="datepicker2" name="datepicker2" date-time ng-model="endDate"></label><br/>
+                            <label>Dealer &nbsp &nbsp &nbsp &nbsp : <input class="form-control" type="text" id = "dealerId" name="dealerId" autocomplete="off"
+                            ng-model="selectedDealer" uib-typeahead="item as item.Code +' - '+ item.Name for item in main.dealers |filter:$viewValue" typeahead-on-select="main.selectDealer(selectedDealer)" placeholder="Dealer" > </label><br/>
+                            </br>
+                            <div class ="col-md-3 ">
+                                <button type="button" ng-click="main.getDataReport(startDate,endDate, main.selectDealer(selectedDealer))" class="btn btn-block btn-primary">
+                                    <span ng-show="main.btnTextSearch == 'Searching'"><i class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></i> </span>
+                                    {{main.btnTextSearch}}
+                                    </button>
+                            </div>
+                            <div class ="col-md-3">
+                                <button id= "btnExport" onclick="demo()" ng-click="main.getDataCompletedReportExport(startDate,endDate, main.selectDealer(selectedDealer))"  type="button" class="btn btn-block btn-warning">
+                                <span ng-show="main.btnExport == 'Exporting'"><i class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></i> </span>
+                                {{main.btnExport}}
+                                </button>
+                            </div>
+                        </div>
+                        </div></br></br>
+                    </div>
+                </form>
+                <div id="pageTable" ng-if="!main.isShow">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <th>No</th>
+                                <th>Outlet Code</th>
+                                <th>Dealer Code</th>
+                                <th>Dealer Name</th>
+                                <th>Order Code</th>
+                                <th>Product Name</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Status Date</th>
+                                <!--<th style="width:150px;"></th>-->
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate="report in main.reports | filter:search |itemsPerPage:10">
+                                    <td> {{$index+1}}</td>
+                                    <td> {{report.KioskCode}} </td>
+                                    <td> {{report.DealerCode}} </td>
+                                    <td> {{report.DealerName}} </td>
+                                    <td> {{report.OrderCode}} </td>
+                                    <td>{{report.ProductName}} </td>
+                                    <td>{{report.Quantity}} </td>
+                                    <td>{{report.Price}} </td>
+                                    <td>{{report.Status}} </td>
+                                    <td>{{report.RequestDate.substring(0,10)}} </td>
+                                    <!--<td>
+                                        <a type="button" class="btn btn-xs btn-default" ui-sref="detailProduct({ id:product.Code })"><i class = "fa fa-file"></i></a>                                        &nbsp;
+                                        <a type="button" class="btn btn-xs btn-warning" ui-sref="editProduct({ id:product.Code })"><i class = "fa fa-pencil"></i></a>                                        &nbsp;
+                                        <a type="button" class="btn btn-xs btn-danger" ng-click="main.deleteProduct(product.Code)"><i class = "fa fa-trash"></i></a>                                        &nbsp;
+                                        <a type="button" class="btn btn-xs btn-success" ng-click="main.goTo(product.Code)"><i class = "fa fa-map-o"></i></a>                                        &nbsp;
+                                    </td>-->
+                                </tr>
+                            </tbody>
+
+                        </table>
+                        <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+                        </dir-pagination-controls>
+                        <!-- /.box-body -->
+                        <iframe id="txtArea1" style="display:none"></iframe>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="allTable" ng-if="main.isShow">
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-hover" id ="completeReport">
+                            <thead>
+                                <th>No</th>
+                                <th>Outlet Code</th>
+                                <th>Dealer Code</th>
+                                <th>Dealer Name</th>
+                                <th>Order Code</th>
+                                <th>Product Name</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Status Date</th>
+                                <!--<th style="width:150px;"></th>-->
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="reports in main.reportsExport">
+                                    <td> {{$index+1}}</td>
+                                    <td> {{reports.KioskCode}} </td>
+                                    <td> {{reports.DealerCode}} </td>
+                                    <td> {{reports.DealerName}} </td>
+                                    <td> {{reports.OrderCode}} </td>
+                                    <td>{{reports.ProductName}} </td>
+                                    <td>{{reports.Quantity}} </td>
+                                    <td>{{reports.Price}} </td>
+                                    <td>{{reports.Status}} </td>
+                                    <td>{{reports.RequestDate.substring(0,10)}} </td>
+                                    <!--<td>
+                                        <a type="button" class="btn btn-xs btn-default" ui-sref="detailProduct({ id:product.Code })"><i class = "fa fa-file"></i></a>                                        &nbsp;
+                                        <a type="button" class="btn btn-xs btn-warning" ui-sref="editProduct({ id:product.Code })"><i class = "fa fa-pencil"></i></a>                                        &nbsp;
+                                        <a type="button" class="btn btn-xs btn-danger" ng-click="main.deleteProduct(product.Code)"><i class = "fa fa-trash"></i></a>                                        &nbsp;
+                                        <a type="button" class="btn btn-xs btn-success" ng-click="main.goTo(product.Code)"><i class = "fa fa-map-o"></i></a>                                        &nbsp;
+                                    </td>-->
+                                </tr>
+                            </tbody>
+
+                        </table>
+                        
+                        <!-- /.box-body -->
+                        <iframe id="txtArea2" style="display:none"></iframe>
+                    </div>
+                </div>
+                <script>
+                    function fnExcelReport()
+                    {
+                        var tab_text="<table border='2px'><tr bgcolor='#87AFC6'>";
+                        var textRange; var j=0;
+                        tab = document.getElementById('completeReport'); 
+
+                        for(j = 0 ; j < tab.rows.length ; j++) 
+                        {     
+                            tab_text=tab_text+tab.rows[j].innerHTML+"</tr>";
+                        
+                        }
+
+                        tab_text=tab_text+"</table>";
+                        tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");
+                        tab_text= tab_text.replace(/<img[^>]*>/gi,"");
+                        tab_text= tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); 
+
+                        var ua = window.navigator.userAgent;
+                        var msie = ua.indexOf("MSIE "); 
+
+                        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))  
+                        {
+                            txtArea1.document.open("txt/html","replace");
+                            txtArea1.document.write(tab_text);
+                            txtArea1.document.close();
+                            txtArea1.focus(); 
+                            sa=txtArea1.document.execCommand("SaveAs",true,"Completed Report.xls");
+                        }  
+                        else     
+                            sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));  
+
+                        return (sa);
+                    }
+
+                </script>
+
+                <script>
+                    function sleep(ms){
+                        return new Promise(resolve => setTimeout(resolve,ms));
+                    }
+
+                    async function demo(){
+
+                        console.log("break...");
+                        document.getElementById("btnExport").disabled = true;
+                        await sleep(5000);
+                        console.log("continue..");
+                        fnExcelReport();
+                        location.reload();
+                        
+                    }
+                </script>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</div>
+
+

@@ -1,6 +1,6 @@
-angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.directives.dirPagination', 'ngStorage', 'lbServices', 'app.authentication'])
+angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.directives.dirPagination', 'ngStorage','lbServices', 'app.authentication'])
 
-    .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider,
+    .config(['$stateProvider', '$urlRouterProvider','$compileProvider', function ($stateProvider,
         $urlRouterProvider) {
         $stateProvider
             .state('login', {
@@ -96,6 +96,14 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             .state('newOrder', {
                 url: '/newOrder',
                 templateUrl: 'pages/forms/order/viewNewOrders.html'
+            })
+            .state('viewCompleteReport', {
+                url: '/viewCompleteReport',
+                templateUrl: 'pages/forms/report/viewCompleteReport.html'
+            })
+            .state('viewAllReport', {
+                url: '/viewAllReport',
+                templateUrl: 'pages/forms/report/viewAllReport.html'
             })
             .state('home', {
                 url: '/index',
@@ -1460,6 +1468,113 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
         };
     })
 
+    .controller('ReportCtrl',function($scope,Dealer,$http){
+        var main = this;
+        main.dealers = [];
+        main.reports = [];
+        main.btnTextSearch = "Search";
+        main.btnExport = "Export";
+        function getDealer(){
+            $http({
+                method: 'GET',
+                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/Dealers/',
+                // url : 'http://localhost:10010/api/dealers',
+                data: {}
+            }).then(function (result) {
+                main.dealers = result.data;
+                if(result.data.length < 1){
+                    alert("Dealer not found");
+                }
+            });
+        }
+
+        function getDataReport(startDate, endDate, dealerVal){
+            var newStartDate = new Date(startDate).toUTCString;
+            var newEndDate = new Date(endDate).toUTCString;
+            main.btnTextSearch = "Searching";
+            $http({
+                method: 'GET',
+                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/VMappedReports?filter[where][Status]=COMPLETED&filter[where][DealerCode]='+dealerVal+'&filter[where][RequestDate][between][0]='+startDate+'&filter[where][RequestDate][between][1]='+endDate+'&filter[order]=KioskCode%20ASC&filter[order]=RequestDate%20ASC',
+                // url : 'http://localhost:10010/api/dealers',
+                data: {}
+            }).then(function (result) {
+                main.reports = result.data;
+                main.btnTextSearch = "Search";
+                if (result.data.length == 0){
+                    alert("Data Not Found");
+                    main.btnTextSearch = "Search";
+                }
+            });
+        }
+
+        function getDataCompletedReportExport(startDate, endDate, dealerVal){
+            var newStartDate2 = new Date(startDate).toUTCString;
+            var newEndDate2 = new Date(endDate).toUTCString;
+            main.isShow = true;
+            main.btnExport = "Exporting";
+            $http({
+                method: 'GET',
+                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/VMappedReports?filter[where][Status]=COMPLETED&filter[where][DealerCode]='+dealerVal+'&filter[where][RequestDate][between][0]='+startDate+'&filter[where][RequestDate][between][1]='+endDate+'&filter[order]=KioskCode%20ASC&filter[order]=RequestDate%20ASC',
+                // url : 'http://localhost:10010/api/dealers',
+                data: {}
+            }).then(function (result) {
+                main.reportsExport = result.data;
+                if (result.data.length == 0){
+                    alert("Data Not Found");
+                }
+            });
+        }
+
+        function getDataAllReport(startDate, endDate){
+            var newStartDate = new Date(startDate).toUTCString;
+            var newEndDate = new Date(endDate).toUTCString;
+            main.btnTextSearch = "Searching";
+            $http({
+                method: 'GET',
+                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/VMappedReports?filter[where][DealerCode][neq]=null&filter[where][RequestDate][between][0]='+startDate+'&filter[where][RequestDate][between][1]='+endDate+'&filter[order]=KioskCode%20ASC&filter[order]=RequestDate%20ASC',
+                // url : 'http://localhost:10010/api/dealers',
+                data: {}
+            }).then(function (result) {
+                main.reports = result.data;
+                main.btnTextSearch = "Search";
+                if (result.data.length == 0){
+                    alert("Data Not Found");
+                }
+            });
+        }
+
+        function getDataReportExport(startDate, endDate){
+            var newStartDate2 = new Date(startDate).toUTCString;
+            var newEndDate2 = new Date(endDate).toUTCString;
+            main.isShow = true;
+            main.btnExport = "Exporting";
+            $http({
+                method: 'GET',
+                url: 'http://tabor-o2o-webapi-internal-dev.azurewebsites.net/api/VMappedReports?filter[where][DealerCode][neq]=null&filter[where][RequestDate][between][0]='+startDate+'&filter[where][RequestDate][between][1]='+endDate+'&filter[order]=KioskCode%20ASC&filter[order]=RequestDate%20ASC',
+                // url : 'http://localhost:10010/api/dealers',
+                data: {}
+            }).then(function (result) {
+                main.reportsExport = result.data;
+                if (result.data.length == 0){
+                    alert("Data Not Found");
+                }
+            });
+        }
+
+        function selectDealer(dealer){
+            console.log(dealer.Code);
+            return dealer.Code;
+        }
+
+        main.isShow = false;
+        main.getDataCompletedReportExport = getDataCompletedReportExport;
+        main.getDataReport = getDataReport;
+        main.selectDealer = selectDealer;
+        main.getDataAllReport = getDataAllReport;
+        main.getDataReportExport = getDataReportExport;
+        getDealer();
+    })
+
     //     .controller('LoginController', ['$scope', '$state', 'authService', '$location', function ($scope, $state, authService, $location) {
     //         $scope.login = function () {
     //             authService.login(this.username, this.password).then(function (response) {
@@ -1502,8 +1617,8 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
     //             }
     //         });
     //     }])
+    
 
-    //your directive
     .directive("fileread", [
         function () {
             return {
@@ -1524,6 +1639,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
             }
         }
     ]);
+
 
 runBlock.$inject = [
     '$state',

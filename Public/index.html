@@ -34,6 +34,8 @@
   <link rel="stylesheet" href="../../assets/css/normalize.css">
   <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">-->
   <link rel="stylesheet" href="../../assets/css/app.css">
+  
+ 
 
 
 
@@ -161,6 +163,19 @@
             </ul>
           </li>
 
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-edit"></i> <span>REPORT</span>
+              <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a ui-sref="viewCompleteReport"><i class="fa fa-circle-o"></i> View Complete Order</a></li>
+              <li><a ui-sref="viewAllReport"><i class="fa fa-circle-o"></i> View All Order</a></li>
+            </ul>
+          </li>
+
 <!--
           <li class="treeview">
             <a href="pages/forms/viewOrders.html">
@@ -224,8 +239,9 @@
     </footer>
 
 
-
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="plugins/jQuery/jquery.table2excel.js"></script>
+    <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>-->
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
@@ -240,7 +256,27 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="../../app/ui-bootstrap-tpls-2.5.0.js"></script>
     <script src="../../app/dirPagination.js"></script>
+    
+<style>
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spinWebkit .7s infinite linear;
+    -moz-animation: spinMoz .7s infinite linear;
+}
 
+@-webkit-keyframes spinWebkit {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+@keyframes spinMoz {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+</style>
 
     <!-- ./wrapper -->
 
@@ -293,8 +329,9 @@
 <script src="pages/forms/user/user-role-mapping.controller.js"></script>
 <script src="pages/forms/user/sidebar.controller.js"></script>
 <script src="app/lb-services.js"></script>
+
+
 <!--<script src="../../app/auth.service.js"></script>-->
-</script>
 </body>
 
 </html>
