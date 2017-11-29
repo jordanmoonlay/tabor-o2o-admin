@@ -50,7 +50,7 @@
                                 <!--<th style="width:150px;"></th>-->
                             </thead>
                             <tbody>
-                                <tr dir-paginate="report in main.reports | filter:search |itemsPerPage:10">
+                                <tr dir-paginate="report in main.reports | itemsPerPage:10" total-items="main.dataAfterCount" current-page="main.paginationCurrent">
                                     <td> {{$index+1}}</td>
                                     <td> {{report.KioskCode}} </td>
                                     <td> {{report.DealerCode}} </td>
@@ -71,7 +71,8 @@
                             </tbody>
 
                         </table>
-                        <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+                        
+                        <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true" on-page-change="main.getPageCompleteData(startDate,endDate, main.selectDealer(selectedDealer),newPageNumber)" >
                         </dir-pagination-controls>
                         <!-- /.box-body -->
                         <iframe id="txtArea1" style="display:none"></iframe>
