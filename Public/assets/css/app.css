@@ -15,6 +15,10 @@ body {
     border-bottom: 1px #CCC solid;
 }
 
+.text-strikethrough {
+    text-decoration: line-through;
+}
+
 .active {
     background-color: #EEE;
 }

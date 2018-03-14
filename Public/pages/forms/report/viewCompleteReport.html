@@ -47,6 +47,7 @@
                                 <th>Price</th>
                                 <th>Status</th>
                                 <th>Status Date</th>
+                                <th></th>
                                 <!--<th style="width:150px;"></th>-->
                             </thead>
                             <tbody>
@@ -61,6 +62,9 @@
                                     <td>{{report.Price}} </td>
                                     <td>{{report.Status}} </td>
                                     <td>{{report.RequestDate.substring(0,10)}} </td>
+                                    <td>
+                                        <a type="button" class="btn btn-xs btn-print" ui-sref="blank.invoice({ id:report.OrderCode })" target="_blank"><i class = "fa fa-print"></i></a>
+                                    </td>
                                     <!--<td>
                                         <a type="button" class="btn btn-xs btn-default" ui-sref="detailProduct({ id:product.Code })"><i class = "fa fa-file"></i></a>                                        &nbsp;
                                         <a type="button" class="btn btn-xs btn-warning" ui-sref="editProduct({ id:product.Code })"><i class = "fa fa-pencil"></i></a>                                        &nbsp;

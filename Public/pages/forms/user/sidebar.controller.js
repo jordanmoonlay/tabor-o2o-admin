@@ -18,7 +18,7 @@ function SidebarController(AuthenticationService,AuthenticationState,$state,$roo
         AuthenticationService.signOut()
         AuthenticationState.remove();
 
-        $state.go('login');
+        $state.go('app.login');
         main.authenticatedUser = AuthenticationState.getUser();
     }
     main.logout = logout;

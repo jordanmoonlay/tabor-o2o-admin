@@ -328,10 +328,12 @@ function ProductDetailController(Constants, $http, $stateParams) {
     main.specifications = [];
 
     function getProductById(id) {
+        debugger
         $http.get(`${Constants.BASE_API}/products/${id}`)
             .then(
             result => {
                 main.viewProduct = result.data;
+                debugger
                 for (var spec of JSON.parse(main.viewProduct.Specification))
                     main.specifications.push({ key: spec.key, value: spec.value });
             });

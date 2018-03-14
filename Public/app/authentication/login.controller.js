@@ -31,7 +31,7 @@ function LoginController(AuthenticationService, AuthenticationState, $localStora
                                 authenticatedUser.email = userResult.email;
                                 authenticatedUser.username = userResult.username;
                                 AuthenticationState.setUser(authenticatedUser);
-                                $state.go('home');
+                                $state.go('app.home');
                             })
                         }else{
                             vm.message = "Error : Unauthorized user. Please login as admin";

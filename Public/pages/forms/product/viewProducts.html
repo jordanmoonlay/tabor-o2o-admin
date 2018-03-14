@@ -9,7 +9,7 @@
         <form class="form-inline">
           <div class="row">
             <div class="col-md-6">
-              <a class="btn btn-sm btn-primary" ui-sref="newProduct"><i class="fa fa-plus"></i> Create</a>
+              <a class="btn btn-sm btn-primary" ui-sref="app.newProduct"><i class="fa fa-plus"></i> Create</a>
             </div>
             <div class="col-md-6 text-right form-group">
               <label>
@@ -39,8 +39,8 @@
     <td>{{product.Name}} </td>
     <td>{{product.Price}} </td>
     <td>
-      <a type="button" class="btn btn-xs btn-default" ui-sref="detailProduct({ id:product.Code })"><i class = "fa fa-file"></i></a>      &nbsp;
-      <a type="button" class="btn btn-xs btn-warning" ui-sref="editProduct({ id:product.Code })"><i class = "fa fa-pencil"></i></a>      &nbsp;
+      <a type="button" class="btn btn-xs btn-default" ui-sref="app.detailProduct({ id:product.Code })"><i class = "fa fa-file"></i></a>      &nbsp;
+      <a type="button" class="btn btn-xs btn-warning" ui-sref="app.editProduct({ id:product.Code })"><i class = "fa fa-pencil"></i></a>      &nbsp;
       <a type="button" class="btn btn-xs btn-danger" ng-click="main.deleteProduct(product.Code)"><i class = "fa fa-trash"></i></a>      &nbsp;
       <a type="button" class="btn btn-xs btn-success" ng-click="main.goTo(product.Code)"><i class = "fa fa-map-o"></i></a>      &nbsp;
     </td>

@@ -1,116 +1,145 @@
 angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.directives.dirPagination', 'ngStorage','lbServices', 'app.authentication'])
 
-    .config(['$stateProvider', '$urlRouterProvider','$compileProvider', function ($stateProvider,
+    .config(['$stateProvider', '$urlRouterProvider','$compileProvider', '$locationProvider', function ($stateProvider,
         $urlRouterProvider) {
+       
         $stateProvider
-            .state('login', {
+        .state('app', {
+            abstract: true,
+            views: {
+                root:{
+                    templateUrl: 'pages/forms/layout/app-layout.html'
+                }
+            }
+            })
+            // .state('app.index', {
+            //     url: '/',
+            //     templateUrl: '/#!/login'
+            // })
+            .state('app.login', {
                 url: '/login',
                 templateUrl: 'app/authentication/login.html',
                 data: { pageTitle: 'Login' }
             })
-            .state('viewBrands', {
+            .state('app.viewBrands', {
                 url: '/viewBrands',
                 templateUrl: 'pages/forms/brand/viewBrands.html'
             })
-            .state('newBrand', {
+            .state('app.newBrand', {
                 url: '/newBrand',
                 templateUrl: 'pages/forms/brand/newBrand.html'
             })
-            .state('viewProducts', {
+            .state('app.viewProducts', {
                 url: '/viewProducts',
                 templateUrl: 'pages/forms/product/viewProducts.html'
             })
-            .state('viewProductCategoryMap', {
+            .state('app.viewProductCategoryMap', {
                 url: '/ProductCategory/map/:productId',
                 templateUrl: 'pages/forms/product/newProductCategoryMap.html',
                 controller: 'productCategoryMapCtrl',
                 controllerAs: 'main',
             })
-            .state('viewProductCategory', {
+            .state('app.viewProductCategory', {
                 url: '/ProductCategory',
                 templateUrl: 'pages/forms/product/viewProductCategory.html'
             })
-            .state('editProductCategory', {
+            .state('app.editProductCategory', {
                 url: '/ProductCategory/edit/:pcId',
                 templateUrl: 'pages/forms/product/editProductCategory.html',
                 controller: 'productCategoryEditCtrl',
                 controllerAs: 'main'
             })
-            .state('newProduct', {
+            .state('app.newProduct', {
                 url: '/newProduct',
                 templateUrl: 'pages/forms/product/newProduct.html'
             })
-            .state('editProduct', {
+            .state('app.editProduct', {
                 url: '/editProduct/{id}',
                 templateUrl: 'pages/forms/product/editProduct.html'
             })
-            .state('detailProduct', {
+            .state('app.detailProduct', {
                 url: '/detailProduct/{id}',
                 templateUrl: 'pages/forms/product/detailProduct.html'
             })
-            .state('newProductCategory', {
+            .state('app.newProductCategory', {
                 url: '/newProductCategory',
                 templateUrl: 'pages/forms/product/newProductCategory.html'
             })
-            .state('viewKiosks', {
+            .state('app.viewKiosks', {
                 url: '/viewKiosks',
                 templateUrl: 'pages/forms/kiosk/viewKiosks.html'
             })
-            .state('viewKioskMap', {
+            .state('app.viewKioskMap', {
                 url: '/viewKiosks/map/:kioskId',
                 templateUrl: 'pages/forms/kiosk/viewKioskMap.html',
                 controller: 'kioskMapCtrl',
                 controllerAs: 'main',
             })
-            .state('newKiosk', {
+            .state('app.newKiosk', {
                 url: '/newKiosk',
                 templateUrl: 'pages/forms/kiosk/newKiosk.html'
             })
-            .state('viewDealers', {
+            .state('app.viewDealers', {
                 url: '/viewDealers',
                 templateUrl: 'pages/forms/dealer/viewDealers.html'
             })
-            .state('newDealer', {
+            .state('app.newDealer', {
                 url: '/newDealer',
                 templateUrl: 'pages/forms/dealer/newDealer.html'
             })
-            .state('viewCompleteReport', {
+            .state('app.viewCompleteReport', {
                 url: '/viewCompleteReport',
                 templateUrl: 'pages/forms/report/viewCompleteReport.html'
             })
-            .state('viewAllReport', {
+            .state('app.viewAllReport', {
                 url: '/viewAllReport',
                 templateUrl: 'pages/forms/report/viewAllReport.html'
             })
-            .state('home', {
+            .state('app.home', {
                 url: '/index',
                 templateUrl: 'pages/forms/home.html'
-            }).state('users', {
+            }).state('app.users', {
                 url: '/users',
                 templateUrl: 'pages/forms/user/list.html',
                 controller: 'UserController',
                 controllerAs: 'vm'
             })
-            .state('users-register', {
+            .state('app.users-register', {
                 url: '/users/register',
                 templateUrl: 'pages/forms/user/register.html',
                 controller: 'UserController',
                 controllerAs: 'vm'
             })
-            .state('users-mapping-kiosk', {
+            .state('app.users-mapping-kiosk', {
                 url: '/users/{id}/mapping-kiosk',
                 templateUrl: 'pages/forms/user/kiosk-mapping.html'
             })
-            .state('users-mapping-dealer', {
+            .state('app.users-mapping-dealer', {
                 url: '/users/{id}/mapping-dealer',
                 templateUrl: 'pages/forms/user/dealer-mapping.html'
             })
-            .state('users-mapping-roles', {
+            .state('app.users-mapping-roles', {
                 url: '/users/{id}/mapping-roles',
                 templateUrl: 'pages/forms/user/role-mapping.html'
             })
+            .state('blank', {
+            abstract: true,
+            views: {
+                root: {
+                    templateUrl: 'pages/forms/layout/blank-layout.html'
+                }
+            }
+            })
 
-        $urlRouterProvider.otherwise('/');
+                .state('blank.invoice', {
+                    url: '/order/print/{id}',
+                    templateUrl: 'pages/forms/report/printReport.html',
+                    data: { pageTitle: 'Invoice' },
+                    controller: 'PrintReportCtrl',
+                    controllerAs: 'main'
+                })
+
+         $urlRouterProvider.otherwise('/');
     }])
 
     .filter('startFrom', function () {
@@ -288,7 +317,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
         function goToEditPage(code) {
             console.log(code)
-            $state.go('editProductCategory', { pcId: code })
+            $state.go('app.editProductCategory', { pcId: code })
         }
 
 
@@ -342,7 +371,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 ProductCategory.replaceById({ Code: main.productCategory.Code }, main.productCategory,
                     function success(result) {
                         alert("update success")
-                        $state.go('viewProductCategory')
+                        $state.go('app.viewProductCategory')
                     }, function error(err) {
                         main.errors = err.data.error;
                         alert("Create Error");
@@ -479,7 +508,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
 
         function goTo(kiosk) {
 
-            $state.go('viewKioskMap', { kioskId: kiosk.Code });
+            $state.go('app.viewKioskMap', { kioskId: kiosk.Code });
         }
 
 
@@ -745,6 +774,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
     
     //     .controller('LoginController', ['$scope', '$state', 'authService', '$location', function ($scope, $state, authService, $location) {
     //         $scope.login = function () {
+    //             debugger
     //             authService.login(this.username, this.password).then(function (response) {
     //                 $location.path('/home');
     //                 console.log(response);
@@ -776,11 +806,13 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
     //             // redirect to login page if not logged in and trying to access a restricted page
     //             var restrictedPage = $.inArray($location.path(), ['/login', '/register']) === -1;
     //             if (restrictedPage && !User.isAuthenticated()) {
+    //                 debugger
     //                 console.log("Not Authenticated");
     //                 $location.path('/login');
     //             }
 
     //             if (User.isAuthenticated()) {
+    //                 debugger
     //                 $location.path('/home');
     //             }
     //         });
@@ -820,7 +852,7 @@ function runBlock($state, AuthenticationState, $rootScope) {
     $rootScope.$on("$locationChangeStart", function (event, next, current) {
         if (!AuthenticationState.isLoggedIn()) {
             console.log("transition changed")
-            $state.go('login');
+            $state.go('app.login');
         }
     });
 }
