@@ -115,7 +115,7 @@
                         </div>
                     </div>
 
-                    <div ng-if="main.paymentMethod == 'DOWN PAYMENT'">
+                    <!--<div ng-if="main.paymentMethod == 'DOWN PAYMENT'">
                         <div>
                             <center><b> DOWN PAYMENT </b></center>
                             <br/>
@@ -143,7 +143,7 @@
                                             <td>{{ detail.ProductName }}</td>
                                             <td class="text-right">{{ detail.Price | currency: 'Rp. ' }}</td>
                                             <td class="text-right">{{ detail.Price * detail.Quantity | currency: 'Rp. ': 0 }}</td>
-                                            <!--<td class="text-center bg-grey">{{ detail.Product.DP }} %</td>-->
+                                        
                                             <td class="text-right bg-grey">{{ detail.DPNominal | currency: 'Rp. ': 0 }}</td>
                                         </tr>
                                         <tr>
@@ -168,14 +168,7 @@
                                             <td class="bg-grey"></td>
                                             <td class="text-right bg-grey">{{ main.paidAmount | currency: 'Rp. ': 0 }}</td>
                                         </tr>
-                                        <!--<tr>
-                                            <td class="text-right" colspan="3">Kembali</td>
-                                            <td class="text-right"></td>
-                                            <td class="bg-grey"></td>
-                                            <td class="text-right bg-grey">
-                                                {{ orderPayment.PaidAmount - (order.DP + order.TotalShippingFee) | currency: 'Rp. ': 0 }}
-                                            </td>
-                                        </tr>-->
+                                        
 
                                         <tr>
                                             <td class="text-right" colspan="3"><b>Sisa yang harus dibayarkan</b></td>
@@ -213,11 +206,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
 
                     <div ng-if="main.fullfilmentPaymentMethod == 'FULFILLMENT'">
                         <div>
-                            <center><b> FULFILLMENT </b></center>
                             <br/>
                             <div class="row">
                                 <div class="col-xs-12">

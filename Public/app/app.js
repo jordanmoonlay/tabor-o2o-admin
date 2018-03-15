@@ -12,10 +12,6 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                 }
             }
             })
-            // .state('app.index', {
-            //     url: '/',
-            //     templateUrl: '/#!/login'
-            // })
             .state('app.login', {
                 url: '/login',
                 templateUrl: 'app/authentication/login.html',
@@ -139,7 +135,7 @@ angular.module('CrudAngular', ['ui.router', 'ui.bootstrap', 'angularUtils.direct
                     controllerAs: 'main'
                 })
 
-         $urlRouterProvider.otherwise('/');
+         $urlRouterProvider.otherwise('/login');
     }])
 
     .filter('startFrom', function () {
