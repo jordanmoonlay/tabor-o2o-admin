@@ -161,12 +161,13 @@ function ReportController(Dealer,$http,$state,Constants,$stateParams){
 
         function getDataAllReport(startDate, endDate){
             var newStartDate = new Date(startDate).toUTCString;
-            var newEndDate = new Date(endDate).toUTCString;
+            var newEndDate = new Date(endDate);
+            newEndDate.setDate(newEndDate.getDate()+1).toUTCString;
             main.btnTextSearch = "Searching";
             countAllData(startDate,endDate);
             $http({
                 method: `GET`,
-                url: `${Constants.BASE_API}/VMappedReports?filter[where][DealerCode][neq]=null&filter[where][RequestDate][between][0]=`+startDate+`&filter[where][RequestDate][between][1]=`+endDate+`&filter[order]=KioskCode%20ASC&filter[order]=RequestDate%20ASC`,
+                url: `${Constants.BASE_API}/VMappedReports?filter[where][DealerCode][neq]=null&filter[where][RequestDate][between][0]=`+startDate+`&filter[where][RequestDate][between][1]=`+newEndDate+`&filter[order]=KioskCode%20ASC&filter[order]=RequestDate%20ASC`,
                 // url : `http://localhost:10010/api/dealers`,
                 data: {}
             }).then(function (result) {
@@ -180,12 +181,13 @@ function ReportController(Dealer,$http,$state,Constants,$stateParams){
 
         function getDataReportExport(startDate, endDate){
             var newStartDate2 = new Date(startDate).toUTCString;
-            var newEndDate2 = new Date(endDate).toUTCString;
+            var newEndDate2 = new Date(endDate);
+            newEndDate2.setDate(newEndDate.getDate()+1).toUTCString;
             main.isShow = true;
             main.btnExport = "Exporting";
             $http({
                 method: `GET`,
-                url: `${Constants.BASE_API}/VMappedReports?filter[where][DealerCode][neq]=null&filter[where][RequestDate][between][0]=`+startDate+`&filter[where][RequestDate][between][1]=`+endDate+`&filter[order]=KioskCode%20ASC&filter[order]=RequestDate%20ASC`,
+                url: `${Constants.BASE_API}/VMappedReports?filter[where][DealerCode][neq]=null&filter[where][RequestDate][between][0]=`+startDate+`&filter[where][RequestDate][between][1]=`+newEndDate2+`&filter[order]=KioskCode%20ASC&filter[order]=RequestDate%20ASC`,
                 // url : `http://localhost:10010/api/dealers`,
                 data: {}
             }).then(function (result) {
@@ -239,13 +241,14 @@ function ReportController(Dealer,$http,$state,Constants,$stateParams){
             var initiatePage = (basePage * (page-1));
             console.log(initiatePage);
             var newStartDate2 = new Date(startDate).toUTCString;
-            var newEndDate2 = new Date(endDate).toUTCString;
+            var newEndDate2 = new Date(endDate);
+            newEndDate2.setDate(newEndDate2.getDate()+1).toUTCString;
             main.paginationCurrent = page;
             main.btnTextSearch = "Searching";
             
             $http({
                 method: `GET`,
-                url: `${Constants.BASE_API}/VMappedReports?filter[where][DealerCode][neq]=null&filter[where][RequestDate][between][0]=`+startDate+`&filter[where][RequestDate][between][1]=`+endDate+`&filter[limit]=`+basePage+`&filter[skip]=`+initiatePage+`&filter[order]=KioskCode%20ASC&filter[order]=RequestDate%20ASC`,
+                url: `${Constants.BASE_API}/VMappedReports?filter[where][DealerCode][neq]=null&filter[where][RequestDate][between][0]=`+startDate+`&filter[where][RequestDate][between][1]=`+newEndDate2+`&filter[limit]=`+basePage+`&filter[skip]=`+initiatePage+`&filter[order]=KioskCode%20ASC&filter[order]=RequestDate%20ASC`,
                 // url : `http://localhost:10010/api/dealers`,
                 data: {}
             }).then(function (result) {
