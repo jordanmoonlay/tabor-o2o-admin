@@ -110,7 +110,8 @@ function ProductController(Product, $http, $state, Constants) {
 
     function goTo(code) {
         console.log(code)
-        $state.go('viewProductCategoryMap', { productId: code })
+        $state.go('app.viewProductCategoryMap', { productId: code })
+        debugger
     }
 
 
@@ -258,14 +259,14 @@ function ProductEditController($stateParams, $http, Constants, Product, $state) 
                     }
                     Product.upsert(product,
                         function (result) {
-                        $state.go("viewProducts");
+                        $state.go("app.viewProducts");
                         alert("Update Successfuly");
                         });
                 })
             } else {
                 Product.upsert(product,
                     function (result) {
-                        $state.go("viewProducts");
+                        $state.go("app.viewProducts");
                         alert("Update Successfuly");
                     });
             }
